@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   compiler: (() => {
+    let compilerConfig = {}
     if (process.env.NODE_ENV === 'production') {
       compilerConfig = {
         ...compilerConfig,
