@@ -10,6 +10,10 @@ const theme = createTheme({
       main: '#ffb6c1',
     },
   },
+  typography: {
+    fontFamily: ['Kosugi Maru', 'Yu Gothic', 'Roboto', 'sans-serif'].join(','),
+    fontSize: 14,
+  },
 })
 
 export default theme

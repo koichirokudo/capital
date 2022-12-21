@@ -1,12 +1,13 @@
 import type { NextPage } from 'next'
-import Header from 'components/Header'
+import Template from 'components/Template'
 import { Typography } from '@mui/material'
 
 const Home: NextPage = () => {
   return (
     <>
-      <Header />
-      <Typography>Hello, Next.js and MUI</Typography>
+      <Template title="ダッシュボード">
+        <Typography variant='h3'>Hello, Next.js</Typography>
+      </Template>
     </>
   )
 }
