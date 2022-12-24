@@ -33,7 +33,7 @@ const drawerWidth = 270
 
 interface TemplateProps {
   window?: () => Window
-  title: string
+  title?: string
   children?: React.ReactNode
 }
 
@@ -128,21 +128,38 @@ const Template = (props: TemplateProps) => {
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          ...(authUser && {
+            width: {
+              sm: `calc(100% - ${drawerWidth}px)`,
+              ml: { sm: `${drawerWidth}px` },
+            },
+          }),
         }}
       >
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            aria-label="menu"
-            onClick={handleDrawerOpen}
-          >
-            <Menu
-              sx={{ color: 'white', display: { xs: 'block', sm: 'none' } }}
-            />
-          </IconButton>
+          {(() => {
+            if (authUser) {
+              return (
+                <IconButton
+                  size="large"
+                  edge="start"
+                  aria-label="menu"
+                  onClick={handleDrawerOpen}
+                >
+                  <Menu
+                    sx={{
+                      color: 'white',
+                      display: { xs: 'block', sm: 'none' },
+                    }}
+                  />
+                </IconButton>
+              )
+            } else if (!authUser) {
+              return (
+                <Image src="/logo.png" width={190} height={50} alt="MyCapi" />
+              )
+            }
+          })()}
           <Typography variant="h5" color="white">
             {title}
           </Typography>
@@ -176,45 +193,51 @@ const Template = (props: TemplateProps) => {
           })()}
         </Toolbar>
       </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={open}
-          onClose={handleDrawerClose}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-          }}
+      {authUser && (
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
         >
-          {list}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {list}
-        </Drawer>
-      </Box>
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={open}
+            onClose={handleDrawerClose}
+            ModalProps={{
+              keepMounted: true,
+            }}
+            sx={{
+              display: { xs: 'block', sm: 'none' },
+            }}
+          >
+            {list}
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
+                width: drawerWidth,
+              },
+            }}
+            open
+          >
+            {list}
+          </Drawer>
+        </Box>
+      )}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ...(authUser && {
+            width: {
+              sm: `calc(100% - ${drawerWidth}px)`,
+            },
+          }),
         }}
       >
         <Toolbar />
