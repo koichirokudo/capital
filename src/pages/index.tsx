@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import Template from 'components/Template'
+import Template from 'components/templates'
 import { Typography } from '@mui/material'
 
 const Home: NextPage = () => {
