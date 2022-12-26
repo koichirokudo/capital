@@ -53,7 +53,13 @@ const Template = (props: TemplateProps) => {
   const list = (
     <div>
       <Box sx={{ mt: 1, ml: 2 }}>
-        <Image src="/logo.png" width={190} height={50} alt="MyCapi" />
+        <Image
+          src="/logo.png"
+          width={190}
+          height={50}
+          alt="MyCapi"
+          priority={true}
+        />
       </Box>
       <Divider />
       <List>
@@ -155,7 +161,13 @@ const Template = (props: TemplateProps) => {
               )
             } else if (!authUser) {
               return (
-                <Image src="/logo.png" width={190} height={50} alt="MyCapi" />
+                <Image
+                  src="/logo.png"
+                  width={190}
+                  height={50}
+                  alt="MyCapi"
+                  priority={true}
+                />
               )
             }
           })()}
