@@ -45,13 +45,13 @@ export const AuthContextProvider = ({
   )
   const isLoading = !data && !error
 
-  // サインイン
+  // ログイン
   const loginInternal = async (username: string, password: string) => {
     await login(context, { username, password })
     await mutate()
   }
 
-  // サインアウト
+  // ログアウト
   const logoutInternal = async () => {
     await logout(context)
     await mutate()
