@@ -145,13 +145,12 @@ const Template = (props: TemplateProps) => {
                   edge="start"
                   aria-label="menu"
                   onClick={handleDrawerOpen}
+                  sx={{
+                    color: 'white',
+                    display: { xs: 'block', sm: 'none' },
+                  }}
                 >
-                  <Menu
-                    sx={{
-                      color: 'white',
-                      display: { xs: 'block', sm: 'none' },
-                    }}
-                  />
+                  <Menu />
                 </IconButton>
               )
             } else if (!authUser) {
