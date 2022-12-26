@@ -22,17 +22,14 @@ const login = async (
   context: ApiContext,
   params: loginParams,
 ): Promise<User> => {
-  return await fetcher(
-    `${context.apiRootUrl.replace(/\/$/g, '')}/auth/login}`,
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(params),
+  return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/auth/login`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
-  )
+    body: JSON.stringify(params),
+  })
 }
 
 export default login
