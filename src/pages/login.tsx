@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Template from 'components/templates'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { useRouter } from 'next/router'
 import LoginFormContainer from 'container/LoginFormContainer'
 
