@@ -208,7 +208,7 @@ const Template = (props: TemplateProps) => {
         <Box
           component="nav"
           sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-          aria-label="mailbox folders"
+          aria-label="drawer"
         >
           <Drawer
             container={container}
