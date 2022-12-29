@@ -3,6 +3,6 @@
  * @param money
  * @returns {string}
  */
-export const formatMoney = (money: string) => {
+export const formatMoney = (money: string | number) => {
   return Number(money).toLocaleString()
 }
