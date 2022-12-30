@@ -42,8 +42,8 @@ export type User = {
   password: string
   email: string
   cancel: boolean
-  create_at: string
-  update_at: string
+  createAt: string
+  updateAt: string
 }
 
 // グループ
@@ -53,8 +53,8 @@ export type Group = {
   participants: number
   inviteId: string
   stratDay: number
-  create_at: string
-  update_at: string
+  createAt: string
+  updateAt: string
 }
 
 // 収支
@@ -68,9 +68,25 @@ export type Capital = {
   note: string
   money: number
   settlement: boolean
-  settlement_at: string
-  create_at: string
-  update_at: string
+  settlementAt: string
+  createAt: string
+  updateAt: string
+}
+
+export type CapitalHistory = {
+  id: number
+  status: number
+  userId: number
+  groupId: number
+  date: string
+  categoryId: number
+  categoryType: string
+  note: string
+  money: number
+  settlement: boolean
+  settlementAt: string
+  createAt: string
+  updateAt: string
 }
 
 // カテゴリ
@@ -79,6 +95,6 @@ export type Category = {
   groupId: number
   categoryType: number
   categoryName: string
-  create_at: string
-  update_at: string
+  createAt: string
+  updateAt: string
 }
