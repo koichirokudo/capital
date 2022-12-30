@@ -37,7 +37,7 @@ const getAllCapitals = async (
       Origin: '*',
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      credentials: 'inclede',
+      credentials: 'include',
     },
   })
 }
