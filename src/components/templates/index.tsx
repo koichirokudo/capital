@@ -63,7 +63,7 @@ const Template = (props: TemplateProps) => {
       </Box>
       <Divider />
       <List>
-        <Link href={authUser ? `/dashboard/${authUser.groupId}` : `/`}>
+        <Link href={authUser ? `/dashboards/${authUser.groupId}` : "/"}>
           <ListItemButton>
             <ListItemIcon>
               <Dashboard sx={{ ml: 1 }} />
@@ -182,7 +182,7 @@ const Template = (props: TemplateProps) => {
             // 認証済み
             if (authUser) {
               return (
-                <Link href={`/users/${authUser.userId}`}>
+                <Link href={`/users/${authUser.id}`}>
                   <IconButton size="large" aria-label="account">
                     <AccountCircle sx={{ color: 'white' }} />
                   </IconButton>
