@@ -35,26 +35,31 @@ export type ApiContext = {
 
 // ユーザ
 export type User = {
-  userId: number
+  id: number
   groupId: number
   authType: number
   username: string
   password: string
   email: string
   cancel: boolean
+  create_at: string
+  update_at: string
 }
 
 // グループ
 export type Group = {
-  groupId: number
+  id: number
+  groupName: string
   participants: number
   inviteId: string
   stratDay: number
+  create_at: string
+  update_at: string
 }
 
 // 収支
 export type Capital = {
-  capitalId: number
+  id: number
   userId: number
   groupId: number
   date: string
@@ -63,12 +68,17 @@ export type Capital = {
   note: string
   money: number
   settlement: boolean
+  settlement_at: string
+  create_at: string
+  update_at: string
 }
 
 // カテゴリ
 export type Category = {
-  categoryId: number
+  id: number
   groupId: number
   categoryType: number
   categoryName: string
+  create_at: string
+  update_at: string
 }

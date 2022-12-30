@@ -63,7 +63,7 @@ const Template = (props: TemplateProps) => {
       </Box>
       <Divider />
       <List>
-        <Link href="/dashboard">
+        <Link href={authUser ? `/dashboard/${authUser.groupId}` : `/`}>
           <ListItemButton>
             <ListItemIcon>
               <Dashboard sx={{ ml: 1 }} />
