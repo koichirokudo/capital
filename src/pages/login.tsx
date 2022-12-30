@@ -11,7 +11,7 @@ const LoginPage: NextPage = () => {
   const onLogin = async (err?: Error) => {
     if (!err) {
       // ログイン成功時にクエリ指定があれば、指定されたURLに遷移
-      const redirectTo = (router.query['redirect_to'] as string) ?? '/dashboard'
+      const redirectTo = (router.query['redirect_to'] as string) ?? '/'
       await router.push(redirectTo)
     }
   }
