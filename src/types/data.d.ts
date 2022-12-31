@@ -63,8 +63,8 @@ export type Capital = {
   userId: number
   groupId: number
   date: string
-  categoryId: number
-  categoryType: string
+  category: string
+  categoryType: number
   note: string
   money: number
   settlement: boolean
@@ -85,16 +85,6 @@ export type CapitalHistory = {
   money: number
   settlement: boolean
   settlementAt: string
-  createAt: string
-  updateAt: string
-}
-
-// カテゴリ
-export type Category = {
-  id: number
-  groupId: number
-  categoryType: number
-  categoryName: string
   createAt: string
   updateAt: string
 }
