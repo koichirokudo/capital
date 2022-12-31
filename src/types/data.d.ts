@@ -38,7 +38,7 @@ export type User = {
   id: number
   groupId: number
   authType: number
-  username: string
+  userName: string
   password: string
   email: string
   cancel: boolean
@@ -79,8 +79,8 @@ export type CapitalHistory = {
   userId: number
   groupId: number
   date: string
-  categoryId: number
-  categoryType: string
+  category: string
+  categoryType: number
   note: string
   money: number
   settlement: boolean
