@@ -27,15 +27,13 @@ export const formatStatus = (status: number): string => {
       return '編集'
     case 2:
       return '削除'
-    case 3:
-      return '清算'
   }
   return '不明'
 }
 /**
  * capital-history.categoryTypeを画面表示用に変換する
  * @param categoryType
- * @returns
+ * @returns {string}
  */
 export const formatCategoryType = (categoryType: number): string => {
   return categoryType === 0 ? '収入' : '支出'
