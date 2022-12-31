@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Link from 'components/link/indext'
+import Link from 'components/Link/indext'
 import Image from 'next/image'
 import {
   AppBar,
@@ -53,11 +53,17 @@ const Template = (props: TemplateProps) => {
   const list = (
     <div>
       <Box sx={{ mt: 1, ml: 2 }}>
-        <Image src="/logo.png" width={190} height={50} alt="MyCapi" />
+        <Image
+          src="/logo.png"
+          width={190}
+          height={50}
+          alt="MyCapi"
+          priority={true}
+        />
       </Box>
       <Divider />
       <List>
-        <Link href="/dashboard">
+        <Link href={authUser ? `/dashboards/${authUser.groupId}` : "/"}>
           <ListItemButton>
             <ListItemIcon>
               <Dashboard sx={{ ml: 1 }} />
@@ -145,18 +151,23 @@ const Template = (props: TemplateProps) => {
                   edge="start"
                   aria-label="menu"
                   onClick={handleDrawerOpen}
+                  sx={{
+                    color: 'white',
+                    display: { xs: 'block', sm: 'none' },
+                  }}
                 >
-                  <Menu
-                    sx={{
-                      color: 'white',
-                      display: { xs: 'block', sm: 'none' },
-                    }}
-                  />
+                  <Menu />
                 </IconButton>
               )
             } else if (!authUser) {
               return (
-                <Image src="/logo.png" width={190} height={50} alt="MyCapi" />
+                <Image
+                  src="/logo.png"
+                  width={190}
+                  height={50}
+                  alt="MyCapi"
+                  priority={true}
+                />
               )
             }
           })()}
@@ -171,7 +182,7 @@ const Template = (props: TemplateProps) => {
             // 認証済み
             if (authUser) {
               return (
-                <Link href={`/users/${authUser.userId}`}>
+                <Link href={`/users/${authUser.id}`}>
                   <IconButton size="large" aria-label="account">
                     <AccountCircle sx={{ color: 'white' }} />
                   </IconButton>
@@ -197,7 +208,7 @@ const Template = (props: TemplateProps) => {
         <Box
           component="nav"
           sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-          aria-label="mailbox folders"
+          aria-label="drawer"
         >
           <Drawer
             container={container}

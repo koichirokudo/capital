@@ -1,7 +1,11 @@
-import type { ApiContext, User } from 'types'
+import type { ApiContext, Capital } from 'types'
 import { fetcher } from 'utils'
 
-export type GetAllUsersParams = {
+export type GetAllCapitalsParams = {
+  /**
+   * 登録したユーザーID
+   */
+  userId?: number
   /**
    * 所属するグループID
    */
@@ -13,17 +17,16 @@ export type GetAllUsersParams = {
 }
 
 /**
- * ユーザAPI（一覧取得）
- * @param context APIコンテキスト
- * @returns ユーザ一覧
+ * 収支API（一覧取得
  */
-const getAllUsers = async (
+const getAllCapitals = async (
   context: ApiContext,
-  { groupId, order }: GetAllUsersParams = {},
-): Promise<User[]> => {
-  const path = `${context.apiRootUrl.replace(/\/$/g, '')}/users`
+  { userId, groupId, order }: GetAllCapitalsParams = {},
+): Promise<Capital[]> => {
+  const path = `${context.apiRootUrl.replace(/\/$/g, '')}/capitals/`
   const params = new URLSearchParams()
 
+  userId && params.append('userId', `${userId}`)
   groupId && params.append('groupId', `${groupId}`)
   order && params.append('_order', order)
 
@@ -39,4 +42,4 @@ const getAllUsers = async (
   })
 }
 
-export default getAllUsers
+export default getAllCapitals

@@ -42,13 +42,14 @@ const CapitalApp = (props: CapitalAppProps) => {
             shouldRetryOnError: false,
             fetcher,
           }}
-        />
-        <SpinnerContextProvider>
-          <AuthContextProvider context={context}>
-            <Spinner />
-            <Component {...pageProps} />
-          </AuthContextProvider>
-        </SpinnerContextProvider>
+        >
+          <SpinnerContextProvider>
+            <AuthContextProvider context={context}>
+              <Spinner />
+              <Component {...pageProps} />
+            </AuthContextProvider>
+          </SpinnerContextProvider>
+        </SWRConfig>
       </ThemeProvider>
     </CacheProvider>
   )

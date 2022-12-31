@@ -1,4 +1,4 @@
-import LoginForm from 'components/form/LoginForm'
+import LoginForm from 'components/LoginForm'
 import { useAuthContext } from 'contexts/AuthContext'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 

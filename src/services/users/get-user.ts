@@ -30,7 +30,7 @@ const getUser = async (
      "cancel": "false"
    }
    */
-  return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/user/${id}`, {
+  return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/users/${id}`, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

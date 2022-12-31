@@ -1,4 +1,4 @@
-import { alpha, CircularProgress, styled } from '@mui/material'
+import { CircularProgress, styled } from '@mui/material'
 import { useSpinnerContext } from 'contexts/SpinnerContext'
 
 const SpinnerWrapper = styled('div')({

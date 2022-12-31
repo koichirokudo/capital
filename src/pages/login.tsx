@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
-import Template from 'components/templates'
-import { Box, Typography } from '@mui/material'
+import Template from 'components/Templates'
+import { Box } from '@mui/material'
 import { useRouter } from 'next/router'
 import LoginFormContainer from 'container/LoginFormContainer'
 
@@ -11,7 +11,7 @@ const LoginPage: NextPage = () => {
   const onLogin = async (err?: Error) => {
     if (!err) {
       // ログイン成功時にクエリ指定があれば、指定されたURLに遷移
-      const redirectTo = (router.query['redirect_to'] as string) ?? '/dashboard'
+      const redirectTo = (router.query['redirect_to'] as string) ?? '/'
       await router.push(redirectTo)
     }
   }

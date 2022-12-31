@@ -28,7 +28,7 @@ const LoginForm = ({ handleLogin }: LoginFormProps) => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Image src="/logo.png" width={350} height={100} alt="MyCapi" />
+      <Image src="/logo.png" width={350} height={100} alt="MyCapi" priority={true} />
       <Box
         sx={{
           mt: 3,
