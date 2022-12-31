@@ -5,7 +5,11 @@ export type GetCapitalParams = {
   /**
    * 収支ID
    */
-  id: number
+  id?: number
+  /**
+   * ユーザーID
+   */
+  userId?: number
 }
 
 /**
@@ -16,7 +20,7 @@ export type GetCapitalParams = {
  */
 const getCapital = async (
   context: ApiContext,
-  { id }: GetCapitalParams,
+  { id, userId }: GetCapitalParams,
 ): Promise<Capital[]> => {
   /**
    * サンプルレスポンス
@@ -35,15 +39,21 @@ const getCapital = async (
      "update_at": "2022-12-01-11:00:01"
    }
    */
-  return await fetcher(
-    `${context.apiRootUrl.replace(/\/$/g, '')}/capitals/${id}`,
-    {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+
+  const path = `${context.apiRootUrl.replace(/\/$/g, '')}/capitals/${id}`
+  const params = new URLSearchParams()
+
+  userId && params.append('userId', `${userId}`)
+
+  const query = params.toString()
+
+  return await fetcher(query.length > 0 ? `${path}?${query}` : path, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      credentials: 'include',
     },
-  )
+  })
 }
 
 export default getCapital
