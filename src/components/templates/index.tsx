@@ -63,7 +63,7 @@ const Template = (props: TemplateProps) => {
       </Box>
       <Divider />
       <List>
-        <Link href={authUser ? `/dashboards/${authUser.groupId}` : "/"}>
+        <Link href={`/dashboards/${authUser?.groupId}/${authUser?.id}`}>
           <ListItemButton>
             <ListItemIcon>
               <Dashboard sx={{ ml: 1 }} />
@@ -73,23 +73,13 @@ const Template = (props: TemplateProps) => {
             </ListItem>
           </ListItemButton>
         </Link>
-        <Link href="/income">
+        <Link href={`/capital`}>
           <ListItemButton>
             <ListItemIcon>
               <CurrencyYen sx={{ ml: 1 }} />
             </ListItemIcon>
             <ListItem>
-              <ListItemText primary="収入登録・編集" />
-            </ListItem>
-          </ListItemButton>
-        </Link>
-        <Link href="/outgo">
-          <ListItemButton>
-            <ListItemIcon>
-              <CurrencyYen sx={{ ml: 1 }} />
-            </ListItemIcon>
-            <ListItem>
-              <ListItemText primary="支出登録・編集" />
+              <ListItemText primary="収支登録・編集" />
             </ListItem>
           </ListItemButton>
         </Link>
