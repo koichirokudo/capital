@@ -22,7 +22,7 @@ import {
 } from '@mui/material'
 import {
   formatCategoryType,
-  formatDate,
+  formatDBDate,
   formatMoney,
   formatStatus,
 } from 'utils/format'
@@ -173,7 +173,7 @@ const DashboardPage: NextPage = ({
                         {formatStatus(capitalHistory.status)}
                       </TableCell>
                       <TableCell>
-                        {formatDate(capitalHistory.createAt)}
+                        {formatDBDate(capitalHistory.createAt)}
                       </TableCell>
                       <TableCell>
                         {users.map((user: User) => {

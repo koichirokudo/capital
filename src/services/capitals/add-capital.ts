@@ -6,7 +6,7 @@ export type AddCapitalPramas = {
    * 追加する収支
    * capitalId を除く
    */
-  capital: Omit<Capital, 'capitalId'>
+  capital: Omit<Capital, 'id'>
 }
 
 /**
@@ -30,3 +30,5 @@ const addCapital = async (
     body: JSON.stringify(capital),
   })
 }
+
+export default addCapital
