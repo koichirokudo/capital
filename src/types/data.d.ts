@@ -60,14 +60,14 @@ export type Group = {
 // 収支
 export type Capital = {
   id: number
-  userId: number
+  userName: string
   groupId: number
   date: string
   category: string
-  categoryType: number
+  categoryType: string
   note: string
   money: number
-  settlement: boolean
+  settlement: string
   settlementAt: string
   createAt: string
   updateAt: string
