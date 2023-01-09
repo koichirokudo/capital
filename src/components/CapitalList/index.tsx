@@ -36,7 +36,7 @@ import deleteCapital from 'services/capitals/delete-capital'
 /**
  * 収支一覧をDatagridで表示
  */
-const CapitalList = ({ capitals }: any) => {
+const CapitalList = ({ capitals, mutate }: any) => {
   const context: ApiContext = {
     apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
   }
@@ -191,6 +191,7 @@ const CapitalList = ({ capitals }: any) => {
     try {
       setSpinner(true)
       await deleteCapital(context, id)
+      await mutate()
       setSnackbar({
         children: '収支情報の削除に成功しました。',
         severity: 'success',
