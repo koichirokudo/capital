@@ -7,6 +7,7 @@ import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import getAllCapitals from 'services/capitals/get-all-capitals'
+import useAllCapital from 'services/capitals/use-all-capitals'
 import { ApiContext } from 'types'
 import { useAuthGaurd } from 'utils/hook'
 
@@ -16,12 +17,15 @@ const context: ApiContext = {
 
 type CapitalPageProps = InferGetStaticPropsType<typeof getStaticProps>
 
-const CapitalPage: NextPage = ({ capitals }: CapitalPageProps) => {
+const CapitalPage: NextPage = ({ capitals: initial }: CapitalPageProps) => {
   // 認証ガード
   useAuthGaurd()
 
   const router = useRouter()
   const { authUser } = useAuthContext()
+  const groupId = authUser?.groupId
+  const data = useAllCapital(context, { groupId, initial })
+  const capitals = data.capitals ?? initial
 
   const onSave = (err?: Error) => {
     if (authUser && !err) {
@@ -36,7 +40,7 @@ const CapitalPage: NextPage = ({ capitals }: CapitalPageProps) => {
           <CapitalFormContainer onSave={onSave} />
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <CapitalList capitals={capitals} />
+          <CapitalList capitals={capitals} mutate={data.mutate} />
         </Grid>
       </Grid>
     </Template>
