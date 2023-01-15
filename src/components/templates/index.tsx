@@ -83,33 +83,33 @@ const Template = (props: TemplateProps) => {
             </ListItem>
           </ListItemButton>
         </Link>
-        <Link href="/report/monthly">
+        <Link href="/report/year">
           <ListItemButton>
             <ListItemIcon>
               <BarChart sx={{ ml: 1 }} />
             </ListItemIcon>
             <ListItem>
-              <ListItemText primary="月別レポート" />
+              <ListItemText primary="年間レポート" />
             </ListItem>
           </ListItemButton>
         </Link>
-        <Link href="/report/category">
+        <Link href="/report/monthly">
           <ListItemButton>
             <ListItemIcon>
               <Category sx={{ ml: 1 }} />
             </ListItemIcon>
             <ListItem>
-              <ListItemText primary="カテゴリ別レポート" />
+              <ListItemText primary="月間レポート" />
             </ListItem>
           </ListItemButton>
         </Link>
-        <Link href="/logout">
+        <Link href="/">
           <ListItemButton>
             <ListItemIcon>
               <Logout sx={{ ml: 1 }} />
             </ListItemIcon>
             <ListItem>
-              <ListItemText primary="ログアウト" />
+              <ListItemText primary="精算" />
             </ListItem>
           </ListItemButton>
         </Link>

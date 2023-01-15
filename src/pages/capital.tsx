@@ -36,7 +36,7 @@ const CapitalPage: NextPage = ({ capitals: initial }: CapitalPageProps) => {
   return (
     <Template title="収支登録・編集">
       <Grid container spacing={2}>
-        <Grid item xs={12} md={12} lg={6}>
+        <Grid item xs={12} md={12} lg={4}>
           <CapitalFormContainer onSave={onSave} />
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
