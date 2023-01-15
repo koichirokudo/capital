@@ -103,7 +103,7 @@ const Template = (props: TemplateProps) => {
             </ListItem>
           </ListItemButton>
         </Link>
-        <Link href="/">
+        <Link href="/calculate">
           <ListItemButton>
             <ListItemIcon>
               <Logout sx={{ ml: 1 }} />
