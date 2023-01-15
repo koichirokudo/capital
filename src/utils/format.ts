@@ -16,16 +16,31 @@ export const formatDBDate = (date: string): string => {
   return date.replace(/(\d{4})\-(\d{2})\-(\d{2})-/, '$1/$2/$3 ')
 }
 /**
- * 指定したDateオブジェクトの日時を指定した区切り文字に変換してstring型で返す
+ * 指定したDateオブジェクトの日時を指定した区切り文字に変換する
+ * typeに year, month, day を指定することで指定したところのまでをstringで返す
+ * defaultはday
  * ex. yyyy/mm/dd
- * ex. yyyy-mm-dd
+ * ex. year: yyyy, month: yyyy/mm, day: yyyy/mm/dd
  * @param date
+ * @param type
+ * @param delimiter
  * @returns {string}
  */
-export const formatDate = (date: Date, delimiter: string = '/'): string => {
+export const formatDate = (
+  date: Date,
+  type: string = 'day',
+  delimiter: string = '/',
+): string => {
   const year = date.getFullYear()
   const month = ('00' + (date.getMonth() + 1)).slice(-2)
   const day = ('00' + date.getDate()).slice(-2)
+
+  if (type === 'year') {
+    return `${year}`
+  } else if (type === 'month') {
+    return `${year}${delimiter}${month}`
+  }
+
   return `${year}${delimiter}${month}${delimiter}${day}`
 }
 /**
