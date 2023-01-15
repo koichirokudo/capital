@@ -14,6 +14,7 @@ import {
   Filler,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
+import { labels } from 'const'
 
 ChartJS.register(
   CategoryScale,
@@ -40,21 +41,6 @@ export const LineChart: React.FC<LineChartProps> = ({
   height,
   width,
 }) => {
-  const labels = [
-    '1月',
-    '2月',
-    '3月',
-    '4月',
-    '5月',
-    '6月',
-    '7月',
-    '8月',
-    '9月',
-    '10月',
-    '11月',
-    '12月',
-  ]
-
   const options = {
     responsive: true,
     plugins: {

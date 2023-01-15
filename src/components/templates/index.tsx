@@ -83,7 +83,7 @@ const Template = (props: TemplateProps) => {
             </ListItem>
           </ListItemButton>
         </Link>
-        <Link href="/report/month">
+        <Link href="/report/monthly">
           <ListItemButton>
             <ListItemIcon>
               <BarChart sx={{ ml: 1 }} />
