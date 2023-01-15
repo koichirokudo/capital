@@ -30,7 +30,7 @@ const getCapital = async (
      "groupId": 1
      "date": "2022-12-01 12:00:00"
      "categoryId": 1
-     "categoryType": 0
+     "capitalType": 0
      "note": "メモです"
      "money": 1000
      "settlement": "false"

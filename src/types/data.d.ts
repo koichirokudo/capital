@@ -81,7 +81,7 @@ export type CapitalHistory = {
   groupId: number
   date: string
   category: string
-  categoryType: number
+  capitalType: number
   note: string
   money: number
   settlement: boolean

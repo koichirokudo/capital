@@ -56,7 +56,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
    * @param props
    * @returns
    */
-  const SelectCategoryTypeEditInputCell = (props: GridRenderCellParams) => {
+  const SelectCapitalTypeEditInputCell = (props: GridRenderCellParams) => {
     const { id, value, field } = props
     const apiRef = useGridApiContext()
 
@@ -84,14 +84,14 @@ const CapitalList = ({ capitals, mutate }: any) => {
   }
 
   /**
-   * SelectCategoryTypeEditInputCellのラッパー関数
+   * SelectCapitalTypeEditInputCellのラッパー関数
    * @param params
    * @returns
    */
-  const renderSelectCategoryTypeEditInputCell: GridColDef['renderCell'] = (
+  const renderSelectCapitalTypeEditInputCell: GridColDef['renderCell'] = (
     params,
   ) => {
-    return <SelectCategoryTypeEditInputCell {...params} />
+    return <SelectCapitalTypeEditInputCell {...params} />
   }
 
   /**
@@ -253,11 +253,11 @@ const CapitalList = ({ capitals, mutate }: any) => {
     },
     { field: 'userName', headerName: '更新者', width: 200, editable: true },
     {
-      field: 'categoryType',
+      field: 'capitalType',
       headerName: '収支',
       width: 80,
       editable: true,
-      renderEditCell: renderSelectCategoryTypeEditInputCell,
+      renderEditCell: renderSelectCapitalTypeEditInputCell,
     },
     {
       field: 'category',

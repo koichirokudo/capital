@@ -60,10 +60,10 @@ export const formatStatus = (status: number): string => {
   return '不明'
 }
 /**
- * capital-history.categoryTypeを画面表示用に変換する
- * @param categoryType
+ * capital-history.capitalTypeを画面表示用に変換する
+ * @param capitalType
  * @returns {string}
  */
-export const formatCategoryType = (categoryType: number): string => {
-  return categoryType === 0 ? '収入' : '支出'
+export const formatCapitalType = (capitalType: number): string => {
+  return capitalType === 0 ? '収入' : '支出'
 }

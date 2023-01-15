@@ -21,7 +21,7 @@ import {
   Typography,
 } from '@mui/material'
 import {
-  formatCategoryType,
+  formatCapitalType,
   formatDBDate,
   formatMoney,
   formatStatus,
@@ -183,7 +183,7 @@ const DashboardPage: NextPage = ({
                         })}
                       </TableCell>
                       <TableCell>
-                        {formatCategoryType(capitalHistory.categoryType)}
+                        {formatCapitalType(capitalHistory.capitalType)}
                       </TableCell>
                       <TableCell>{capitalHistory.category}</TableCell>
                       <TableCell>{formatMoney(capitalHistory.money)}</TableCell>
