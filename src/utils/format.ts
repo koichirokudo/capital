@@ -1,9 +1,22 @@
 /**
  * 数字を3桁カンマ区切りにする
+ * currency が true の場合は円マークをつけて返す
  * @param money
+ * @param currency
  * @returns {string}
  */
-export const formatMoney = (money: string | number): string => {
+export const formatMoney = (
+  money: string | number,
+  currency?: boolean,
+): string => {
+  if (currency) {
+    return new Intl.NumberFormat('ja-JP', {
+      style: 'currency',
+      currency: 'JPY',
+    })
+      .format(Number(money))
+      .toLocaleString()
+  }
   return Number(money).toLocaleString()
 }
 /**
@@ -60,10 +73,10 @@ export const formatStatus = (status: number): string => {
   return '不明'
 }
 /**
- * capital-history.categoryTypeを画面表示用に変換する
- * @param categoryType
+ * capital-history.capitalTypeを画面表示用に変換する
+ * @param capitalType
  * @returns {string}
  */
-export const formatCategoryType = (categoryType: number): string => {
-  return categoryType === 0 ? '収入' : '支出'
+export const formatCapitalType = (capitalType: number): string => {
+  return capitalType === 0 ? '収入' : '支出'
 }

@@ -26,7 +26,7 @@ export type CapitalFormData = {
   groupId: number
   date: string
   category: string
-  categoryType: string
+  capitalType: string
   note: string
   money: number
   settlement: boolean
@@ -65,11 +65,11 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl
             margin="normal"
-            error={errors?.hasOwnProperty('categoryType')}
+            error={errors?.hasOwnProperty('capitalType')}
           >
             <FormLabel>収支タイプ</FormLabel>
             <Controller
-              name="categoryType"
+              name="capitalType"
               defaultValue="0"
               control={control}
               rules={{ required: '収支タイプを選択してください。' }}
@@ -88,7 +88,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                     />
                   </RadioGroup>
                   <FormHelperText>
-                    {errors?.categoryType?.message}
+                    {errors?.capitalType?.message}
                   </FormHelperText>
                 </>
               )}

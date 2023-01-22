@@ -9,7 +9,11 @@ import { useAuthGaurd } from 'utils/hook'
 import { BarChart } from 'components/BarChart'
 import { formatMoney } from 'utils/format'
 import { Categories } from 'components/CategoryList'
-import { ArrowBackIos, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
+import {
+  ArrowBackIos,
+  ArrowBackIosNew,
+  ArrowForwardIos,
+} from '@mui/icons-material'
 
 type CategoryPageProps = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -29,12 +33,12 @@ const CategoryPage: NextPage = ({ capitals: initial }: CategoryPageProps) => {
   const capitals = data.capitals ?? initial
 
   const incomeCategories = Categories.filter(
-    (c) => c.categoryType === INCOME,
+    (c) => c.capitalType === INCOME,
   ).map((c) => c.category)
 
-  const outgoCategories = Categories.filter(
-    (c) => c.categoryType === OUTGO,
-  ).map((c) => c.category)
+  const outgoCategories = Categories.filter((c) => c.capitalType === OUTGO).map(
+    (c) => c.category,
+  )
 
   const options = {
     indexAxis: 'y' as const,

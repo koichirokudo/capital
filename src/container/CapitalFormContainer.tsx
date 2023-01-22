@@ -31,7 +31,7 @@ const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
       groupId: authUser.groupId,
       date: data.date,
       category: data.category,
-      categoryType: data.categoryType,
+      capitalType: data.capitalType,
       money: Number(data.money),
       note: data.note ?? '',
       settlement: 'FALSE',
