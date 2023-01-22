@@ -89,3 +89,13 @@ export type CapitalHistory = {
   createAt: string
   updateAt: string
 }
+
+export type Calculate = {
+  id: number
+  userId: number
+  userName: string
+  memberName: string
+  outgo: number
+  income: number
+  total: number
+}
