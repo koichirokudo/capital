@@ -1,9 +1,22 @@
 /**
  * 数字を3桁カンマ区切りにする
+ * currency が true の場合は円マークをつけて返す
  * @param money
+ * @param currency
  * @returns {string}
  */
-export const formatMoney = (money: string | number): string => {
+export const formatMoney = (
+  money: string | number,
+  currency?: boolean,
+): string => {
+  if (currency) {
+    return new Intl.NumberFormat('ja-JP', {
+      style: 'currency',
+      currency: 'JPY',
+    })
+      .format(Number(money))
+      .toLocaleString()
+  }
   return Number(money).toLocaleString()
 }
 /**

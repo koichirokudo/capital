@@ -14,7 +14,7 @@ import {
   Filler,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-import { labels } from 'const'
+import { monthlyLabels } from 'const'
 
 ChartJS.register(
   CategoryScale,
@@ -32,42 +32,17 @@ ChartJS.register(
 
 interface LineChartProps {
   data: any
+  options?: any
   height: number
   width: number
 }
 
 export const LineChart: React.FC<LineChartProps> = ({
   data,
+  options,
   height,
   width,
 }) => {
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-    elements: {
-      line: {
-        tension: 0,
-        borderWidth: 2,
-        fill: 'start',
-      },
-      point: {
-        radius: 0,
-        hitRadius: 0,
-      },
-    },
-    scales: {
-      y: {
-        suggestedMin: 50,
-        suggestedMax: 100,
-      },
-    },
-  }
-
-  data.labels = labels
 
   return <Line data={data} options={options} height={height} width={width} />
 }
