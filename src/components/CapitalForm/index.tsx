@@ -25,6 +25,7 @@ export type CapitalFormData = {
   userId: number
   groupId: number
   date: string
+  share: string
   category: string
   capitalType: string
   note: string

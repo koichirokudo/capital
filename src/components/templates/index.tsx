@@ -2,17 +2,21 @@ import * as React from 'react'
 import Link from 'components/Link/indext'
 import Image from 'next/image'
 import {
-  AppBar,
+  AppBar as MuiAppBar,
+  Avatar,
   Box,
   CircularProgress,
   Divider,
-  Drawer,
+  Drawer as MuiDrawer,
   IconButton,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Stack,
+  styled,
   Toolbar,
   Typography,
 } from '@mui/material'
@@ -21,21 +25,65 @@ import {
   Notifications,
   AccountCircle,
   Person,
-  Dashboard,
   CurrencyYen,
   BarChart,
   Logout,
   Category,
+  ChevronLeft,
 } from '@mui/icons-material'
 import { useAuthContext } from 'contexts/AuthContext'
 
-const drawerWidth = 270
+const drawerWidth = 240
 
 interface TemplateProps {
   window?: () => Window
   title?: string
   children?: React.ReactNode
 }
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{ open?: boolean }>(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}))
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{ open?: boolean }>(({ theme, open }) => ({
+  '& .MuiDrawer-paper': {
+    position: 'relative',
+    whiteSpace: 'noWrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: 'border-box',
+    ...(!open && {
+      overflowX: 'hidden',
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(3),
+      [theme.breakpoints.up('sm')]: {
+        width: theme.spacing(7.5),
+      },
+    }),
+  },
+}))
 
 const Template = (props: TemplateProps) => {
   const { authUser, isLoading } = useAuthContext()
@@ -51,116 +99,58 @@ const Template = (props: TemplateProps) => {
   }
 
   const list = (
-    <div>
-      <Box sx={{ mt: 1, ml: 2 }}>
-        <Image
-          src="/logo.png"
-          width={190}
-          height={50}
-          alt="MyCapi"
-          priority={true}
-        />
-      </Box>
-      <Divider />
+    <>
       <List>
-        <Link href={`/dashboards/${authUser?.groupId}/${authUser?.id}`}>
-          <ListItemButton>
-            <ListItemIcon>
-              <Dashboard sx={{ ml: 1 }} />
-            </ListItemIcon>
-            <ListItem>
-              <ListItemText primary="ダッシュボード" />
-            </ListItem>
-          </ListItemButton>
-        </Link>
         <Link href={`/capital`}>
           <ListItemButton>
-            <ListItemIcon>
-              <CurrencyYen sx={{ ml: 1 }} />
-            </ListItemIcon>
-            <ListItem>
+            <CurrencyYen />
+            <ListItem sx={{ ml: 1 }}>
               <ListItemText primary="収支登録・編集" />
             </ListItem>
           </ListItemButton>
         </Link>
         <Link href="/report/year">
           <ListItemButton>
-            <ListItemIcon>
-              <BarChart sx={{ ml: 1 }} />
-            </ListItemIcon>
-            <ListItem>
+            <BarChart />
+            <ListItem sx={{ ml: 1 }}>
               <ListItemText primary="年間レポート" />
             </ListItem>
           </ListItemButton>
         </Link>
         <Link href="/report/monthly">
           <ListItemButton>
-            <ListItemIcon>
-              <Category sx={{ ml: 1 }} />
-            </ListItemIcon>
-            <ListItem>
+            <Category />
+            <ListItem sx={{ ml: 1 }}>
               <ListItemText primary="月間レポート" />
             </ListItem>
           </ListItemButton>
         </Link>
         <Link href={`/calculate/${authUser?.groupId}`}>
           <ListItemButton>
-            <ListItemIcon>
-              <Logout sx={{ ml: 1 }} />
-            </ListItemIcon>
-            <ListItem>
+            <Logout />
+            <ListItem sx={{ ml: 1 }}>
               <ListItemText primary="精算" />
             </ListItem>
           </ListItemButton>
         </Link>
       </List>
-    </div>
+    </>
   )
-
-  const container = window !== undefined ? () => document.body : undefined
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <AppBar
-        position="fixed"
-        sx={{
-          ...(authUser && {
-            width: {
-              sm: `calc(100% - ${drawerWidth}px)`,
-              ml: { sm: `${drawerWidth}px` },
-            },
-          }),
-        }}
-      >
+      <AppBar position="absolute" open={open}>
         <Toolbar>
-          {(() => {
-            if (authUser) {
-              return (
-                <IconButton
-                  size="large"
-                  edge="start"
-                  aria-label="menu"
-                  onClick={handleDrawerOpen}
-                  sx={{
-                    color: 'white',
-                    display: { xs: 'block', sm: 'none' },
-                  }}
-                >
-                  <Menu />
-                </IconButton>
-              )
-            } else if (!authUser) {
-              return (
-                <Image
-                  src="/logo.png"
-                  width={190}
-                  height={50}
-                  alt="MyCapi"
-                  priority={true}
-                />
-              )
-            }
-          })()}
+          <IconButton
+            edge="start"
+            aria-label="open drawer"
+            sx={{
+              ...(open && { display: 'none' }),
+            }}
+            onClick={handleDrawerOpen}
+          >
+            <Menu />
+          </IconButton>
           <Typography variant="h5" color="white">
             {title}
           </Typography>
@@ -195,39 +185,24 @@ const Template = (props: TemplateProps) => {
         </Toolbar>
       </AppBar>
       {authUser && (
-        <Box
-          component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-          aria-label="drawer"
-        >
-          <Drawer
-            container={container}
-            variant="temporary"
-            open={open}
-            onClose={handleDrawerClose}
-            ModalProps={{
-              keepMounted: true,
-            }}
-            sx={{
-              display: { xs: 'block', sm: 'none' },
-            }}
-          >
+        <>
+          <Drawer variant="permanent" open={open}>
+            <Toolbar
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                px: [1],
+              }}
+            >
+              <IconButton onClick={handleDrawerClose}>
+                <ChevronLeft />
+              </IconButton>
+            </Toolbar>
+            <Divider />
             {list}
           </Drawer>
-          <Drawer
-            variant="permanent"
-            sx={{
-              display: { xs: 'none', sm: 'block' },
-              '& .MuiDrawer-paper': {
-                boxSizing: 'border-box',
-                width: drawerWidth,
-              },
-            }}
-            open
-          >
-            {list}
-          </Drawer>
-        </Box>
+        </>
       )}
       <Box
         component="main"

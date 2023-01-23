@@ -30,6 +30,7 @@ const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
       userName: authUser.userName,
       groupId: authUser.groupId,
       date: data.date,
+      share: data.share,
       category: data.category,
       capitalType: data.capitalType,
       money: Number(data.money),
