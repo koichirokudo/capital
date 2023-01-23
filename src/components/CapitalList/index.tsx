@@ -240,18 +240,13 @@ const CapitalList = ({ capitals, mutate }: any) => {
 
   const columns: GridColumns = [
     {
-      field: 'id',
-      headerName: 'ID',
-      width: 110,
-    },
-    {
       field: 'date',
       headerName: '日時',
-      width: 150,
+      width: 120,
       type: 'date',
       editable: true,
     },
-    { field: 'userName', headerName: '更新者', width: 200, editable: true },
+    { field: 'userName', headerName: '更新者', width: 180, editable: true },
     {
       field: 'capitalType',
       headerName: '収支',
@@ -273,7 +268,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
       type: 'number',
       editable: true,
     },
-    { field: 'note', headerName: 'メモ', editable: true, width: 300 },
+    { field: 'note', headerName: 'メモ', editable: true, width: 200 },
     {
       field: 'actions',
       type: 'actions',
@@ -320,10 +315,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
   ]
 
   return (
-    <Paper sx={{ p: 2 }}>
-      <Typography variant="h5" sx={{ mb: 1 }}>
-        収支一覧
-      </Typography>
+    <Paper>
       <Box sx={{ height: '700px', width: '100%' }}>
         <DataGrid
           rows={capitals}
