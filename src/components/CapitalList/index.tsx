@@ -315,10 +315,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
   ]
 
   return (
-    <Paper sx={{ p: 2 }}>
-      <Typography variant="h5" sx={{ mb: 1 }}>
-        収支一覧
-      </Typography>
+    <Paper>
       <Box sx={{ height: '700px', width: '100%' }}>
         <DataGrid
           rows={capitals}

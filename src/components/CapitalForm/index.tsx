@@ -61,13 +61,10 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
   const categories = Categories
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{ p: 1 }}>
       <Box>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl
-            margin="normal"
-            error={errors?.hasOwnProperty('capitalType')}
-          >
+          <FormControl error={errors?.hasOwnProperty('capitalType')}>
             <FormLabel>収支タイプ</FormLabel>
             <Controller
               name="capitalType"
@@ -185,7 +182,13 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
             color="primary"
             variant="contained"
             fullWidth
-            sx={{ mt: 1, fontSize: '1rem', height: 56 }}
+            sx={{
+              mt: 1,
+              color: '#fff',
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              height: 56,
+            }}
           >
             登録
           </Button>
