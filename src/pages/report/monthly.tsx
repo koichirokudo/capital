@@ -9,11 +9,7 @@ import { useAuthGaurd } from 'utils/hook'
 import { BarChart } from 'components/BarChart'
 import { formatMoney } from 'utils/format'
 import { Categories } from 'components/CategoryList'
-import {
-  ArrowBackIos,
-  ArrowBackIosNew,
-  ArrowForwardIos,
-} from '@mui/icons-material'
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material'
 
 type CategoryPageProps = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -39,9 +35,11 @@ const CategoryPage: NextPage = ({ capitals: initial }: CategoryPageProps) => {
   const outgoCategories = Categories.filter((c) => c.capitalType === OUTGO).map(
     (c) => c.category,
   )
+  console.log(outgoCategories)
 
   const options = {
     indexAxis: 'y' as const,
+    skipNull: true,
     plugins: {
       legend: {
         display: false,
@@ -51,23 +49,68 @@ const CategoryPage: NextPage = ({ capitals: initial }: CategoryPageProps) => {
       },
       datalabels: {
         display: true,
-        formatter: function (value: { toString: () => string | number }) {
-          return formatMoney(value.toString())
+        font: {
+          size: 10,
+          weight: 'bold',
+        },
+        formatter: function (
+          value: { toString: () => string | number },
+          chart: { dataset: any; dataIndex: any },
+        ) {
+          // const { dataset, dataIndex } = chart
+          // console.log(dataset.data[dataIndex])
+          // console.log(dataIndex)
+          if (value > 0) {
+            return formatMoney(value.toString(), true)
+          } else {
+            return null
+          }
+        },
+      },
+    },
+    scales: {
+      x: {
+        display: true,
+        grid: {
+          display: false,
+        },
+        ticks: {
+          font: {
+            size: 14,
+          },
+        },
+      },
+      y: {
+        display: true,
+        beginAtZero: true,
+        grid: {
+          display: false,
         },
       },
     },
   }
 
-  // TODO: backend からとってくる
-  const categoryData = [420000, 438900, 387908, 459869, 678755, 245678]
+  // TODO: backend から以下の形式でとってくる
+  /*
+  data: {
+    datasets: [{
+      data: [{category: '食費', money: 1000}, {category: '日用品', money: 1000}]
+    }]
+  }
+}*/
+  const categoryIncomeData = [420000, 438900, 387908, 459869, 678755, 245678]
+  const categoryOutgoData = [420000, 438900, 387908, 459869, 678755, 245678]
 
   const incomeCategoriesData = {
     labels: incomeCategories,
     datasets: [
       {
-        data: categoryData,
-        borderColor: 'rgba(158, 206, 255,1)',
-        backgroundColor: 'rgba(158, 206, 255, 0.8)',
+        label: 'カテゴリ',
+        data: categoryIncomeData,
+        backgroundColor: 'rgba(0, 171, 85, 0.9)',
+        barPercentage: 0.9,
+        borderRadius: 10,
+        skipNull: true,
       },
     ],
   }
@@ -76,9 +119,12 @@ const CategoryPage: NextPage = ({ capitals: initial }: CategoryPageProps) => {
     labels: outgoCategories,
     datasets: [
       {
-        data: categoryData,
-        borderColor: 'rgba(235, 179, 179, 1)',
-        backgroundColor: 'rgba(235, 179, 179, 0.8)',
+        label: 'カテゴリ',
+        data: categoryOutgoData,
+        backgroundColor: 'rgba(255, 171, 0, 0.9)',
+        barPercentage: 0.9,
+        borderRadius: 10,
+        skipNull: true,
       },
     ],
   }
@@ -114,10 +160,7 @@ const CategoryPage: NextPage = ({ capitals: initial }: CategoryPageProps) => {
       </Typography>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={12} lg={12}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h5">
-              収入 {formatMoney(categoryData.reduce((ac, cv) => ac + cv))}円
-            </Typography>
+          <Paper>
             <BarChart
               data={incomeCategoriesData}
               options={options}
@@ -127,10 +170,7 @@ const CategoryPage: NextPage = ({ capitals: initial }: CategoryPageProps) => {
           </Paper>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h5">
-              支出 {formatMoney(categoryData.reduce((ac, cv) => ac + cv))}円
-            </Typography>
+          <Paper>
             <BarChart
               data={outgoCategoriesData}
               options={options}
