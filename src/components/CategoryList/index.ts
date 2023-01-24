@@ -16,7 +16,7 @@ export const Categories = [
     capitalType: '収入',
   },
   {
-    category: 'お小遣い',
+    category: '小遣い',
     capitalType: '収入',
   },
   {
@@ -24,7 +24,7 @@ export const Categories = [
     capitalType: '収入',
   },
   {
-    category: '臨時収入',
+    category: '臨時',
     capitalType: '収入',
   },
   {
@@ -76,15 +76,15 @@ export const Categories = [
     capitalType: '支出',
   },
   {
-    category: 'ローン返済',
+    category: 'ローン',
     capitalType: '支出',
   },
   {
-    category: 'インターネット',
+    category: 'ネット',
     capitalType: '支出',
   },
   {
-    category: 'スマートフォン',
+    category: 'スマホ',
     capitalType: '支出',
   },
   {
