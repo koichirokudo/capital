@@ -17,7 +17,7 @@ import { useAuthGaurd } from 'utils/hook'
 
 type UserPageProps = InferGetStaticPropsType<typeof getStaticProps>
 
-const UserPage: NextPage<UserPageProps> = ({ id, user }: UserPageProps) => {
+const UserEditPage: NextPage<UserPageProps> = ({ id, user }: UserPageProps) => {
   // 認証ガード
   useAuthGaurd()
 
@@ -71,4 +71,4 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   }
 }
 
-export default UserPage
+export default UserEditPage
