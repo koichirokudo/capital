@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import Template from 'components/Templates'
-import UserEditFormContainer from 'container/UserFormContainer'
+import UserEditFormContainer from 'container/UserEditFormContainer'
 import { useAuthContext } from 'contexts/AuthContext'
 import {
   GetStaticPaths,

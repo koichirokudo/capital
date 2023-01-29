@@ -1,4 +1,4 @@
-import UserEditForm, { UserFormData } from 'components/UserForm'
+import UserEditForm, { UserFormData } from 'components/UserEditForm'
 import { useAuthContext } from 'contexts/AuthContext'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 import updateUser from 'services/users/update-user'
