@@ -25,7 +25,7 @@ const UserEditPage: NextPage<UserPageProps> = ({ id, user }: UserPageProps) => {
   const { authUser } = useAuthContext()
   const onSave = (err?: Error) => {
     if (authUser && !err) {
-      router.push(`/users/${authUser.id}`)
+      router.push(`/users/edit/${authUser.id}`)
     }
   }
 
@@ -45,7 +45,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     apiRootUrl: process.env.API_BASE_URL || 'http://localhost:3000',
   }
   const users = await getAllUsers(context)
-  const paths = users.map((u) => `/users/${u.id}`)
+  const paths = users.map((u) => `/users/edit/${u.id}`)
 
   return { paths, fallback: true }
 }
