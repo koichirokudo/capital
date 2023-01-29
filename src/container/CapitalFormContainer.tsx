@@ -27,7 +27,7 @@ const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
     if (!authUser) return
 
     const capital = {
-      userName: authUser.userName,
+      username: authUser.username,
       groupId: authUser.groupId,
       date: data.date,
       share: data.share,
@@ -37,8 +37,6 @@ const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
       note: data.note ?? '',
       settlement: 'FALSE',
       settlementAt: '', // DBで日時登録する
-      createAt: '', // 同上
-      updateAt: '', // 同上
     }
 
     try {

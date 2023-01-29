@@ -1,4 +1,4 @@
-import { Box, Button, Container, TextField } from '@mui/material'
+import { Box, Button, Container, TextField, Typography } from '@mui/material'
 import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 
@@ -28,7 +28,13 @@ const LoginForm = ({ handleLogin }: LoginFormProps) => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Image src="/logo.png" width={350} height={100} alt="MyCapi" priority={true} />
+      <Image
+        src="/logo.png"
+        width={350}
+        height={100}
+        alt="MyCapi"
+        priority={true}
+      />
       <Box
         sx={{
           mt: 3,
