@@ -30,7 +30,7 @@ const UserEditPage: NextPage<UserPageProps> = ({ id, user }: UserPageProps) => {
   }
 
   return (
-    <Template title="プロフィール">
+    <Template title="プロフィール編集">
       <Grid container>
         <Grid item xs={12} md={12} lg={12}>
           <UserEditFormContainer onSave={onSave} />
@@ -67,7 +67,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
       id: userId,
       user,
     },
-    revalidate: 10,
   }
 }
 
