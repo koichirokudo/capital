@@ -1,4 +1,3 @@
-import { GridRowId } from '@mui/x-data-grid'
 import type { ApiContext, Capital } from 'types'
 import { fetcher } from 'utils'
 

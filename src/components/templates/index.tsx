@@ -1,9 +1,7 @@
 import * as React from 'react'
 import Link from 'components/Link/indext'
-import Image from 'next/image'
 import {
   AppBar as MuiAppBar,
-  Avatar,
   Box,
   CircularProgress,
   Divider,
@@ -11,17 +9,17 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
-  Stack,
+  Menu,
+  MenuItem,
   styled,
   Toolbar,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import {
-  Menu,
+  Menu as MenuIcon,
   Notifications,
   AccountCircle,
   Person,
@@ -87,70 +85,47 @@ const Drawer = styled(MuiDrawer, {
 
 const Template = (props: TemplateProps) => {
   const { authUser, isLoading } = useAuthContext()
-  const { window, title, children } = props
-  const [open, setOpen] = React.useState<boolean>(false)
+  const { title, children } = props
+  const [drawerOpen, setDrawerOpen] = React.useState<boolean>(false)
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
 
   const handleDrawerOpen = () => {
-    setOpen(true)
+    setDrawerOpen(true)
   }
-
   const handleDrawerClose = () => {
-    setOpen(false)
+    setDrawerOpen(false)
   }
 
-  const list = (
-    <>
-      <List>
-        <Link href={`/capital`}>
-          <ListItemButton>
-            <CurrencyYen />
-            <ListItem sx={{ ml: 1 }}>
-              <ListItemText primary="収支登録・編集" />
-            </ListItem>
-          </ListItemButton>
-        </Link>
-        <Link href="/report/year">
-          <ListItemButton>
-            <BarChart />
-            <ListItem sx={{ ml: 1 }}>
-              <ListItemText primary="年間レポート" />
-            </ListItem>
-          </ListItemButton>
-        </Link>
-        <Link href="/report/monthly">
-          <ListItemButton>
-            <Category />
-            <ListItem sx={{ ml: 1 }}>
-              <ListItemText primary="月間レポート" />
-            </ListItem>
-          </ListItemButton>
-        </Link>
-        <Link href={`/calculate/${authUser?.groupId}`}>
-          <ListItemButton>
-            <Logout />
-            <ListItem sx={{ ml: 1 }}>
-              <ListItemText primary="精算" />
-            </ListItem>
-          </ListItemButton>
-        </Link>
-      </List>
-    </>
-  )
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <AppBar position="absolute" open={open}>
+      <AppBar position="absolute" open={drawerOpen}>
         <Toolbar>
-          <IconButton
-            edge="start"
-            aria-label="open drawer"
-            sx={{
-              ...(open && { display: 'none' }),
-            }}
-            onClick={handleDrawerOpen}
-          >
-            <Menu />
-          </IconButton>
+          {(() => {
+            // 認証済み
+            if (authUser) {
+              return (
+                <IconButton
+                  edge="start"
+                  aria-label="open drawer"
+                  sx={{
+                    ...(drawerOpen && { display: 'none' }),
+                  }}
+                  onClick={handleDrawerOpen}
+                >
+                  <MenuIcon />
+                </IconButton>
+              )
+            }
+          })()}
           <Typography variant="h5" color="white">
             {title}
           </Typography>
@@ -162,11 +137,69 @@ const Template = (props: TemplateProps) => {
             // 認証済み
             if (authUser) {
               return (
-                <Link href={`/users/${authUser.id}`}>
-                  <IconButton size="large" aria-label="account">
-                    <AccountCircle sx={{ color: 'white' }} />
-                  </IconButton>
-                </Link>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                  }}
+                >
+                  <Tooltip title="プロフィール">
+                    <IconButton
+                      onClick={handleMenuClick}
+                      size="small"
+                      sx={{ ml: 2 }}
+                      aria-controls={open ? 'account-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? 'true' : undefined}
+                    >
+                      <AccountCircle sx={{ color: 'white' }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleMenuClose}
+                    onClick={handleMenuClose}
+                    PaperProps={{
+                      elevation: 0,
+                      sx: {
+                        overflow: 'visible',
+                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                        mt: 1.5,
+                        '& .MuiAvatar-root': {
+                          width: 32,
+                          height: 32,
+                          ml: -0.5,
+                          mr: 1,
+                        },
+                        '&:before': {
+                          content: '""',
+                          display: 'block',
+                          position: 'absolute',
+                          top: 0,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          bgcolor: 'background.paper',
+                          transform: 'translateY(-50%) rotate(45deg)',
+                          zIndex: 0,
+                        },
+                      },
+                    }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  >
+                    <Link href={`/users/${authUser.id}`}>
+                      <MenuItem onClick={handleMenuClose}>
+                        プロフィール
+                      </MenuItem>
+                    </Link>
+                    <Link href={`/logout`}>
+                      <MenuItem onClick={handleMenuClose}>ログアウト</MenuItem>
+                    </Link>
+                  </Menu>
+                </Box>
               )
             } else if (isLoading) {
               // ロード中
@@ -186,7 +219,7 @@ const Template = (props: TemplateProps) => {
       </AppBar>
       {authUser && (
         <>
-          <Drawer variant="permanent" open={open}>
+          <Drawer variant="permanent" open={drawerOpen}>
             <Toolbar
               sx={{
                 display: 'flex',
@@ -200,7 +233,40 @@ const Template = (props: TemplateProps) => {
               </IconButton>
             </Toolbar>
             <Divider />
-            {list}
+            <List>
+              <Link href={`/capital`}>
+                <ListItemButton>
+                  <CurrencyYen />
+                  <ListItem sx={{ ml: 1 }}>
+                    <ListItemText primary="収支登録・編集" />
+                  </ListItem>
+                </ListItemButton>
+              </Link>
+              <Link href="/report/year">
+                <ListItemButton>
+                  <BarChart />
+                  <ListItem sx={{ ml: 1 }}>
+                    <ListItemText primary="年間レポート" />
+                  </ListItem>
+                </ListItemButton>
+              </Link>
+              <Link href="/report/monthly">
+                <ListItemButton>
+                  <Category />
+                  <ListItem sx={{ ml: 1 }}>
+                    <ListItemText primary="月間レポート" />
+                  </ListItem>
+                </ListItemButton>
+              </Link>
+              <Link href={`/calculate/${authUser?.groupId}`}>
+                <ListItemButton>
+                  <Logout />
+                  <ListItem sx={{ ml: 1 }}>
+                    <ListItemText primary="精算" />
+                  </ListItem>
+                </ListItemButton>
+              </Link>
+            </List>
           </Drawer>
         </>
       )}
