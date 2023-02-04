@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Template from 'components/Templates'
 import { Box } from '@mui/material'
 import { useRouter } from 'next/router'
-import UserFormContainer from 'container/UserFormContainer'
+import UserFormContainer from 'container/UserEditFormContainer'
 
 /**
  * ユーザー登録ページ

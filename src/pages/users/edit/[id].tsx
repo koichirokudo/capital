@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import Template from 'components/Templates'
-import UserEditFormContainer from 'container/UserFormContainer'
+import UserEditFormContainer from 'container/UserEditFormContainer'
 import { useAuthContext } from 'contexts/AuthContext'
 import {
   GetStaticPaths,
@@ -17,7 +17,7 @@ import { useAuthGaurd } from 'utils/hook'
 
 type UserPageProps = InferGetStaticPropsType<typeof getStaticProps>
 
-const UserPage: NextPage<UserPageProps> = ({ id, user }: UserPageProps) => {
+const UserEditPage: NextPage<UserPageProps> = ({ id, user }: UserPageProps) => {
   // 認証ガード
   useAuthGaurd()
 
@@ -25,12 +25,12 @@ const UserPage: NextPage<UserPageProps> = ({ id, user }: UserPageProps) => {
   const { authUser } = useAuthContext()
   const onSave = (err?: Error) => {
     if (authUser && !err) {
-      router.push(`/users/${authUser.id}`)
+      router.push(`/users/edit/${authUser.id}`)
     }
   }
 
   return (
-    <Template title="プロフィール">
+    <Template title="プロフィール編集">
       <Grid container>
         <Grid item xs={12} md={12} lg={12}>
           <UserEditFormContainer onSave={onSave} />
@@ -45,7 +45,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     apiRootUrl: process.env.API_BASE_URL || 'http://localhost:3000',
   }
   const users = await getAllUsers(context)
-  const paths = users.map((u) => `/users/${u.id}`)
+  const paths = users.map((u) => `/users/edit/${u.id}`)
 
   return { paths, fallback: true }
 }
@@ -67,8 +67,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
       id: userId,
       user,
     },
-    revalidate: 10,
   }
 }
 
-export default UserPage
+export default UserEditPage

@@ -1,4 +1,4 @@
-import UserEditForm, { UserFormData } from 'components/UserForm'
+import UserEditForm, { UserFormData } from 'components/UserEditForm'
 import { useAuthContext } from 'contexts/AuthContext'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 import updateUser from 'services/users/update-user'
@@ -33,6 +33,7 @@ const UserEditFormContainer = ({ onSave }: UserFormContainerProps) => {
       profileImage: data.profileImage,
       username: data.username,
       password: data.password,
+      confirmPassword: data.confirmPassword,
       email: data.email,
       cancel: data.cancel,
     }
