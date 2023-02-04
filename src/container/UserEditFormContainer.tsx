@@ -33,6 +33,7 @@ const UserEditFormContainer = ({ onSave }: UserFormContainerProps) => {
       profileImage: data.profileImage,
       username: data.username,
       password: data.password,
+      confirmPassword: data.confirmPassword,
       email: data.email,
       cancel: data.cancel,
     }
