@@ -1,7 +1,5 @@
-import { Grid } from '@mui/material'
 import Template from 'components/Templates'
-import UserEditFormContainer from 'container/UserEditFormContainer'
-import { useAuthContext } from 'contexts/AuthContext'
+import UserProfileContainer from 'container/UserProfileContainer'
 import {
   GetStaticPaths,
   GetStaticPropsContext,
@@ -13,29 +11,22 @@ import React from 'react'
 import getAllUsers from 'services/users/get-all-users'
 import getUser from 'services/users/get-user'
 import { ApiContext } from 'types'
-import { useAuthGaurd } from 'utils/hook'
 
-type UserEditPageProps = InferGetStaticPropsType<typeof getStaticProps>
+type UserProfilePageProps = InferGetStaticPropsType<typeof getStaticProps>
 
-const UserEditPage: NextPage<UserEditPageProps> = ({ id, user }: UserEditPageProps) => {
-  // 認証ガード
-  useAuthGaurd()
-
+const UserProfilePage: NextPage<UserProfilePageProps> = ({
+  id,
+  user,
+}: UserProfilePageProps) => {
   const router = useRouter()
-  const { authUser } = useAuthContext()
-  const onSave = (err?: Error) => {
-    if (authUser && !err) {
-      router.push(`/users/edit/${authUser.id}`)
-    }
+
+  if (router.isFallback) {
+    return <div>Loading...</div>
   }
 
   return (
-    <Template title="プロフィール編集">
-      <Grid container>
-        <Grid item xs={12} md={12} lg={12}>
-          <UserEditFormContainer onSave={onSave} />
-        </Grid>
-      </Grid>
+    <Template title="プロフィール">
+      <UserProfileContainer userId={id} user={user} />
     </Template>
   )
 }
@@ -45,7 +36,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     apiRootUrl: process.env.API_BASE_URL || 'http://localhost:3000',
   }
   const users = await getAllUsers(context)
-  const paths = users.map((u) => `/users/edit/${u.id}`)
+  const paths = users.map((u) => `/users/profile/${u.id}`)
 
   return { paths, fallback: true }
 }
@@ -70,4 +61,4 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   }
 }
 
-export default UserEditPage
+export default UserProfilePage
