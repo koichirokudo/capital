@@ -126,7 +126,7 @@ const Template = (props: TemplateProps) => {
               )
             }
           })()}
-          <Typography variant="h5" color="white">
+          <Typography variant="h5" color="white" sx={{ ml: 3 }}>
             {title}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
@@ -190,7 +190,7 @@ const Template = (props: TemplateProps) => {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                   >
-                    <Link href={`/users/${authUser.id}`}>
+                    <Link href={`/users/profile/${authUser.id}`}>
                       <MenuItem onClick={handleMenuClose}>
                         プロフィール
                       </MenuItem>
