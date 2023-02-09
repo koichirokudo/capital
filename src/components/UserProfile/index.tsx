@@ -1,13 +1,11 @@
 import { EmailOutlined, PersonOutline } from '@mui/icons-material'
 import {
-  Box,
   Grid,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Paper,
-  Stack,
 } from '@mui/material'
 import Image from 'next/image'
 
