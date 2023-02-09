@@ -1,4 +1,4 @@
-import UserEditForm, { UserFormData } from 'components/UserEditForm'
+import UserEditForm, { UserEditFormData } from 'components/UserEditForm'
 import { useAuthContext } from 'contexts/AuthContext'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 import updateUser from 'services/users/update-user'
@@ -23,7 +23,7 @@ interface UserEditFormContainerProps {
 const UserEditFormContainer = ({ onSave }: UserEditFormContainerProps) => {
   const { authUser } = useAuthContext()
   const setSpinner = useSpinnerActionsContext()
-  const handleSave = async (data: UserFormData) => {
+  const handleSave = async (data: UserEditFormData) => {
     if (!authUser) return
 
     const user = {

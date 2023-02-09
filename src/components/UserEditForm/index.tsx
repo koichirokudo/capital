@@ -3,7 +3,7 @@ import React, { ChangeEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { User } from 'types'
 
-export type UserFormData = {
+export type UserEditFormData = {
   id: number
   groupId: number
   authType: number
@@ -17,7 +17,7 @@ export type UserFormData = {
 
 interface UserFormProps {
   user: User
-  onUserSave?: (data: UserFormData) => void
+  onUserSave?: (data: UserEditFormData) => void
 }
 
 /**
@@ -28,7 +28,7 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
     user.profileImage,
   )
 
-  const onSubmit = (data: UserFormData) => {
+  const onSubmit = (data: UserEditFormData) => {
     onUserSave && onUserSave(data)
   }
 
@@ -37,7 +37,7 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<UserFormData>()
+  } = useForm<UserEditFormData>()
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
