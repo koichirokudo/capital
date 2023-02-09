@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Template from 'components/Templates'
 import { Box } from '@mui/material'
 import { useRouter } from 'next/router'
-import UserEditFormContainer from 'container/UserEditFormContainer'
+import UserRegisterFormContainer from 'container/UserRegisterFormContainer'
 
 /**
  * ユーザー登録ページ
@@ -22,7 +22,7 @@ const RegisterPage: NextPage = () => {
     <>
       <Template>
         <Box sx={{ textAlign: 'center', mt: 1 }}>
-          <UserEditFormContainer onSave={onSave} />
+          <UserRegisterFormContainer onSave={onSave} />
         </Box>
       </Template>
     </>
