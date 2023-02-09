@@ -21,7 +21,7 @@ interface UserFormProps {
 }
 
 /**
- * ユーザープロファイル登録編集
+ * ユーザープロファイル編集
  */
 const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
   const [imagePreview, setImagePreview] = React.useState<string | null>(
