@@ -1,5 +1,6 @@
 import { Box, Button, Container, TextField, Typography } from '@mui/material'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
 export type LoginFormData = {
@@ -71,6 +72,9 @@ const LoginForm = ({ handleLogin }: LoginFormProps) => {
           >
             ログイン
           </Button>
+          <Typography>
+            <Link href="/users/register">ユーザー新規登録</Link>
+          </Typography>
         </form>
       </Box>
     </Container>
