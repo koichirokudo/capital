@@ -8,7 +8,7 @@ const context: ApiContext = {
   apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
 }
 
-interface UserFormContainerProps {
+interface UserEditFormContainerProps {
   /**
    * 保存した時に呼ばれるイベントハンドラ
    * @param error
@@ -20,7 +20,7 @@ interface UserFormContainerProps {
 /**
  * ユーザー編集フォームコンテナ
  */
-const UserEditFormContainer = ({ onSave }: UserFormContainerProps) => {
+const UserEditFormContainer = ({ onSave }: UserEditFormContainerProps) => {
   const { authUser } = useAuthContext()
   const setSpinner = useSpinnerActionsContext()
   const handleSave = async (data: UserFormData) => {
