@@ -3,8 +3,7 @@ import React, { ChangeEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { User } from 'types'
 
-export type UserEditFormData = {
-  id: number
+export type UserRegisterFormData = {
   groupId: number
   authType: number
   username: string
@@ -16,19 +15,16 @@ export type UserEditFormData = {
 }
 
 interface UserFormProps {
-  user: User
-  onUserSave?: (data: UserEditFormData) => void
+  onUserSave?: (data: UserRegisterFormData) => void
 }
 
 /**
- * ユーザープロファイル編集
+ * ユーザープロファイル登録
  */
-const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
-  const [imagePreview, setImagePreview] = React.useState<string | null>(
-    user.profileImage,
-  )
+const UserRegisterForm = ({ onUserSave }: UserFormProps) => {
+  const [imagePreview, setImagePreview] = React.useState<string | null>(null)
 
-  const onSubmit = (data: UserEditFormData) => {
+  const onSubmit = (data: UserRegisterFormData) => {
     onUserSave && onUserSave(data)
   }
 
@@ -37,7 +33,7 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<UserEditFormData>()
+  } = useForm<UserRegisterFormData>()
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
@@ -90,7 +86,6 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
             margin="normal"
             type="text"
             label="ユーザー名"
-            defaultValue={user.username}
             sx={{ width: '350px' }}
             error={'username' in errors}
             helperText={errors.username?.message}
@@ -109,7 +104,6 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
             margin="normal"
             type="email"
             label="メールアドレス"
-            defaultValue={user.email}
             sx={{ width: '350px' }}
             error={'email' in errors}
             helperText={errors.email?.message}
@@ -151,40 +145,12 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
             fullWidth
             sx={{ mt: 1, width: '350px', color: 'white' }}
           >
-            更新する
+            登録する
           </Button>
         </Grid>
       </Grid>
-      {user && (
-        <>
-          <input
-            type="hidden"
-            {...register('id', { valueAsNumber: true })}
-            defaultValue={user.id}
-          />
-          <input
-            type="hidden"
-            {...register('authType', {
-              valueAsNumber: true,
-            })}
-            defaultValue={user.authType}
-          />
-          <input
-            type="hidden"
-            {...register('groupId', {
-              valueAsNumber: true,
-            })}
-            defaultValue={user.groupId}
-          />
-          <input
-            type="hidden"
-            {...register('cancel')}
-            defaultValue={user.cancel}
-          />
-        </>
-      )}
     </form>
   )
 }
 
-export default UserEditForm
+export default UserRegisterForm

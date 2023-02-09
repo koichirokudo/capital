@@ -1,14 +1,15 @@
-import UserEditForm, { UserEditFormData } from 'components/UserEditForm'
-import { useAuthContext } from 'contexts/AuthContext'
+import UserRegisterForm, {
+  UserRegisterFormData,
+} from 'components/UserRegisterForm'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
-import updateUser from 'services/users/update-user'
+import addUser from 'services/users/add-user'
 import { ApiContext, User } from 'types'
 
 const context: ApiContext = {
   apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
 }
 
-interface UserEditFormContainerProps {
+interface UserRegisterFormContainerProps {
   /**
    * 保存した時に呼ばれるイベントハンドラ
    * @param error
@@ -18,16 +19,15 @@ interface UserEditFormContainerProps {
 }
 
 /**
- * ユーザー編集フォームコンテナ
+ * ユーザー登録フォームコンテナ
  */
-const UserEditFormContainer = ({ onSave }: UserEditFormContainerProps) => {
-  const { authUser } = useAuthContext()
+const UserRegisterFormContainer = ({
+  onSave,
+}: UserRegisterFormContainerProps) => {
   const setSpinner = useSpinnerActionsContext()
-  const handleSave = async (data: UserEditFormData) => {
-    if (!authUser) return
-
+  const handleSave = async (data: UserRegisterFormData) => {
+    //TODO: groupIdの登録は、招待機能構築時に追加する
     const user = {
-      id: data.id,
       groupId: data.groupId,
       authType: data.authType,
       profileImage: data.profileImage,
@@ -40,7 +40,7 @@ const UserEditFormContainer = ({ onSave }: UserEditFormContainerProps) => {
 
     try {
       setSpinner(true)
-      const ret = await updateUser(context, user)
+      const ret = await addUser(context, { user })
       onSave && onSave(undefined, ret)
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -52,11 +52,7 @@ const UserEditFormContainer = ({ onSave }: UserEditFormContainerProps) => {
     }
   }
 
-  if (!authUser) {
-    return <div>Loading...</div>
-  }
-
-  return authUser && <UserEditForm user={authUser} onUserSave={handleSave} />
+  return <UserRegisterForm onUserSave={handleSave} />
 }
 
-export default UserEditFormContainer
+export default UserRegisterFormContainer
