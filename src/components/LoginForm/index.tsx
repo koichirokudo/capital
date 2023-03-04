@@ -12,6 +12,7 @@ interface LoginFormProps {
   /**
    * ログインボタンを押した時のイベントハンドラ
    */
+  // eslint-disable-next-line no-unused-vars
   handleLogin?: (username: string, password: string) => void
 }
 
@@ -20,7 +21,6 @@ const LoginForm = ({ handleLogin }: LoginFormProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<LoginFormData>()
   const onSubmit = (data: LoginFormData) => {
     const { username, password } = data

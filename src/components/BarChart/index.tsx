@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   BarController,
   BarElement,
@@ -9,10 +8,9 @@ import {
   CategoryScale,
   LinearScale,
 } from 'chart.js'
-import { Bar } from 'react-chartjs-2'
-import 'chartjs-plugin-datalabels'
-import { Context } from 'chartjs-plugin-datalabels'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
+import React from 'react'
+import { Bar } from 'react-chartjs-2'
 
 ChartJS.register(
   CategoryScale,

@@ -26,7 +26,7 @@ export const formatMoney = (
  * @returns {string}
  */
 export const formatDBDate = (date: string): string => {
-  return date.replace(/(\d{4})\-(\d{2})\-(\d{2})-/, '$1/$2/$3 ')
+  return date.replace(/(\d{4})-(\d{2})-(\d{2})-/, '$1/$2/$3 ')
 }
 /**
  * 指定したDateオブジェクトの日時を指定した区切り文字に変換する

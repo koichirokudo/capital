@@ -17,6 +17,7 @@ export type UserEditFormData = {
 
 interface UserFormProps {
   user: User
+  // eslint-disable-next-line no-unused-vars
   onUserSave?: (data: UserEditFormData) => void
 }
 
@@ -56,6 +57,7 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
       >
         <Grid item xs={12} md={12} xl={12}>
           <Stack direction="row">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               id="profileImagePreview"
               src={imagePreview ?? '/Avatar/DefaultProfileImage.png'}
@@ -102,7 +104,7 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
             {...register('email', {
               required: 'メールアドレスを入力してください。',
               pattern: {
-                value: /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/,
+                value: /^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$/,
                 message: 'メールアドレスの形式を正しく入力してください。',
               },
             })}

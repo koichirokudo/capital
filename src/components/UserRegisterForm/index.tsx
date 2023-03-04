@@ -1,7 +1,6 @@
 import { Button, Grid, TextField, Stack, Box } from '@mui/material'
 import React, { ChangeEvent } from 'react'
 import { useForm } from 'react-hook-form'
-import { User } from 'types'
 
 export type UserRegisterFormData = {
   groupId: number
@@ -15,6 +14,7 @@ export type UserRegisterFormData = {
 }
 
 interface UserFormProps {
+  // eslint-disable-next-line no-unused-vars
   onUserSave?: (data: UserRegisterFormData) => void
 }
 
@@ -52,6 +52,7 @@ const UserRegisterForm = ({ onUserSave }: UserFormProps) => {
       >
         <Grid item xs={12} md={12} xl={12}>
           <Stack direction="row">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               id="profileImagePreview"
               src={imagePreview ?? '/Avatar/DefaultProfileImage.png'}
@@ -97,7 +98,7 @@ const UserRegisterForm = ({ onUserSave }: UserFormProps) => {
             {...register('email', {
               required: 'メールアドレスを入力してください。',
               pattern: {
-                value: /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/,
+                value: /^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$/,
                 message: 'メールアドレスの形式を正しく入力してください。',
               },
             })}

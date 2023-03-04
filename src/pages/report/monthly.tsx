@@ -1,17 +1,14 @@
-import { Box, Grid, IconButton, Paper, Typography } from '@mui/material'
-import Template from 'components/Templates'
-import { useAuthContext } from 'contexts/AuthContext'
-import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
-import getAllCapitals from 'services/capitals/get-all-capitals'
-import useAllCapital from 'services/capitals/use-all-capitals'
-import { ApiContext } from 'types'
-import { useAuthGaurd } from 'utils/hook'
-import { BarChart } from 'components/BarChart'
-import { formatMoney } from 'utils/format'
-import { Categories } from 'components/CategoryList'
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material'
+import { Grid, IconButton, Paper, Typography } from '@mui/material'
+import { BarChart } from 'components/BarChart'
+import { Categories } from 'components/CategoryList'
+import Template from 'components/Templates'
+import type { GetStaticProps, NextPage } from 'next'
+import getAllCapitals from 'services/capitals/get-all-capitals'
+import { ApiContext } from 'types'
+import { formatMoney } from 'utils/format'
+import { useAuthGaurd } from 'utils/hook'
 
-type CategoryPageProps = InferGetStaticPropsType<typeof getStaticProps>
 
 const INCOME = '収入'
 const OUTGO = '支出'
@@ -19,14 +16,9 @@ const context: ApiContext = {
   apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
 }
 
-const CategoryPage: NextPage = ({ capitals: initial }: CategoryPageProps) => {
+const CategoryPage: NextPage = () => {
   // 認証ガード
   useAuthGaurd()
-
-  const { authUser } = useAuthContext()
-  const groupId = authUser?.groupId
-  const data = useAllCapital(context, { groupId, initial })
-  const capitals = data.capitals ?? initial
 
   const incomeCategories = Categories.filter(
     (c) => c.capitalType === INCOME,
@@ -55,7 +47,6 @@ const CategoryPage: NextPage = ({ capitals: initial }: CategoryPageProps) => {
         },
         formatter: function (
           value: { toString: () => string | number },
-          chart: { dataset: any; dataIndex: any },
         ) {
           // const { dataset, dataIndex } = chart
           // console.log(dataset.data[dataIndex])

@@ -1,16 +1,19 @@
 import React, { useContext } from 'react'
-import useSWR from 'swr'
 import login from 'services/auth/login'
 import logout from 'services/auth/logout'
+import useSWR from 'swr'
 import type { ApiContext, User } from 'types'
 
 type AuthContextType = {
   authUser?: User
   isLoading: boolean
+  // eslint-disable-next-line no-unused-vars
   login: (username: string, password: string) => Promise<void>
   logout: () => Promise<void>
   mutate: (
+    // eslint-disable-next-line no-unused-vars
     data?: User | Promise<User>,
+    // eslint-disable-next-line no-unused-vars
     shouldRevalidate?: boolean,
   ) => Promise<User | undefined>
 }

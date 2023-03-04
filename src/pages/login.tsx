@@ -1,8 +1,8 @@
-import type { NextPage } from 'next'
-import Template from 'components/Templates'
 import { Box } from '@mui/material'
-import { useRouter } from 'next/router'
+import Template from 'components/Templates'
 import LoginFormContainer from 'container/LoginFormContainer'
+import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
 
 const LoginPage: NextPage = () => {
   const router = useRouter()

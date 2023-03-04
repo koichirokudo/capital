@@ -29,7 +29,9 @@ export type UseCapital = {
    * mutate
    */
   mutate: (
+    // eslint-disable-next-line no-unused-vars
     data?: Capital[] | Promise<Capital[]>,
+    // eslint-disable-next-line no-unused-vars
     shouldRevalidate?: boolean,
   ) => Promise<Capital[] | undefined>
 }

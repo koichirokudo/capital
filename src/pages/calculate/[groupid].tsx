@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   ArrowBackIos,
   ArrowForwardIos,
@@ -9,7 +10,6 @@ import {
   Avatar,
   Box,
   Button,
-  CardHeader,
   Grid,
   IconButton,
   Paper,
@@ -27,15 +27,14 @@ import {
   Tabs,
   Typography,
 } from '@mui/material'
-import {
-  blue,
-  deepOrange,
-  deepPurple,
-  green,
-  orange,
-  red,
-} from '@mui/material/colors'
-import { fontWeight } from '@mui/system'
+// import {
+//   blue,
+//   deepOrange,
+//   deepPurple,
+//   green,
+//   orange,
+//   red,
+// } from '@mui/material/colors'
 import { DataGrid, GridColumns } from '@mui/x-data-grid'
 import Template from 'components/Templates'
 import {
@@ -48,8 +47,8 @@ import {
 import React from 'react'
 import getAllCapitals from 'services/capitals/get-all-capitals'
 import getAllUsers from 'services/users/get-all-users'
-import { ApiContext, Calculate, Capital, User } from 'types'
-import { formatDBDate, formatMoney } from 'utils/format'
+import { ApiContext, User } from 'types'
+import { formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
 
 interface TabPanelProps {
@@ -65,32 +64,27 @@ const context: ApiContext = {
 
 type CalculatePageProps = InferGetStaticPropsType<typeof getStaticProps>
 
-const avatarColor = [
-  {
-    backgroundColor: orange[500],
-  },
-  {
-    backgroundColor: red[500],
-  },
-  {
-    backgroundColor: blue[500],
-  },
-  {
-    backgroundColor: green[500],
-  },
-  {
-    backgroundColor: deepOrange[500],
-  },
-  {
-    backgroundColor: deepPurple[500],
-  },
-]
+// const avatarColor = [
+//   {
+//     backgroundColor: orange[500],
+//   },
+//   {
+//     backgroundColor: red[500],
+//   },
+//   {
+//     backgroundColor: blue[500],
+//   },
+//   {
+//     backgroundColor: green[500],
+//   },
+//   {
+//     backgroundColor: deepOrange[500],
+//   },
+//   {
+//     backgroundColor: deepPurple[500],
+//   },
+// ]
 
-const random = (): number => {
-  return Math.floor(Math.random() * 6)
-}
-
-// -----------------------
 const TabPanel = (props: TabPanelProps) => {
   const { data, value, index, targetUser } = props
   const columns: GridColumns = [
@@ -151,7 +145,7 @@ const TabPanel = (props: TabPanelProps) => {
   )
 }
 
-const CalculatePage: NextPage = ({ users, capitals }: CalculatePageProps) => {
+const CalculatePage: NextPage = ({ users }: CalculatePageProps) => {
   // 認証ガード
   useAuthGaurd()
 
@@ -257,12 +251,13 @@ const CalculatePage: NextPage = ({ users, capitals }: CalculatePageProps) => {
                     <StyledTableCell style={{ width: 180, fontSize: '1rem' }}>
                       カテゴリ
                     </StyledTableCell>
-                    {users.map((user: { userName: string }) => {
+                    {users.map((user: { username: string }, index: number) => {
                       return (
                         <StyledTableCell
+                          key={index}
                           style={{ width: 180, fontSize: '1rem' }}
                         >
-                          {user.userName}
+                          {user.username}
                         </StyledTableCell>
                       )
                     })}
@@ -274,7 +269,7 @@ const CalculatePage: NextPage = ({ users, capitals }: CalculatePageProps) => {
                     </StyledTableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
+                {/* <TableBody>
                   {(() => {
                     const item = []
                     for (let i = 0; i < 5; i++) {
@@ -307,7 +302,7 @@ const CalculatePage: NextPage = ({ users, capitals }: CalculatePageProps) => {
                     }
                     return item
                   })()}
-                </TableBody>
+                </TableBody> */}
               </Table>
             </TableContainer>
             <TablePagination
@@ -337,12 +332,13 @@ const CalculatePage: NextPage = ({ users, capitals }: CalculatePageProps) => {
               aria-label="member tabs"
             >
               {users.map((user: User) => {
-                return <Tab key={user.id} label={user.userName} />
+                return <Tab key={user.id} label={user.username} />
               })}
             </Tabs>
             {users.map((user: User, index: number) => {
               return (
                 <TabPanel
+                  key={index}
                   data={data}
                   value={value}
                   index={index}

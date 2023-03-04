@@ -1,15 +1,3 @@
-import { Avatar, Box, Grid, IconButton, Paper, Typography } from '@mui/material'
-import Template from 'components/Templates'
-import { useAuthContext } from 'contexts/AuthContext'
-import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
-import { useRouter } from 'next/router'
-import getAllCapitals from 'services/capitals/get-all-capitals'
-import useAllCapital from 'services/capitals/use-all-capitals'
-import { ApiContext } from 'types'
-import { useAuthGaurd } from 'utils/hook'
-import { BarChart } from 'components/BarChart'
-import { formatMoney } from 'utils/format'
-import { monthlyLabels } from 'const'
 import {
   AccountBalanceWalletSharp,
   ArrowBackIos,
@@ -17,7 +5,16 @@ import {
   CallMadeSharp,
   CallReceivedSharp,
 } from '@mui/icons-material'
+import { Avatar, Box, Grid, IconButton, Paper, Typography } from '@mui/material'
+import { BarChart } from 'components/BarChart'
 import LineChart from 'components/LineChart'
+import Template from 'components/Templates'
+import { monthlyLabels } from 'const'
+import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
+import getAllCapitals from 'services/capitals/get-all-capitals'
+import { ApiContext } from 'types'
+import { formatMoney } from 'utils/format'
+import { useAuthGaurd } from 'utils/hook'
 
 type MonthlyPageProps = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -25,15 +22,16 @@ const context: ApiContext = {
   apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
 }
 
+// eslint-disable-next-line no-unused-vars
 const MonthlyPage: NextPage = ({ capitals: initial }: MonthlyPageProps) => {
   // 認証ガード
   useAuthGaurd()
 
-  const router = useRouter()
-  const { authUser } = useAuthContext()
-  const groupId = authUser?.groupId
-  const data = useAllCapital(context, { groupId, initial })
-  const capitals = data.capitals ?? initial
+  // const router = useRouter()
+  // const { authUser } = useAuthContext()
+  // const groupId = authUser?.groupId
+  // const data = useAllCapital(context, { groupId, initial })
+  // const capitals = data.capitals ?? initial
 
   // TODO: backend からとってくる
   const incomeMonthly = [

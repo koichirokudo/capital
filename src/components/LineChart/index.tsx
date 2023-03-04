@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   BarController,
   BarElement,
@@ -13,8 +12,8 @@ import {
   LineElement,
   Filler,
 } from 'chart.js'
+import React from 'react'
 import { Line } from 'react-chartjs-2'
-import { monthlyLabels } from 'const'
 
 ChartJS.register(
   CategoryScale,

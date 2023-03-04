@@ -15,6 +15,7 @@ interface UserRegisterFormContainerProps {
    * @param error
    * @returns
    */
+  // eslint-disable-next-line no-unused-vars
   onSave: (error?: Error, user?: User) => void
 }
 

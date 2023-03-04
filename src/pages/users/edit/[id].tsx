@@ -17,6 +17,7 @@ import { useAuthGaurd } from 'utils/hook'
 
 type UserEditPageProps = InferGetStaticPropsType<typeof getStaticProps>
 
+// eslint-disable-next-line no-unused-vars
 const UserEditPage: NextPage<UserEditPageProps> = ({ id, user }: UserEditPageProps) => {
   // 認証ガード
   useAuthGaurd()

@@ -1,4 +1,6 @@
-import * as React from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import process from 'process'
+import { Cancel, Delete, Edit, Save } from '@mui/icons-material'
 import {
   Alert,
   AlertProps,
@@ -25,12 +27,11 @@ import {
   MuiEvent,
   useGridApiContext,
 } from '@mui/x-data-grid'
-import { Cancel, Delete, Edit, Save } from '@mui/icons-material'
-import updateCapital from 'services/capitals/update-capital'
-import process from 'process'
-import { ApiContext } from 'types'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
+import * as React from 'react'
 import deleteCapital from 'services/capitals/delete-capital'
+import updateCapital from 'services/capitals/update-capital'
+import { ApiContext } from 'types'
 
 /**
  * 収支一覧をDatagridで表示
@@ -226,7 +227,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
     setSpinner(false)
     setSnackbar({ children: '編集内容を保存しました。', severity: 'success' })
     return res
-  }, [])
+  }, [context, setSpinner])
 
   // processRowUpdateで更新失敗した場合に呼び出される関数
   const handleProcessRowUpdateError = React.useCallback(() => {
@@ -235,7 +236,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
       children: '編集内容の保存に失敗しました。もう一度やり直してください。',
       severity: 'error',
     })
-  }, [])
+  }, [setSpinner])
 
   const columns: GridColumns = [
     {
@@ -279,11 +280,13 @@ const CapitalList = ({ capitals, mutate }: any) => {
 
         if (isInEditMode) {
           return [
+            // eslint-disable-next-line react/jsx-key
             <GridActionsCellItem
               icon={<Save />}
               label="Save"
               onClick={handleSaveClick(id)}
             />,
+            // eslint-disable-next-line react/jsx-key
             <GridActionsCellItem
               icon={<Cancel />}
               label="Cancel"
@@ -295,6 +298,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
         }
 
         return [
+          // eslint-disable-next-line react/jsx-key
           <GridActionsCellItem
             icon={<Edit />}
             label="Edit"
@@ -302,6 +306,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
             onClick={handleEditClick(id)}
             color="inherit"
           />,
+          // eslint-disable-next-line react/jsx-key
           <GridActionsCellItem
             icon={<Delete />}
             label="Delete"

@@ -8,6 +8,7 @@ interface LoginFormContainerProps {
    * @param error
    * @returns
    */
+  // eslint-disable-next-line no-unused-vars
   onLogin: (error?: Error) => void
 }
 

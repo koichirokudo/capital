@@ -1,8 +1,8 @@
-import type { NextPage } from 'next'
-import Template from 'components/Templates'
 import { Box } from '@mui/material'
-import { useRouter } from 'next/router'
+import Template from 'components/Templates'
 import UserRegisterFormContainer from 'container/UserRegisterFormContainer'
+import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
 
 /**
  * ユーザー登録ページ
