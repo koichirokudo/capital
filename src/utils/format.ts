@@ -41,8 +41,8 @@ export const formatDBDate = (date: string): string => {
  */
 export const formatDate = (
   date: Date,
-  type: string = 'day',
-  delimiter: string = '/',
+  type = 'day',
+  delimiter = '/',
 ): string => {
   const year = date.getFullYear()
   const month = ('00' + (date.getMonth() + 1)).slice(-2)

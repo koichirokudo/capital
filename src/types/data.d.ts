@@ -92,3 +92,22 @@ export type Calculate = {
   income: number
   total: number
 }
+
+export type Budgets = {
+  year: number,
+  total: number,
+  details: {
+    January: number,
+    February: number,
+    March: number,
+    April: number,
+    May: number,
+    June: number,
+    July: number,
+    August: number,
+    September: number,
+    October: number,
+    November: number,
+    December: number
+  }
+}

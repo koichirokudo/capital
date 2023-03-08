@@ -11,10 +11,11 @@ import LineChart from 'components/LineChart'
 import Template from 'components/Templates'
 import { monthlyLabels } from 'const'
 import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
-import getAllCapitals from 'services/capitals/get-all-capitals'
 import { ApiContext } from 'types'
-import { formatMoney } from 'utils/format'
+import { formatDate, formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
+import getYearlyIncome from 'services/budgets/get-yearly-income'
+import getYearlyOutgo from 'services/budgets/get-yearly-outgo'
 
 type MonthlyPageProps = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -23,34 +24,20 @@ const context: ApiContext = {
 }
 
 // eslint-disable-next-line no-unused-vars
-const MonthlyPage: NextPage = ({ capitals: initial }: MonthlyPageProps) => {
+const MonthlyPage: NextPage = ({ year, income, outgo }: MonthlyPageProps) => {
   // 認証ガード
   useAuthGaurd()
 
-  // const router = useRouter()
-  // const { authUser } = useAuthContext()
-  // const groupId = authUser?.groupId
-  // const data = useAllCapital(context, { groupId, initial })
-  // const capitals = data.capitals ?? initial
+  const incomeMonthly = Object.values<number>(income[0].details)
+  const outgoMonthly = Object.values<number>(outgo[0].details)
 
-  // TODO: backend からとってくる
-  const incomeMonthly = [
-    420000, 438900, 387908, 459869, 678755, 365678, 689659, 765432, 300000,
-    550000, 432870, 419865,
-  ]
-
-  const outgoMonthly = [
-    220000, 238900, 287908, 259869, 378755, 245678, 289659, 265432, 200000,
-    200000, 189987, 235697,
-  ]
-
-  const balanceMonthly = []
+  const balanceMonthly: number[] = []
   for (let i = 0; i < incomeMonthly.length; i++) {
     balanceMonthly.push(incomeMonthly[i] - outgoMonthly[i])
   }
 
-  const incomeTotal = incomeMonthly.reduce((ac, cv) => ac + cv)
-  const outgoTotal = outgoMonthly.reduce((ac, cv) => ac + cv)
+  const incomeTotal = Number(income[0].total)
+  const outgoTotal = Number(outgo[0].total)
 
   const barChartOptions = {
     plugins: {
@@ -239,7 +226,7 @@ const MonthlyPage: NextPage = ({ capitals: initial }: MonthlyPageProps) => {
         >
           <ArrowBackIos />
         </IconButton>
-        2023年
+        { year }年
         <IconButton
           color="primary"
           aria-label="back button"
@@ -354,9 +341,7 @@ const MonthlyPage: NextPage = ({ capitals: initial }: MonthlyPageProps) => {
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <Paper sx={{ p: 2 }}>
-            <Typography sx={{ fontWeight: 'bold' }}>
-              収支グラフ
-            </Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>収支グラフ</Typography>
             <BarChart
               data={monthlyData}
               options={barChartOptions}
@@ -371,13 +356,17 @@ const MonthlyPage: NextPage = ({ capitals: initial }: MonthlyPageProps) => {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const capitals = await getAllCapitals(context)
+  const year = Number(formatDate(new Date(), 'year'))
+  const income = await getYearlyIncome(context, { year: year })
+  const outgo = await getYearlyOutgo(context, { year: year })
 
   return {
     props: {
-      capitals,
+      year: year,
+      income: income,
+      outgo: outgo,
     },
-    revalidate: 30,
+    revalidate: 60,
   }
 }
 
