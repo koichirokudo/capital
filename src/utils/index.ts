@@ -1,8 +1,7 @@
 export const fetcher = async (
-  // eslint-disable-next-line no-undef
   resource: RequestInfo,
-  // eslint-disable-next-line no-undef
   init?: RequestInit,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   const res = await fetch(resource, init)
   if (!res.ok) {
