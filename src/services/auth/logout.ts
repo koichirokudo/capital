@@ -8,7 +8,7 @@ import { fetcher } from 'utils'
  */
 const logout = async (context: ApiContext): Promise<{ message: string }> => {
   return await fetcher(
-    `${context.apiRootUrl.replace(/\/$/g, '')}/auth/login}`,
+    `${context.apiRootUrl.replace(/\/$/g, '')}/auth/logout}`,
     {
       method: 'POST',
       headers: {

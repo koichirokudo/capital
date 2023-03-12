@@ -5,7 +5,6 @@ export const fetcher = async (
   init?: RequestInit,
 ): Promise<any> => {
   const res = await fetch(resource, init)
-
   if (!res.ok) {
     // レスポンス失敗
     const errorRes = await res.json()

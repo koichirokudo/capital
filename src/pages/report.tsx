@@ -1,43 +1,54 @@
 import {
   AccountBalanceWalletSharp,
-  ArrowBackIos,
-  ArrowForwardIos,
   CallMadeSharp,
   CallReceivedSharp,
 } from '@mui/icons-material'
-import { Avatar, Box, Grid, IconButton, Paper, Typography } from '@mui/material'
+import { Avatar, Box, Grid, Paper, Typography } from '@mui/material'
 import { BarChart } from 'components/BarChart'
 import LineChart from 'components/LineChart'
 import Template from 'components/Templates'
 import { monthlyLabels } from 'const'
-import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
+import type {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+  NextPage,
+} from 'next'
 import { ApiContext } from 'types'
-import { formatDate, formatMoney } from 'utils/format'
+import { formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
-import getYearlyIncome from 'services/budgets/get-yearly-income'
-import getYearlyOutgo from 'services/budgets/get-yearly-outgo'
+import checkAuth from 'services/auth/check-auth'
+import getIncExp from 'services/incexp/get-incexp'
+import YearControl from 'components/YearControl'
 
-type MonthlyPageProps = InferGetStaticPropsType<typeof getStaticProps>
+type ReportYearPageProps = InferGetServerSidePropsType<
+  typeof getServerSideProps
+>
 
-const context: ApiContext = {
-  apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
-}
-
-// eslint-disable-next-line no-unused-vars
-const MonthlyPage: NextPage = ({ year, income, outgo }: MonthlyPageProps) => {
+const ReportYearPage: NextPage<ReportYearPageProps> = ({
+  year,
+  incExp,
+}: ReportYearPageProps) => {
   // 認証ガード
   useAuthGaurd()
 
-  const incomeMonthly = Object.values<number>(income[0].details)
-  const outgoMonthly = Object.values<number>(outgo[0].details)
-
-  const balanceMonthly: number[] = []
-  for (let i = 0; i < incomeMonthly.length; i++) {
-    balanceMonthly.push(incomeMonthly[i] - outgoMonthly[i])
+  // データが登録されていない
+  if (incExp.length === 0) {
+    return (
+      <Template title="年間レポート">
+        <YearControl year={year} />
+        <Typography variant="body1">{year}年のデータはありません。</Typography>
+      </Template>
+    )
   }
 
-  const incomeTotal = Number(income[0].total)
-  const outgoTotal = Number(outgo[0].total)
+  const { incomeDetails, incomeTotal, expenseDetails, expenseTotal } = incExp
+  const incomeMonthly = Object.values<number>(incomeDetails ?? [])
+  const expenseMonthly = Object.values<number>(expenseDetails ?? [])
+  const balanceMonthly: number[] = []
+  for (let i = 0; i < incomeMonthly.length; i++) {
+    balanceMonthly.push(incomeMonthly[i] - expenseMonthly[i])
+  }
 
   const barChartOptions = {
     plugins: {
@@ -162,11 +173,11 @@ const MonthlyPage: NextPage = ({ year, income, outgo }: MonthlyPageProps) => {
     ],
   }
 
-  const lineChartOutgoData = {
+  const lineChartExpenseData = {
     labels: monthlyLabels,
     datasets: [
       {
-        data: outgoMonthly,
+        data: expenseMonthly,
         tension: 0.3,
         borderColor: 'rgba(255, 171, 0, 1)',
         backgroundColor: 'rgba(255, 171, 0, 0.3)',
@@ -198,7 +209,7 @@ const MonthlyPage: NextPage = ({ year, income, outgo }: MonthlyPageProps) => {
       },
       {
         label: '支出',
-        data: outgoMonthly,
+        data: expenseMonthly,
         backgroundColor: 'rgba(255, 171, 0, 0.9)',
         barPercentage: 0.5,
         borderRadius: 10,
@@ -206,36 +217,9 @@ const MonthlyPage: NextPage = ({ year, income, outgo }: MonthlyPageProps) => {
     ],
   }
 
-  // TODO: あとで作る
-  const handlePrevYear = () => {
-    console.log('prev year')
-  }
-
-  const handleNextYear = () => {
-    console.log('next year')
-  }
-
   return (
     <Template title="年間レポート">
-      <Typography variant="h4" sx={{ mb: 2 }}>
-        <IconButton
-          color="primary"
-          aria-label="back button"
-          component="title"
-          onClick={handlePrevYear}
-        >
-          <ArrowBackIos />
-        </IconButton>
-        { year }年
-        <IconButton
-          color="primary"
-          aria-label="back button"
-          component="title"
-          onClick={handleNextYear}
-        >
-          <ArrowForwardIos />
-        </IconButton>
-      </Typography>
+      <YearControl year={year} />
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={12} lg={4}>
           <Paper
@@ -285,7 +269,7 @@ const MonthlyPage: NextPage = ({ year, income, outgo }: MonthlyPageProps) => {
               color="#7a4100"
               sx={{ ml: 3, fontSize: '2rem', fontWeight: 'bold' }}
             >
-              {formatMoney(outgoTotal, true)}
+              {formatMoney(expenseTotal, true)}
             </Box>
             <Avatar
               sx={{
@@ -298,7 +282,7 @@ const MonthlyPage: NextPage = ({ year, income, outgo }: MonthlyPageProps) => {
               <CallMadeSharp />
             </Avatar>
             <LineChart
-              data={lineChartOutgoData}
+              data={lineChartExpenseData}
               options={lineChartOptions}
               width={50}
               height={25}
@@ -319,7 +303,7 @@ const MonthlyPage: NextPage = ({ year, income, outgo }: MonthlyPageProps) => {
               color="#275f72"
               sx={{ ml: 3, fontSize: '2rem', fontWeight: 'bold' }}
             >
-              {formatMoney(incomeTotal - outgoTotal, true)}
+              {formatMoney(incomeTotal - expenseTotal, true)}
             </Box>
             <Avatar
               sx={{
@@ -355,19 +339,37 @@ const MonthlyPage: NextPage = ({ year, income, outgo }: MonthlyPageProps) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const year = Number(formatDate(new Date(), 'year'))
-  const income = await getYearlyIncome(context, { year: year })
-  const outgo = await getYearlyOutgo(context, { year: year })
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+}: GetServerSidePropsContext) => {
+  const context: ApiContext = {
+    apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
+  }
+  // 認証確認
+  const authUser = await checkAuth(context)
+  if (!authUser) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  // 指定された年度の収支情報を取得する
+  const userId = authUser.id
+  const year = Number(query?.year)
+  const incExp = await getIncExp(context, {
+    userId: userId,
+    year: year,
+  })
 
   return {
     props: {
       year: year,
-      income: income,
-      outgo: outgo,
+      incExp: incExp[0] ?? [],
     },
-    revalidate: 60,
   }
 }
 
-export default MonthlyPage
+export default ReportYearPage

@@ -30,6 +30,7 @@ import {
 import Link from 'components/Link/indext'
 import { useAuthContext } from 'contexts/AuthContext'
 import * as React from 'react'
+import { formatDate } from 'utils/format'
 
 const drawerWidth = 240
 
@@ -247,7 +248,7 @@ const Template = (props: TemplateProps) => {
                   </ListItem>
                 </ListItemButton>
               </Link>
-              <Link href="/report/year">
+              <Link href={`/report?year=${formatDate(new Date(), 'year')}`}>
                 <ListItemButton>
                   <BarChart />
                   <ListItem sx={{ ml: 1 }}>
