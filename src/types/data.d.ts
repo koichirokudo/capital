@@ -94,6 +94,8 @@ export type Calculate = {
 }
 
 export type IncExp = {
+  userId: number
+  groupId: number
   year: number
   incomeTotal: number
   incomeDetails: {
