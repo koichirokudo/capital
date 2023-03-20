@@ -30,9 +30,10 @@ import {
 import Link from 'components/Link/indext'
 import { useAuthContext } from 'contexts/AuthContext'
 import * as React from 'react'
-import { formatDate } from 'utils/format'
+import { getSpecificDate } from 'utils/format'
 
-const drawerWidth = 240
+const drawerWidth = 220
+const date = new Date()
 
 interface TemplateProps {
   window?: () => Window
@@ -248,7 +249,7 @@ const Template = (props: TemplateProps) => {
                   </ListItem>
                 </ListItemButton>
               </Link>
-              <Link href={`/report?year=${formatDate(new Date(), 'year')}`}>
+              <Link href={`/report/year?year=${getSpecificDate(date, 'year')}`}>
                 <ListItemButton>
                   <BarChart />
                   <ListItem sx={{ ml: 1 }}>
@@ -256,7 +257,12 @@ const Template = (props: TemplateProps) => {
                   </ListItem>
                 </ListItemButton>
               </Link>
-              <Link href="/report/monthly">
+              <Link
+                href={`/report/month?year=${getSpecificDate(
+                  date,
+                  'year',
+                )}&month=${getSpecificDate(date, 'month', -1)}`}
+              >
                 <ListItemButton>
                   <Category />
                   <ListItem sx={{ ml: 1 }}>

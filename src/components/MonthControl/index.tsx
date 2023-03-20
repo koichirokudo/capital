@@ -7,22 +7,25 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material'
-import { YEAR_LIMIT } from 'const'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { eachYearOfInterval } from 'date-fns'
-import { useRouter } from 'next/router'
+import { MONTH_LIST, YEAR_LIMIT } from 'const'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 
-type YearControlProps = {
+type MonthControlProps = {
   year: number
+  month: number
 }
 
-const YearControl = ({ year }: YearControlProps) => {
+const MonthControl = ({ year, month }: MonthControlProps) => {
   const router = useRouter()
   const setSpinner = useSpinnerActionsContext()
-
   const [selectedYear, setSelectedYear] = React.useState<string>(
     year.toString(),
+  )
+  const [selectedMonth, setSelectedMonth] = React.useState<string>(
+    month.toString(),
   )
   const YearList = React.useMemo(() => {
     return eachYearOfInterval({
@@ -35,13 +38,17 @@ const YearControl = ({ year }: YearControlProps) => {
     setSelectedYear(event.target.value)
   }
 
+  const handleMonthChange = (event: SelectChangeEvent) => {
+    setSelectedMonth(event.target.value)
+  }
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setSpinner(true)
     setTimeout(() => {
       setSpinner(false)
     }, 500)
-    router.push(`/report/year?year=${selectedYear}`)
+    router.push(`/report/month?year=${selectedYear}&month=${selectedMonth}`)
   }
 
   return (
@@ -66,6 +73,24 @@ const YearControl = ({ year }: YearControlProps) => {
             ))}
           </Select>
         </FormControl>
+        <FormControl>
+          <InputLabel id="select-month-label">月</InputLabel>
+          <Select
+            required
+            labelId="select-month-label"
+            id="select-month"
+            value={selectedMonth}
+            label="月"
+            sx={{ width: '100px', mr: 1 }}
+            onChange={handleMonthChange}
+          >
+            {MONTH_LIST.map((month, index) => (
+              <MenuItem key={index} value={month}>
+                {month}月
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Button type="submit" variant="outlined" color="primary">
           選択
         </Button>
@@ -74,4 +99,4 @@ const YearControl = ({ year }: YearControlProps) => {
   )
 }
 
-export default YearControl
+export default MonthControl

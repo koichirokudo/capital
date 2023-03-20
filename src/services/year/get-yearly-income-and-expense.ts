@@ -1,7 +1,7 @@
-import type { ApiContext, IncExp } from 'types'
+import type { ApiContext, YearlyIncomeAndExpense } from 'types'
 import { fetcher } from 'utils'
 
-export type GetIncExpParams = {
+export type GetYealryIncomeAndExpenseParams = {
   /**
    * ユーザID
    */
@@ -14,24 +14,29 @@ export type GetIncExpParams = {
    * 取得する年
    */
   year?: number
+  /**
+   * 昇順、降順
+   */
+  order?: 'asc' | 'desc'
 }
 
 /**
- * ユーザAPI（個別取得）
+ * 年間収入データ取得API
  * @param context APIコンテキスト
  * @param params パラメータ
  * @returns ユーザ
  */
-const getIncExp = async (
+const getYearlyIncomeAndExpense = async (
   context: ApiContext,
-  { userId, groupId, year }: GetIncExpParams,
-): Promise<IncExp[]> => {
-  const path = `${context.apiRootUrl.replace(/\/$/g, '')}/incexp`
+  { userId, groupId, year, order }: GetYealryIncomeAndExpenseParams,
+): Promise<YearlyIncomeAndExpense[]> => {
+  const path = `${context.apiRootUrl.replace(/\/$/g, '')}/year`
   const params = new URLSearchParams()
 
   userId && params.append('userId', `${userId}`)
   groupId && params.append('groupId', `${groupId}`)
   year && params.append('year', `${year}`)
+  order && params.append('year', `${order}`)
 
   const query = params.toString()
 
@@ -45,4 +50,4 @@ const getIncExp = async (
   })
 }
 
-export default getIncExp
+export default getYearlyIncomeAndExpense

@@ -8,7 +8,7 @@ export type IncomeCategory =
   | 'extra'
 
 // 支出カテゴリ
-export type OutgoCategory =
+export type ExpenseCategory =
   | 'daily'
   | 'education'
   | 'transport'
@@ -93,38 +93,73 @@ export type Calculate = {
   total: number
 }
 
-export type IncExp = {
+export type YearlyIncomeAndExpense = {
   userId: number
   groupId: number
   year: number
   incomeTotal: number
   incomeDetails: {
-    January: number
-    February: number
-    March: number
-    April: number
-    May: number
-    June: number
-    July: number
-    August: number
-    September: number
-    October: number
-    November: number
-    December: number
+    January?: number
+    February?: number
+    March?: number
+    April?: number
+    May?: number
+    June?: number
+    July?: number
+    August?: number
+    September?: number
+    October?: number
+    November?: number
+    December?: number
   }
   expenseTotal: number
   expenseDetails: {
-    January: number
-    February: number
-    March: number
-    April: number
-    May: number
-    June: number
-    July: number
-    August: number
-    September: number
-    October: number
-    November: number
-    December: number
+    January?: number
+    February?: number
+    March?: number
+    April?: number
+    May?: number
+    June?: number
+    July?: number
+    August?: number
+    September?: number
+    October?: number
+    November?: number
+    December?: number
+  }
+}
+
+export type MonthlyIncomeAndExpense = {
+  userId: number
+  groupId: number
+  year: number
+  month: number
+  incomeDetails: {
+    salary?: number
+    sidejob?: number
+    pocketmoney?: number
+    investment?: number
+    bonus?: number
+    extra?: number
+  }
+  expenseDetails: {
+    daily?: number
+    education?: number
+    transport?: number
+    insurance?: number
+    beauty?: number
+    clothes?: number
+    food?: number
+    medical?: number
+    house?: number
+    water?: number
+    gas?: number
+    electric?: number
+    loan?: number
+    internet?: number
+    smartphone?: number
+    entertain?: number
+    gift?: number
+    fee?: number
   }
 }

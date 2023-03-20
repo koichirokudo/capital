@@ -3,6 +3,7 @@ import React, { useState, useContext, createContext } from 'react'
 const SpinnerContext = createContext<boolean>(false)
 const SpinnerActionsContext = createContext<
   React.Dispatch<React.SetStateAction<boolean>>
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 >(() => {})
 
 // スピナーの表示・非表示

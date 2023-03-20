@@ -7,7 +7,7 @@ import { Avatar, Box, Grid, Paper, Typography } from '@mui/material'
 import { BarChart } from 'components/BarChart'
 import LineChart from 'components/LineChart'
 import Template from 'components/Templates'
-import { monthlyLabels } from 'const'
+import { monthlyLabels, YEAR_LIMIT } from 'const'
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -18,8 +18,12 @@ import { ApiContext } from 'types'
 import { formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
 import checkAuth from 'services/auth/check-auth'
-import getIncExp from 'services/incexp/get-incexp'
 import YearControl from 'components/YearControl'
+import getYearlyIncomeAndExpense from 'services/year/get-yearly-income-and-expense'
+
+const context: ApiContext = {
+  apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
+}
 
 type ReportYearPageProps = InferGetServerSidePropsType<
   typeof getServerSideProps
@@ -27,13 +31,13 @@ type ReportYearPageProps = InferGetServerSidePropsType<
 
 const ReportYearPage: NextPage<ReportYearPageProps> = ({
   year,
-  incExp,
+  incomeAndExpense,
 }: ReportYearPageProps) => {
   // 認証ガード
   useAuthGaurd()
 
   // データが登録されていない
-  if (incExp.length === 0) {
+  if (incomeAndExpense.length === 0) {
     return (
       <Template title="年間レポート">
         <YearControl year={year} />
@@ -42,7 +46,8 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
     )
   }
 
-  const { incomeDetails, incomeTotal, expenseDetails, expenseTotal } = incExp
+  const { incomeDetails, incomeTotal, expenseDetails, expenseTotal } =
+    incomeAndExpense
   const incomeMonthly = Object.values<number>(incomeDetails ?? [])
   const expenseMonthly = Object.values<number>(expenseDetails ?? [])
   const balanceMonthly: number[] = []
@@ -342,9 +347,6 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
 export const getServerSideProps: GetServerSideProps = async ({
   query,
 }: GetServerSidePropsContext) => {
-  const context: ApiContext = {
-    apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
-  }
   // 認証確認
   const authUser = await checkAuth(context)
   if (!authUser) {
@@ -356,10 +358,22 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
+  if (!query || !query.year) {
+    return {
+      notFound: true,
+    }
+  }
+
   // 指定された年度の収支情報を取得する
   const userId = authUser.id
-  const year = Number(query?.year)
-  const incExp = await getIncExp(context, {
+  const year = parseInt(query.year as string, 10)
+  if (year < YEAR_LIMIT || year > new Date().getFullYear()) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const incomeAndExpense = await getYearlyIncomeAndExpense(context, {
     userId: userId,
     year: year,
   })
@@ -367,7 +381,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   return {
     props: {
       year: year,
-      incExp: incExp[0] ?? [],
+      incomeAndExpense: incomeAndExpense[0] ?? [],
     },
   }
 }

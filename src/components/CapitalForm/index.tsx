@@ -22,7 +22,7 @@ import { Categories } from 'components/CategoryList'
 import { ja } from 'date-fns/locale'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { formatDate } from 'utils/format'
+import { getFullDate } from 'utils/format'
 
 export type CapitalFormData = {
   userId: number
@@ -50,7 +50,7 @@ interface CapitalFormProps {
  * 収支投稿フォーム
  */
 const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
-  const today = formatDate(new Date())
+  const today = getFullDate(new Date())
   const onSubmit = (data: CapitalFormData) => {
     onCapitalSave && onCapitalSave(data)
   }
