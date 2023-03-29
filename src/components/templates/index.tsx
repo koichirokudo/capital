@@ -270,7 +270,7 @@ const Template = (props: TemplateProps) => {
                   </ListItem>
                 </ListItemButton>
               </Link>
-              <Link href={`/calculate/${authUser?.groupId}`}>
+              <Link href={`/settlement/bill`}>
                 <ListItemButton>
                   <Logout />
                   <ListItem sx={{ ml: 1 }}>
