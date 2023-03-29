@@ -163,3 +163,16 @@ export type MonthlyIncomeAndExpense = {
     fee?: number
   }
 }
+
+export type Settlement = {
+  id: number
+  groupId?: number
+  year: number
+  month: number
+  totalAmount: number
+  status: string
+  users: Array<{
+    username: string
+    amount: number
+  }>
+}
