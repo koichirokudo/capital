@@ -9,6 +9,15 @@ const theme = createTheme({
     secondary: {
       main: '#ffb6c1',
     },
+    success: {
+      main: '#4caf50',
+    },
+    error: {
+      main: '#f44336',
+    },
+    warning: {
+      main: '#ff9800',
+    }
   },
   typography: {
     fontFamily: ['Kosugi Maru', 'Yu Gothic', 'Roboto', 'sans-serif'].join(','),
