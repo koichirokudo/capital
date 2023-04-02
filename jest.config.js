@@ -5,5 +5,6 @@ const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleDirectories: ['node_modules', '<rootDir>/src'],
   testEnvironment: 'jsdom',
+  setupFiles: ['jest-canvas-mock'],
 }
 module.exports = createJestConfig(customJestConfig)
