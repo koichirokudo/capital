@@ -165,7 +165,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
           <Controller
             name="money"
             control={control}
-            defaultValue={0}
+            defaultValue="0"
             rules={{ required: '金額を入力してください。' }}
             render={({ field }): JSX.Element => (
               <TextField
