@@ -30,10 +30,6 @@ interface BarChartProps {
   width?: number
 }
 
-interface BarContext extends Context {
-  bar?: number
-}
-
 export const BarChart: React.FC<BarChartProps> = ({
   data,
   options = {},
