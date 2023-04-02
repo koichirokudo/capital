@@ -14,6 +14,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  SelectChangeEvent,
   TextField,
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
@@ -32,7 +33,7 @@ export type CapitalFormData = {
   category: string
   capitalType: string
   note: string
-  money: number
+  money: string
   settlement: boolean
   settlementAt: string
   createAt: string
@@ -51,9 +52,14 @@ interface CapitalFormProps {
  */
 const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
   const today = getFullDate(new Date())
+  const categories = Categories
+
   const onSubmit = (data: CapitalFormData) => {
     onCapitalSave && onCapitalSave(data)
   }
+
+  const [capitalType, setCapitalType] = React.useState('0')
+  const [category, setCategory] = React.useState('undefined')
 
   const {
     handleSubmit,
@@ -61,39 +67,41 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     formState: { errors },
   } = useForm<CapitalFormData>()
 
-  const categories = Categories
+  const handleCapitalType = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCapitalType(event.target.value)
+  }
+
+  const handleSelectCategory = (event: SelectChangeEvent) => {
+    setCategory(event.target.value as string)
+  }
 
   return (
     <Paper sx={{ p: 1 }}>
       <Box>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl error={errors?.hasOwnProperty('capitalType')}>
-            <FormLabel>収支タイプ</FormLabel>
-            <Controller
+          <FormControl required error={errors?.hasOwnProperty('capitalType')}>
+            <FormLabel id="capital-type-radio">収支タイプ</FormLabel>
+            <RadioGroup
+              row
+              id="capital-type-radio"
+              aria-labelledby="capital-type-radio"
               name="capitalType"
-              defaultValue="0"
-              control={control}
-              rules={{ required: '収支タイプを選択してください。' }}
-              render={({ field }): JSX.Element => (
-                <>
-                  <RadioGroup {...field} row>
-                    <FormControlLabel
-                      value="0"
-                      control={<Radio />}
-                      label="収入"
-                    />
-                    <FormControlLabel
-                      value="1"
-                      control={<Radio />}
-                      label="支出"
-                    />
-                  </RadioGroup>
-                  <FormHelperText>
-                    {errors?.capitalType?.message}
-                  </FormHelperText>
-                </>
-              )}
-            />
+              defaultValue="income"
+              value={capitalType}
+              onChange={handleCapitalType}
+            >
+              <FormControlLabel
+                value="income"
+                control={<Radio />}
+                label="収入"
+              />
+              <FormControlLabel
+                value="expenses"
+                control={<Radio />}
+                label="支出"
+              />
+            </RadioGroup>
+            <FormHelperText>{errors?.capitalType?.message}</FormHelperText>
           </FormControl>
           <FormControl fullWidth error={errors?.hasOwnProperty('date')}>
             <Controller
@@ -126,17 +134,25 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
           >
             <Controller
               name="category"
-              defaultValue="未設定"
+              defaultValue="undefined"
               control={control}
               rules={{ required: 'カテゴリを選択してください。' }}
               render={({ field }): JSX.Element => (
                 <>
-                  <InputLabel id="categoryId">カテゴリ</InputLabel>
-                  <Select {...field} label="category" labelId="categoryId">
+                  <InputLabel id="category">カテゴリ</InputLabel>
+                  <Select
+                    {...field}
+                    data-testid="category-input"
+                    label="category"
+                    labelId="category"
+                    defaultValue="undefined"
+                    onChange={handleSelectCategory}
+                    value={category}
+                  >
                     {categories.map((c, index) => {
                       return (
-                        <MenuItem key={index} value={c.category}>
-                          {c.category}
+                        <MenuItem key={index} value={c.value}>
+                          {c.label}
                         </MenuItem>
                       )
                     })}
@@ -168,7 +184,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
           <Controller
             name="note"
             control={control}
-            defaultValue={''}
+            defaultValue={'undefined'}
             render={({ field }): JSX.Element => (
               <TextField
                 {...field}
