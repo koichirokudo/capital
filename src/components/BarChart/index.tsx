@@ -2,6 +2,8 @@ import {
   BarController,
   BarElement,
   Chart as ChartJS,
+  ChartData,
+  ChartOptions,
   Title,
   Tooltip,
   Legend,
@@ -24,8 +26,8 @@ ChartJS.register(
 )
 
 interface BarChartProps {
-  data: any
-  options?: {}
+  data: ChartData<'bar'>
+  options?: ChartOptions
   height?: number
   width?: number
 }
@@ -33,10 +35,10 @@ interface BarChartProps {
 export const BarChart: React.FC<BarChartProps> = ({
   data,
   options = {},
-  height,
   width,
+  height,
 }) => {
-  return <Bar data={data} options={options} height={height} width={width} />
+  return <Bar data={data} options={options} width={width} height={height} />
 }
 
 export default BarChart

@@ -73,10 +73,10 @@ const ReportMonthPage: NextPage<ReportMonthPageProps> = ({
         display: true,
         font: {
           size: 10,
-          weight: 'bold',
+          weight: 600,
         },
         formatter: function (value: { toString: () => string | number }) {
-          if (value > 0) {
+          if (Number(value) > 0) {
             return formatMoney(value.toString(), true)
           } else {
             return null
