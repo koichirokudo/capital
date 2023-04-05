@@ -1,5 +1,5 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import CapitalForm, { CapitalFormData } from './index'
+import { fireEvent, render, waitFor } from '@testing-library/react'
+import CapitalForm from './index'
 import { Categories } from 'components/CategoryList'
 
 describe('CapitalForm', () => {
