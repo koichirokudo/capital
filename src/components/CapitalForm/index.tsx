@@ -14,7 +14,6 @@ import {
   Radio,
   RadioGroup,
   Select,
-  SelectChangeEvent,
   TextField,
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
@@ -58,49 +57,42 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     onCapitalSave && onCapitalSave(data)
   }
 
-  const [capitalType, setCapitalType] = React.useState('0')
-  const [category, setCategory] = React.useState('undefined')
-
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<CapitalFormData>()
 
-  const handleCapitalType = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCapitalType(event.target.value)
-  }
-
-  const handleSelectCategory = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as string)
-  }
-
   return (
     <Paper sx={{ p: 1 }}>
       <Box>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl required error={errors?.hasOwnProperty('capitalType')}>
-            <FormLabel id="capital-type-radio">収支タイプ</FormLabel>
-            <RadioGroup
-              row
-              id="capital-type-radio"
+          <FormControl
+            component="fieldset"
+            error={errors?.hasOwnProperty('capitalType')}
+          >
+            <FormLabel component="legend">収支タイプ</FormLabel>
+            <Controller
               aria-labelledby="capital-type-radio"
               name="capitalType"
+              control={control}
+              rules={{ required: '収支タイプを選択してください。' }}
               defaultValue="income"
-              value={capitalType}
-              onChange={handleCapitalType}
-            >
-              <FormControlLabel
-                value="income"
-                control={<Radio />}
-                label="収入"
-              />
-              <FormControlLabel
-                value="expenses"
-                control={<Radio />}
-                label="支出"
-              />
-            </RadioGroup>
+              render={({ field }): JSX.Element => (
+                <RadioGroup row {...field}>
+                  <FormControlLabel
+                    value="income"
+                    control={<Radio required />}
+                    label="収入"
+                  />
+                  <FormControlLabel
+                    value="expenses"
+                    control={<Radio required />}
+                    label="支出"
+                  />
+                </RadioGroup>
+              )}
+            />
             <FormHelperText>{errors?.capitalType?.message}</FormHelperText>
           </FormControl>
           <FormControl fullWidth error={errors?.hasOwnProperty('date')}>
@@ -146,8 +138,6 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                     label="category"
                     labelId="category"
                     defaultValue="undefined"
-                    onChange={handleSelectCategory}
-                    value={category}
                   >
                     {categories.map((c, index) => {
                       return (
