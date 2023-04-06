@@ -70,7 +70,7 @@ describe('UserEditForm', () => {
     fireEvent.click(getByText('更新する'))
 
     await waitFor(() => {
-      expect(getByText(/ユーザ名を入力してください。/i)).toBeInTheDocument()
+      expect(getByText('ユーザ名を入力してください。')).toBeInTheDocument()
       expect(
         getByText('メールアドレスを入力してください。'),
       ).toBeInTheDocument()
@@ -125,6 +125,81 @@ describe('UserEditForm', () => {
     await waitFor(() => {
       expect(
         getByText('パスワードとパスワード確認が一致しません。'),
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('メールアドレスの形式が不正な場合はエラーメッセージを表示する', async () => {
+    const { getByText, getByLabelText } = render(
+      <UserEditForm onUserSave={onUserSave} user={testUser} />,
+    )
+
+    fireEvent.change(getByLabelText('ユーザ名'), {
+      target: { value: 'test' },
+    })
+    fireEvent.change(getByLabelText('メールアドレス'), {
+      target: { value: 'example' },
+    })
+    fireEvent.change(getByLabelText('パスワード'), {
+      target: { value: 'password' },
+    })
+    fireEvent.change(getByLabelText('パスワード確認'), {
+      target: { value: 'password' },
+    })
+    fireEvent.click(getByText('更新する'))
+
+    await waitFor(() => {
+      expect(getByText(/メールアドレスの形式が不正です。/i)).toBeInTheDocument()
+    })
+  })
+
+  it('ユーザ名が15文字以上の場合はエラーメッセージを表示する', async () => {
+    const { getByText, getByLabelText } = render(
+      <UserEditForm onUserSave={onUserSave} user={testUser} />,
+    )
+
+    fireEvent.change(getByLabelText('ユーザ名'), {
+      target: { value: 'testtesttesttest' },
+    })
+    fireEvent.change(getByLabelText('メールアドレス'), {
+      target: { value: 'example@example.com' },
+    })
+    fireEvent.change(getByLabelText('パスワード'), {
+      target: { value: 'password' },
+    })
+    fireEvent.change(getByLabelText('パスワード確認'), {
+      target: { value: 'password' },
+    })
+    fireEvent.click(getByText('更新する'))
+
+    await waitFor(() => {
+      expect(
+        getByText('ユーザ名は15文字以下で入力してください。'),
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('ユーザー名が2文字未満の場合はエラーメッセージを表示する', async () => {
+    const { getByText, getByLabelText } = render(
+      <UserEditForm onUserSave={onUserSave} user={testUser} />,
+    )
+
+    fireEvent.change(getByLabelText('ユーザ名'), {
+      target: { value: 't' },
+    })
+    fireEvent.change(getByLabelText('メールアドレス'), {
+      target: { value: 'example@example.com' },
+    })
+    fireEvent.change(getByLabelText('パスワード'), {
+      target: { value: 'password' },
+    })
+    fireEvent.change(getByLabelText('パスワード確認'), {
+      target: { value: 'password' },
+    })
+    fireEvent.click(getByText('更新する'))
+    await waitFor(() => {
+      expect(
+        getByText('ユーザ名は2文字以上で入力してください。'),
       ).toBeInTheDocument()
     })
   })
