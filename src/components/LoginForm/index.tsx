@@ -1,7 +1,7 @@
 import { Box, Button, Container, TextField, Typography } from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 export type LoginFormData = {
   username: string
@@ -19,8 +19,9 @@ interface LoginFormProps {
 const LoginForm = ({ handleLogin }: LoginFormProps) => {
   // React Hook Formの使用
   const {
-    register,
     handleSubmit,
+    control,
+    formState: { errors },
   } = useForm<LoginFormData>()
   const onSubmit = (data: LoginFormData) => {
     const { username, password } = data
@@ -45,23 +46,44 @@ const LoginForm = ({ handleLogin }: LoginFormProps) => {
         }}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField
-            required
-            {...register('username')}
-            autoComplete="off"
-            margin="normal"
-            type="text"
-            label="ユーザ名"
-            fullWidth
+          <Controller
+            name="username"
+            control={control}
+            defaultValue=""
+            rules={{ required: 'ユーザ名を入力してください。' }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="ユーザ名"
+                fullWidth
+                error={!!errors.username}
+                helperText={errors.username?.message}
+                margin="normal"
+              />
+            )}
           />
-          <TextField
-            required
-            {...register('password')}
-            autoComplete="off"
-            margin="normal"
-            type="password"
-            label="パスワード"
-            fullWidth
+          <Controller
+            name="password"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: 'パスワードを入力してください。',
+              minLength: {
+                value: 8,
+                message: 'パスワードは8文字以上で入力してください。',
+              },
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="パスワード"
+                type="password"
+                fullWidth
+                error={!!errors.password}
+                helperText={errors.password?.message}
+                margin="normal"
+              />
+            )}
           />
           <Button
             type="submit"
