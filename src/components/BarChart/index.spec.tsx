@@ -22,11 +22,11 @@ const mockData = {
 }
 
 describe('BarChart', () => {
-  it('should render correctly', () => {
+  it('BarChartが正しくレンダリングできること', () => {
     render(<BarChart data={mockData} />)
   })
 
-  it('renders the canvas element', () => {
+  it('canvasがレンダリングできること', () => {
     render(<BarChart data={mockData} />)
     const canvasElement = screen.getByRole('img')
     expect(canvasElement).toBeInTheDocument()
