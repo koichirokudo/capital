@@ -82,11 +82,11 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
               required: 'ユーザ名を入力してください。',
               minLength: {
                 value: 2,
-                message: '2文字以上のユーザ名を入力してください。',
+                message: 'ユーザ名は2文字以上で入力してください。',
               },
               maxLength: {
                 value: 15,
-                message: '15文字以下のユーザ名を入力してください。',
+                message: 'ユーザ名は15文字以下で入力してください。',
               },
             })}
             margin="normal"
@@ -104,11 +104,11 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
               required: 'メールアドレスを入力してください。',
               pattern: {
                 value: /^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$/,
-                message: 'メールアドレスの形式を正しく入力してください。',
+                message: 'メールアドレスの形式が不正です。',
               },
             })}
             margin="normal"
-            type="email"
+            type="text"
             label="メールアドレス"
             defaultValue={user.email}
             sx={{ width: '350px' }}
