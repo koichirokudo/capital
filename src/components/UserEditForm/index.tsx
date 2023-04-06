@@ -79,19 +79,19 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
         <Grid item xs={12}>
           <TextField
             {...register('username', {
-              required: 'ユーザー名を入力してください。',
+              required: 'ユーザ名を入力してください。',
               minLength: {
                 value: 2,
-                message: '2文字以上のユーザー名を入力してください。',
+                message: '2文字以上のユーザ名を入力してください。',
               },
               maxLength: {
                 value: 15,
-                message: '15文字以下のユーザー名を入力してください。',
+                message: '15文字以下のユーザ名を入力してください。',
               },
             })}
             margin="normal"
             type="text"
-            label="ユーザー名"
+            label="ユーザ名"
             defaultValue={user.username}
             sx={{ width: '350px' }}
             error={'username' in errors}
@@ -100,7 +100,6 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            required
             {...register('email', {
               required: 'メールアドレスを入力してください。',
               pattern: {
@@ -119,10 +118,15 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            {...register('password')}
+            {...register('password', {
+              minLength: {
+                value: 8,
+                message: 'パスワードは8文字以上で入力してください。',
+              },
+            })}
             margin="normal"
             type="password"
-            label="パスワードを入力"
+            label="パスワード"
             sx={{ width: '350px' }}
             error={'password' in errors}
             helperText={errors.password?.message}
@@ -133,13 +137,13 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
             {...register('confirmPassword', {
               validate: (value: string) => {
                 if (watch('password') != value) {
-                  return '入力したパスワードが違います。'
+                  return 'パスワードとパスワード確認が一致しません。'
                 }
               },
             })}
             margin="normal"
             type="password"
-            label="もう一度パスワードを入力"
+            label="パスワード確認"
             sx={{ width: '350px' }}
             error={'confirmPassword' in errors}
             helperText={errors.confirmPassword?.message}
