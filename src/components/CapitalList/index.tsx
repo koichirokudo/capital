@@ -246,7 +246,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
       type: 'date',
       editable: true,
     },
-    { field: 'userName', headerName: '更新者', width: 180, editable: true },
+    { field: 'name', headerName: '更新者', width: 180, editable: true },
     {
       field: 'capitalType',
       headerName: '収支',

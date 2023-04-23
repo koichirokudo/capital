@@ -10,7 +10,7 @@ type AuthContextType = {
   authUser?: User
   isLoading: boolean
   // eslint-disable-next-line no-unused-vars
-  login: (username: string, password: string) => Promise<void>
+  login: (name: string, password: string) => Promise<void>
   logout: () => Promise<void>
   mutate: (
     // eslint-disable-next-line no-unused-vars
@@ -51,10 +51,10 @@ export const AuthContextProvider = ({
   const isLoading = !data && !error
 
   // ログイン
-  const loginInternal = async (username: string, password: string) => {
+  const loginInternal = async (name: string, password: string) => {
     await getCsrfToken(context)
     const token = decodeURIComponent(getCookie('XSRF-TOKEN'))
-    await login(context, token, { username, password })
+    await login(context, token, { name, password })
     await mutate()
   }
 

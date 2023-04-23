@@ -1,10 +1,9 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, TextField } from '@mui/material'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Controller, useForm } from 'react-hook-form'
 
 export type LoginFormData = {
-  username: string
+  name: string
   password: string
 }
 
@@ -13,7 +12,7 @@ interface LoginFormProps {
    * ログインボタンを押した時のイベントハンドラ
    */
   // eslint-disable-next-line no-unused-vars
-  handleLogin?: (username: string, password: string) => void
+  handleLogin?: (name: string, password: string) => void
 }
 
 const LoginForm = ({ handleLogin }: LoginFormProps) => {
@@ -24,8 +23,8 @@ const LoginForm = ({ handleLogin }: LoginFormProps) => {
     formState: { errors },
   } = useForm<LoginFormData>()
   const onSubmit = (data: LoginFormData) => {
-    const { username, password } = data
-    handleLogin && handleLogin(username, password)
+    const { name, password } = data
+    handleLogin && handleLogin(name, password)
   }
 
   return (
@@ -47,7 +46,7 @@ const LoginForm = ({ handleLogin }: LoginFormProps) => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
-            name="username"
+            name="name"
             control={control}
             defaultValue=""
             rules={{ required: 'ユーザ名を入力してください。' }}
@@ -56,8 +55,8 @@ const LoginForm = ({ handleLogin }: LoginFormProps) => {
                 {...field}
                 label="ユーザ名"
                 fullWidth
-                error={!!errors.username}
-                helperText={errors.username?.message}
+                error={!!errors.name}
+                helperText={errors.name?.message}
                 margin="normal"
               />
             )}

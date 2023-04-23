@@ -124,7 +124,7 @@ const Bill: NextPage = ({ users, settlement }: BillProps) => {
                 <TableCell>月</TableCell>
                 {users.map((user: User) => (
                   <TableCell key={user.id} padding="none">
-                    {user.username}
+                    {user.name}
                   </TableCell>
                 ))}
                 <TableCell>支払い合計</TableCell>

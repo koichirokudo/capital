@@ -27,7 +27,7 @@ const UserProfileContainer = ({ userId, user }: UserProfileContainerProps) => {
 
   return (
     <UserProfile
-      username={u.username}
+      name={u.name}
       email={u.email}
       profileImage={u.profileImage}
     />

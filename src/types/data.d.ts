@@ -39,19 +39,19 @@ export type User = {
   groupId: number
   authType: number
   profileImage: string
-  username: string
+  name: string
   password: string
   email: string
-  cancel: string
+  delete: string
 }
 
 // グループ
 export type Group = {
   id: number
   groupName: string
-  participants: number
-  inviteId: string
-  stratDay: number
+  memberCount: number
+  inviteCode: string
+  startDate: number
 }
 
 // 収支
@@ -59,7 +59,7 @@ export type Capital = {
   id: number
   groupId: number
   share: string
-  username: string
+  name: string
   date: string
   category: string
   capitalType: string
@@ -86,7 +86,7 @@ export type CapitalHistory = {
 export type Calculate = {
   id: number
   userId: number
-  userName: string
+  name: string
   memberName: string
   outgo: number
   income: number
@@ -172,7 +172,7 @@ export type Settlement = {
   totalAmount: number
   status: string
   users: Array<{
-    username: string
+    name: string
     amount: number
   }>
 }

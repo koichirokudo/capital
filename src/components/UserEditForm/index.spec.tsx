@@ -12,12 +12,12 @@ describe('UserEditForm', () => {
     id: 1,
     groupId: 1,
     authType: 1,
-    username: 'test',
+    name: 'test',
     password: 'password',
     password_confirmation: 'password',
     email: 'example@example.com',
     profileImage: '',
-    cancel: 'false',
+    delete: 'false',
   }
 
   it('UserEditFormのレンダリング', () => {

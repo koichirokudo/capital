@@ -21,21 +21,25 @@ const getUser = async (
   /**
    * サンプルレスポンス
    {
-     "userId": "1"
+     "id": "1"
      "groupId": "1"
      "authType": "1"
-     "username": "Kouichiro Kudo"
+     "profileImage": "https://example.com/profile.png"
+     "name": "name"
      "password": "$78jlihfad["
-     "email": "koichiro@example.com"
-     "cancel": "false"
+     "email": "example@example.com"
+     "delete": "false"
    }
    */
-  return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/users/${id}`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+  return await fetcher(
+    `${context.apiRootUrl.replace(/\/$/g, '')}/users/${id}`,
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
     },
-  })
+  )
 }
 
 export default getUser

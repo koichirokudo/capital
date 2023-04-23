@@ -6,7 +6,7 @@ const mockCapitals = [
   {
     id: 1,
     date: '2023-03-25',
-    userName: 'Alice',
+    name: 'Alice',
     capitalType: '収入',
     category: '給料',
     money: 3000,
@@ -15,7 +15,7 @@ const mockCapitals = [
   {
     id: 2,
     date: '2023-03-26',
-    userName: 'Bob',
+    name: 'Bob',
     capitalType: '支出',
     category: '食費',
     money: 1000,

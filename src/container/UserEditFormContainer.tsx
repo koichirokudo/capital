@@ -31,11 +31,11 @@ const UserEditFormContainer = ({ onSave }: UserEditFormContainerProps) => {
       groupId: data.groupId,
       authType: data.authType,
       profileImage: data.profileImage,
-      username: data.username,
+      name: data.name,
       password: data.password,
       confirmPassword: data.confirmPassword,
       email: data.email,
-      cancel: data.cancel,
+      delete: data.delete,
     }
 
     try {

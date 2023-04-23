@@ -10,12 +10,12 @@ import {
 import Image from 'next/image'
 
 interface UserProfileProps {
-  username: string
+  name: string
   email: string
   profileImage: string
 }
 
-const UserProfile = ({ username, email, profileImage }: UserProfileProps) => {
+const UserProfile = ({ name, email, profileImage }: UserProfileProps) => {
   return (
     <Grid
       container
@@ -43,7 +43,7 @@ const UserProfile = ({ username, email, profileImage }: UserProfileProps) => {
               <ListItemIcon>
                 <PersonOutline />
               </ListItemIcon>
-              <ListItemText>{username}</ListItemText>
+              <ListItemText>{name}</ListItemText>
             </ListItem>
             <ListItem>
               <ListItemIcon>

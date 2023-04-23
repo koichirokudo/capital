@@ -19,11 +19,11 @@ const LoginFormContainer = ({ onLogin }: LoginFormContainerProps) => {
   const { login } = useAuthContext()
   const setSpinner = useSpinnerActionsContext()
 
-  const handleLogin = async (username: string, password: string) => {
+  const handleLogin = async (name: string, password: string) => {
     try {
       // ローディングスピナーを表示
       setSpinner(true)
-      await login(username, password)
+      await login(name, password)
       onLogin && onLogin()
     } catch (err: unknown) {
       if (err instanceof Error) {

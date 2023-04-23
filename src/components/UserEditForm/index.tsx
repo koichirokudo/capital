@@ -7,12 +7,12 @@ export type UserEditFormData = {
   id: number
   groupId: number
   authType: number
-  username: string
+  name: string
   password: string
   confirmPassword: string
   email: string
   profileImage: string
-  cancel: string
+  delete: string
 }
 
 interface UserFormProps {
@@ -78,7 +78,7 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            {...register('username', {
+            {...register('name', {
               required: 'ユーザ名を入力してください。',
               minLength: {
                 value: 2,
@@ -92,10 +92,10 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
             margin="normal"
             type="text"
             label="ユーザ名"
-            defaultValue={user.username}
+            defaultValue={user.name}
             sx={{ width: '350px' }}
-            error={'username' in errors}
-            helperText={errors.username?.message}
+            error={'name' in errors}
+            helperText={errors.name?.message}
           />
         </Grid>
         <Grid item xs={12}>
@@ -184,8 +184,8 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
           />
           <input
             type="hidden"
-            {...register('cancel')}
-            defaultValue={user.cancel}
+            {...register('delete')}
+            defaultValue={user.delete}
           />
         </>
       )}

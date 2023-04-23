@@ -27,7 +27,7 @@ const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
     if (!authUser) return
 
     const capital = {
-      username: authUser.username,
+      name: authUser.name,
       groupId: authUser.groupId,
       date: data.date,
       share: data.share,

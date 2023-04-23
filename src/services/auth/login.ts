@@ -5,7 +5,7 @@ export type loginParams = {
   /**
    * ユーザ名
    */
-  username: string
+  name: string
   /**
    * パスワード
    */
