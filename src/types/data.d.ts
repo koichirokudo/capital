@@ -49,8 +49,8 @@ export type User = {
 export type Group = {
   id: number
   groupName: string
-  memberCount: number
   inviteCode: string
+  inviteLimit: string
   startDay: number
 }
 
