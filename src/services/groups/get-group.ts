@@ -22,8 +22,8 @@ const getGroup = async (
    * サンプルレスポンス
    {
     "id": 1,
-    "participants": 2,
-    "inviteId": "8flakdsfhaidfyasfkldjpad$&YJ",
+    "memberCount": 2,
+    "inviteCode": "8flakdsfhaidfyasfkldjpad$&YJ",
     "startDay": 1,
     "create_at": "2022-12-01-11:00:01",
     "update_at": "2022-12-01-11:00:01""

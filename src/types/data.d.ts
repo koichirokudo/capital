@@ -8,7 +8,7 @@ export type IncomeCategory =
   | 'extra'
 
 // 支出カテゴリ
-export type ExpenseCategory =
+export type ExpensesCategory =
   | 'daily'
   | 'education'
   | 'transport'
@@ -51,7 +51,7 @@ export type Group = {
   groupName: string
   memberCount: number
   inviteCode: string
-  startDate: number
+  startDay: number
 }
 
 // 収支
@@ -88,12 +88,12 @@ export type Calculate = {
   userId: number
   name: string
   memberName: string
-  outgo: number
+  expenses: number
   income: number
   total: number
 }
 
-export type YearlyIncomeAndExpense = {
+export type YearlyIncomeAndExpenses = {
   userId: number
   groupId: number
   year: number
@@ -112,8 +112,8 @@ export type YearlyIncomeAndExpense = {
     November?: number
     December?: number
   }
-  expenseTotal: number
-  expenseDetails: {
+  expensesTotal: number
+  expensesDetails: {
     January?: number
     February?: number
     March?: number
@@ -129,7 +129,7 @@ export type YearlyIncomeAndExpense = {
   }
 }
 
-export type MonthlyIncomeAndExpense = {
+export type MonthlyIncomeAndExpenses = {
   userId: number
   groupId: number
   year: number
@@ -142,7 +142,7 @@ export type MonthlyIncomeAndExpense = {
     bonus?: number
     extra?: number
   }
-  expenseDetails: {
+  expensesDetails: {
     daily?: number
     education?: number
     transport?: number

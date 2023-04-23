@@ -19,7 +19,7 @@ import { formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
 import checkAuth from 'services/auth/check-auth'
 import YearControl from 'components/YearControl'
-import getYearlyIncomeAndExpense from 'services/year/get-yearly-income-and-expense'
+import getYearlyIncomeAndExpenses from 'services/year/get-yearly-income-and-expenses'
 
 const context: ApiContext = {
   apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
@@ -31,13 +31,13 @@ type ReportYearPageProps = InferGetServerSidePropsType<
 
 const ReportYearPage: NextPage<ReportYearPageProps> = ({
   year,
-  incomeAndExpense,
+  incomeAndExpenses,
 }: ReportYearPageProps) => {
   // 認証ガード
   useAuthGaurd()
 
   // データが登録されていない
-  if (incomeAndExpense.length === 0) {
+  if (incomeAndExpenses.length === 0) {
     return (
       <Template title="年間レポート">
         <YearControl year={year} />
@@ -46,13 +46,13 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
     )
   }
 
-  const { incomeDetails, incomeTotal, expenseDetails, expenseTotal } =
-    incomeAndExpense
+  const { incomeDetails, incomeTotal, expensesDetails, expensesTotal } =
+    incomeAndExpenses
   const incomeMonthly = Object.values<number>(incomeDetails ?? [])
-  const expenseMonthly = Object.values<number>(expenseDetails ?? [])
+  const expensesMonthly = Object.values<number>(expensesDetails ?? [])
   const balanceMonthly: number[] = []
   for (let i = 0; i < incomeMonthly.length; i++) {
-    balanceMonthly.push(incomeMonthly[i] - expenseMonthly[i])
+    balanceMonthly.push(incomeMonthly[i] - expensesMonthly[i])
   }
 
   const barChartOptions = {
@@ -178,11 +178,11 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
     ],
   }
 
-  const lineChartExpenseData = {
+  const lineChartExpensesData = {
     labels: monthlyLabels,
     datasets: [
       {
-        data: expenseMonthly,
+        data: expensesMonthly,
         tension: 0.3,
         borderColor: 'rgba(255, 171, 0, 1)',
         backgroundColor: 'rgba(255, 171, 0, 0.3)',
@@ -214,7 +214,7 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
       },
       {
         label: '支出',
-        data: expenseMonthly,
+        data: expensesMonthly,
         backgroundColor: 'rgba(255, 171, 0, 0.9)',
         barPercentage: 0.5,
         borderRadius: 10,
@@ -274,7 +274,7 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
               color="#7a4100"
               sx={{ ml: 3, fontSize: '2rem', fontWeight: 'bold' }}
             >
-              {formatMoney(expenseTotal, true)}
+              {formatMoney(expensesTotal, true)}
             </Box>
             <Avatar
               sx={{
@@ -287,7 +287,7 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
               <CallMadeSharp />
             </Avatar>
             <LineChart
-              data={lineChartExpenseData}
+              data={lineChartExpensesData}
               options={lineChartOptions}
               width={50}
               height={25}
@@ -308,7 +308,7 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
               color="#275f72"
               sx={{ ml: 3, fontSize: '2rem', fontWeight: 'bold' }}
             >
-              {formatMoney(incomeTotal - expenseTotal, true)}
+              {formatMoney(incomeTotal - expensesTotal, true)}
             </Box>
             <Avatar
               sx={{
@@ -373,7 +373,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
-  const incomeAndExpense = await getYearlyIncomeAndExpense(context, {
+  const incomeAndExpenses = await getYearlyIncomeAndExpenses(context, {
     userId: userId,
     year: year,
   })
@@ -381,7 +381,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   return {
     props: {
       year: year,
-      incomeAndExpense: incomeAndExpense[0] ?? [],
+      incomeAndExpenses: incomeAndExpenses[0] ?? [],
     },
   }
 }

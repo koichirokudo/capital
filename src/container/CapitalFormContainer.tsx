@@ -36,7 +36,7 @@ const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
       money: Number(data.money),
       note: data.note ?? '',
       settlement: 'FALSE',
-      settlementAt: '', // DBで日時登録する
+      settlementAt: '',
     }
 
     try {

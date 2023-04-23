@@ -11,13 +11,13 @@ import type {
   NextPage,
 } from 'next'
 import checkAuth from 'services/auth/check-auth'
-import getMonthlyIncomeAndExpense from 'services/month/get-monthly-income-and-expense'
+import getMonthlyIncomeAndExpenses from 'services/month/get-monthly-income-and-expenses'
 import { ApiContext } from 'types'
 import { formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
 
 const INCOME = '収入'
-const OUTGO = '支出'
+const EXPENSE = '支出'
 const context: ApiContext = {
   apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
 }
@@ -29,18 +29,18 @@ type ReportMonthPageProps = InferGetServerSidePropsType<
 const ReportMonthPage: NextPage<ReportMonthPageProps> = ({
   year,
   month,
-  incomeAndExpense,
+  incomeAndExpenses,
 }: ReportMonthPageProps) => {
   // 認証ガード
   useAuthGaurd()
 
-  const specificIncomeAndExpense = incomeAndExpense.filter(
+  const specificIncomeAndExpenses = incomeAndExpenses.filter(
     (item: { year: number; month: number }) =>
       item.year === year && item.month === month,
   )
 
   // データが登録されていない
-  if (specificIncomeAndExpense.length === 0) {
+  if (specificIncomeAndExpenses.length === 0) {
     return (
       <Template title="月間レポート">
         <MonthControl year={year} month={month} />
@@ -55,9 +55,9 @@ const ReportMonthPage: NextPage<ReportMonthPageProps> = ({
     (c) => c.capitalType === INCOME,
   ).map((c) => c.category)
 
-  const outgoCategories = Categories.filter((c) => c.capitalType === OUTGO).map(
-    (c) => c.category,
-  )
+  const expensesCategories = Categories.filter(
+    (c) => c.capitalType === EXPENSE,
+  ).map((c) => c.category)
 
   const options = {
     indexAxis: 'y' as const,
@@ -106,9 +106,9 @@ const ReportMonthPage: NextPage<ReportMonthPageProps> = ({
     },
   }
 
-  const { incomeDetails, expenseDetails } = specificIncomeAndExpense[0]
+  const { incomeDetails, expensesDetails } = specificIncomeAndExpenses[0]
   const categoryIncomeData = Object.values<number>(incomeDetails ?? [])
-  const categoryExpenseData = Object.values<number>(expenseDetails ?? [])
+  const categoryExpensesData = Object.values<number>(expensesDetails ?? [])
 
   const incomeCategoriesData = {
     labels: incomeCategories,
@@ -124,12 +124,12 @@ const ReportMonthPage: NextPage<ReportMonthPageProps> = ({
     ],
   }
 
-  const outgoCategoriesData = {
-    labels: outgoCategories,
+  const expensesCategoriesData = {
+    labels: expensesCategories,
     datasets: [
       {
         label: 'カテゴリ',
-        data: categoryExpenseData,
+        data: categoryExpensesData,
         backgroundColor: 'rgba(255, 171, 0, 0.9)',
         barPercentage: 0.9,
         borderRadius: 10,
@@ -155,7 +155,7 @@ const ReportMonthPage: NextPage<ReportMonthPageProps> = ({
         <Grid item xs={12} md={12} lg={12}>
           <Paper>
             <BarChart
-              data={outgoCategoriesData}
+              data={expensesCategoriesData}
               options={options}
               height={500}
               width={1200}
@@ -201,7 +201,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
-  const incomeAndExpense = await getMonthlyIncomeAndExpense(context, {
+  const incomeAndExpenses = await getMonthlyIncomeAndExpenses(context, {
     userId: userId,
   })
 
@@ -209,7 +209,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {
       year: year,
       month: month,
-      incomeAndExpense: incomeAndExpense ?? [],
+      incomeAndExpenses: incomeAndExpenses ?? [],
     },
   }
 }

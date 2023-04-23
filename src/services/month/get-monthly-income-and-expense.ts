@@ -1,7 +1,7 @@
-import type { ApiContext, MonthlyIncomeAndExpense } from 'types'
+import type { ApiContext, MonthlyIncomeAndExpenses } from 'types'
 import { fetcher } from 'utils'
 
-export type GetMonthlyIncomeAndExpenseParams = {
+export type GetMonthlyIncomeAndExpensesParams = {
   /**
    * ユーザID
    */
@@ -30,10 +30,10 @@ export type GetMonthlyIncomeAndExpenseParams = {
  * @param params パラメータ
  * @returns ユーザ
  */
-const getMonthlyIncomeAndExpense = async (
+const getMonthlyIncomeAndExpenses = async (
   context: ApiContext,
-  { userId, groupId, year, month, order }: GetMonthlyIncomeAndExpenseParams,
-): Promise<MonthlyIncomeAndExpense[]> => {
+  { userId, groupId, year, month, order }: GetMonthlyIncomeAndExpensesParams,
+): Promise<MonthlyIncomeAndExpenses[]> => {
   const path = `${context.apiRootUrl.replace(/\/$/g, '')}/month`
   const params = new URLSearchParams()
 
@@ -55,4 +55,4 @@ const getMonthlyIncomeAndExpense = async (
   })
 }
 
-export default getMonthlyIncomeAndExpense
+export default getMonthlyIncomeAndExpenses
