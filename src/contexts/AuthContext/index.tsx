@@ -1,8 +1,10 @@
 import React, { useContext } from 'react'
+import getCsrfToken from 'services/auth/csrf'
 import login from 'services/auth/login'
 import logout from 'services/auth/logout'
 import useSWR from 'swr'
 import type { ApiContext, User } from 'types'
+import { getCookie } from 'utils/cookie'
 
 type AuthContextType = {
   authUser?: User
@@ -44,13 +46,15 @@ export const AuthContextProvider = ({
   children,
 }: React.PropsWithChildren<AuthContextProviderProps>) => {
   const { data, error, mutate } = useSWR<User>(
-    `${context.apiRootUrl.replace(/\/$/g, '')}/users/me`,
+    `${context.apiRootUrl.replace(/\/$/g, '')}/me`,
   )
   const isLoading = !data && !error
 
   // ログイン
   const loginInternal = async (username: string, password: string) => {
-    await login(context, { username, password })
+    await getCsrfToken(context)
+    const token = decodeURIComponent(getCookie('XSRF-TOKEN'))
+    await login(context, token, { username, password })
     await mutate()
   }
 
