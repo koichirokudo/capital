@@ -7,16 +7,14 @@ import { fetcher } from 'utils'
  * @returns ログアウトメッセージ
  */
 const logout = async (context: ApiContext): Promise<{ message: string }> => {
-  return await fetcher(
-    `${context.apiRootUrl.replace(/\/$/g, '')}/auth/logout}`,
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+  return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/logout`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      include: 'credentials',
     },
-  )
+  })
 }
 
 export default logout

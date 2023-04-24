@@ -3,12 +3,14 @@ import { fetcher } from 'utils'
 
 /**
  * 収支API（更新）
- * @param APIコンテキスト
+ * @param context APIコンテキスト
+ * @param csrfToken CSRFトークン
  * @param params 更新する収支
  * @returns 更新した収支
  */
 const updateCapital = async (
   context: ApiContext,
+  csrfToken: string,
   capital: Partial<Capital>,
 ): Promise<Capital> => {
   return await fetcher(
@@ -17,6 +19,7 @@ const updateCapital = async (
       method: 'PUT',
       headers: {
         Origin: '*',
+        'X-XSRF-TOKEN': csrfToken,
         Accept: 'application/json',
         'Content-Type': 'application/json',
         credentials: 'include',

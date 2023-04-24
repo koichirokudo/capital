@@ -17,7 +17,9 @@ export type GetAllCapitalsParams = {
 }
 
 /**
- * 収支API（一覧取得
+ * 収支API（一覧取得）
+ * @param context APIコンテキスト
+ * @param params パラメータ
  */
 const getAllCapitals = async (
   context: ApiContext,

@@ -15,23 +15,23 @@ export type loginParams = {
 /**
  * 認証API（ログイン）
  * @param context APIコンテキスト
- * @param token CSRFトークン
+ * @param csrfToken CSRFトークン
  * @param params パラメータ
  * @param ログインユーザ
  */
 const login = async (
   context: ApiContext,
-  token: string,
+  csrfToken: string,
   params: loginParams,
 ): Promise<User> => {
   return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/login`, {
     method: 'POST',
     headers: {
-      'X-XSRF-TOKEN': token,
+      'X-XSRF-TOKEN': csrfToken,
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      credentials: 'include',
     },
-    credentials: 'include',
     body: JSON.stringify(params),
   })
 }

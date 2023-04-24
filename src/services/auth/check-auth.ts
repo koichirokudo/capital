@@ -2,7 +2,7 @@ import { ApiContext, User } from 'types'
 import { fetcher } from 'utils'
 
 const checkAuth = async (context: ApiContext): Promise<User> => {
-  return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/users/me`, {
+  return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/me`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',

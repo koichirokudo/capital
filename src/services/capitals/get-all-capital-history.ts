@@ -22,6 +22,8 @@ export type GetAllCapitalHistoryParams = {
 
 /**
  * 収支履歴API（一覧取得）
+ * @param context APIコンテキスト
+ * @param params パラメータ
  */
 const getAllCapitalHistory = async (
   context: ApiContext,

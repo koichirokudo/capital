@@ -32,6 +32,7 @@ import * as React from 'react'
 import deleteCapital from 'services/capitals/delete-capital'
 import updateCapital from 'services/capitals/update-capital'
 import { ApiContext } from 'types'
+import { useAuthContext } from 'contexts/AuthContext'
 
 /**
  * 収支一覧をDatagridで表示
@@ -40,7 +41,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
   const context: ApiContext = {
     apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
   }
-
+  const { csrfToken } = useAuthContext()
   const setSpinner = useSpinnerActionsContext()
 
   // 行のモードを制御する変数（表示モード/編集モード）
@@ -48,8 +49,10 @@ const CapitalList = ({ capitals, mutate }: any) => {
     {},
   )
 
-  const [snackbar, setSnackbar] =
-    React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null)
+  const [snackbar, setSnackbar] = React.useState<Pick<
+    AlertProps,
+    'children' | 'severity'
+  > | null>(null)
 
   /**
    * 収支タイプをDataGridのセル内で表示する
@@ -190,7 +193,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
   const handleDeleteClick = (id: GridRowId) => async () => {
     try {
       setSpinner(true)
-      await deleteCapital(context, id)
+      await deleteCapital(context, csrfToken ?? '', id)
       await mutate()
       setSnackbar({
         children: '収支情報の削除に成功しました。',
@@ -221,13 +224,16 @@ const CapitalList = ({ capitals, mutate }: any) => {
 
   // handleSaveClick実行後に、実行される
   // 更新前に呼び出される関数
-  const processRowUpdate = React.useCallback(async (newRow: GridRowModel) => {
-    setSpinner(true)
-    const res = await updateCapital(context, newRow)
-    setSpinner(false)
-    setSnackbar({ children: '編集内容を保存しました。', severity: 'success' })
-    return res
-  }, [context, setSpinner])
+  const processRowUpdate = React.useCallback(
+    async (newRow: GridRowModel) => {
+      setSpinner(true)
+      const res = await updateCapital(context, csrfToken ?? '', newRow)
+      setSpinner(false)
+      setSnackbar({ children: '編集内容を保存しました。', severity: 'success' })
+      return res
+    },
+    [context, setSpinner],
+  )
 
   // processRowUpdateで更新失敗した場合に呼び出される関数
   const handleProcessRowUpdateError = React.useCallback(() => {
