@@ -25,7 +25,7 @@ const getAllCapitals = async (
   context: ApiContext,
   { userId, groupId, order }: GetAllCapitalsParams = {},
 ): Promise<Capital[]> => {
-  const path = `${context.apiRootUrl.replace(/\/$/g, '')}/capitals/`
+  const path = `${context.apiRootUrl.replace(/\/$/g, '')}/capitals`
   const params = new URLSearchParams()
 
   userId && params.append('userId', `${userId}`)
@@ -35,6 +35,7 @@ const getAllCapitals = async (
   const query = params.toString()
 
   return await fetcher(query.length > 0 ? `${path}?${query}` : path, {
+    method: 'GET',
     headers: {
       Origin: '*',
       Accept: 'application/json',

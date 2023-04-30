@@ -41,7 +41,6 @@ const CapitalList = ({ capitals, mutate }: any) => {
   const context: ApiContext = {
     apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
   }
-  const { csrfToken } = useAuthContext()
   const setSpinner = useSpinnerActionsContext()
 
   // 行のモードを制御する変数（表示モード/編集モード）
@@ -193,7 +192,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
   const handleDeleteClick = (id: GridRowId) => async () => {
     try {
       setSpinner(true)
-      await deleteCapital(context, csrfToken ?? '', id)
+      await deleteCapital(context, id)
       await mutate()
       setSnackbar({
         children: '収支情報の削除に成功しました。',
@@ -227,7 +226,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
   const processRowUpdate = React.useCallback(
     async (newRow: GridRowModel) => {
       setSpinner(true)
-      const res = await updateCapital(context, csrfToken ?? '', newRow)
+      const res = await updateCapital(context, newRow)
       setSpinner(false)
       setSnackbar({ children: '編集内容を保存しました。', severity: 'success' })
       return res

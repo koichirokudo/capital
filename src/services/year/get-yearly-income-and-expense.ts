@@ -36,7 +36,7 @@ const getYearlyIncomeAndExpenses = async (
   userId && params.append('userId', `${userId}`)
   groupId && params.append('groupId', `${groupId}`)
   year && params.append('year', `${year}`)
-  order && params.append('year', `${order}`)
+  order && params.append('order', `${order}`)
 
   const query = params.toString()
 

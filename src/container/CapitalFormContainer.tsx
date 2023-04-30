@@ -21,10 +21,10 @@ interface CapitalFormContainerProps {
  * 収入登録フォームコンテナ
  */
 const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
-  const { authUser, csrfToken } = useAuthContext()
+  const { authUser } = useAuthContext()
   const setSpinner = useSpinnerActionsContext()
   const handleSave = async (data: CapitalFormData) => {
-    if (!authUser || !csrfToken) return
+    if (!authUser) return
 
     const capital = {
       name: authUser.name,
@@ -41,7 +41,7 @@ const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
 
     try {
       setSpinner(true)
-      const ret = await addCapital(context, csrfToken, { capital })
+      const ret = await addCapital(context, { capital })
       onSave && onSave(undefined, ret)
     } catch (err: unknown) {
       if (err instanceof Error) {

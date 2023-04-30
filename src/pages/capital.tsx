@@ -3,19 +3,25 @@ import CapitalList from 'components/CapitalList'
 import Template from 'components/Templates'
 import CapitalFormContainer from 'container/CapitalFormContainer'
 import { useAuthContext } from 'contexts/AuthContext'
-import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
+import type {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+  NextPage,
+} from 'next'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import checkAuth from 'services/auth/check-auth'
 import getAllCapitals from 'services/capitals/get-all-capitals'
 import useAllCapital from 'services/capitals/use-all-capitals'
 import { ApiContext } from 'types'
 import { useAuthGaurd } from 'utils/hook'
 
 const context: ApiContext = {
-  apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
+  apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH ?? '/api/proxy',
 }
 
-type CapitalPageProps = InferGetStaticPropsType<typeof getStaticProps>
+type CapitalPageProps = InferGetServerSidePropsType<typeof getServerSideProps>
 
 const CapitalPage: NextPage = ({ capitals: initial }: CapitalPageProps) => {
   // 認証ガード
@@ -41,22 +47,32 @@ const CapitalPage: NextPage = ({ capitals: initial }: CapitalPageProps) => {
         </Grid>
         <Grid item xs={12} md={12} lg={9}>
           <CapitalList capitals={capitals} mutate={data.mutate} />
-        </Grid>
+        </Grid  >
       </Grid>
     </Template>
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+}: GetServerSidePropsContext) => {
+  // 認証確認
+  const authUser = await checkAuth(context)
+  if (!authUser) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
   // 収支情報を取得して、静的ページを作成する
   // 10秒でstaleな状態にして、静的ページを更新する
   const capitals = await getAllCapitals(context)
 
   return {
-    props: {
-      capitals,
-    },
-    revalidate: 10,
+    props: { capitals },
   }
 }
 
