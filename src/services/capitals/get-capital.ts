@@ -1,5 +1,5 @@
 import { ApiContext, Capital } from 'types'
-import { fetcher } from 'utils'
+import { fetcher } from 'utils/axios'
 
 export type GetCapitalParams = {
   /**

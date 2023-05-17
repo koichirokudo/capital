@@ -1,5 +1,4 @@
-import { ApiContext, User } from 'types'
-import { fetcher } from 'utils'
+import { axios } from 'utils/axios'
 
 export type loginParams = {
   /**
@@ -14,23 +13,9 @@ export type loginParams = {
 
 /**
  * 認証API（ログイン）
- * @param context APIコンテキスト
- * @param params パラメータ
- * @param ログインユーザ
  */
-const login = async (
-  context: ApiContext,
+export const loginWithNameAndPassword = (
   params: loginParams,
-): Promise<User> => {
-  return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/login`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      credentials: 'include',
-    },
-    body: JSON.stringify(params),
-  })
+): Promise<string> => {
+  return axios.post('/api/login', params)
 }
-
-export default login

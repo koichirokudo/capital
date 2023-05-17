@@ -1,5 +1,5 @@
 import type { ApiContext, Capital } from 'types'
-import { fetcher } from 'utils'
+import { fetcher } from 'utils/axios'
 
 /**
  * 収支API（更新）

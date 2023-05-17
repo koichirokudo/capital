@@ -13,7 +13,7 @@ import {
 import Template from 'components/Templates'
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
 import React from 'react'
-import checkAuth from 'services/auth/check-auth'
+import { getAuthUser } from 'services/auth/get-auth-user'
 import getSettlements from 'services/settlement/get-settlements'
 import getAllUsers from 'services/users/get-all-users'
 import theme from 'theme'
@@ -176,7 +176,7 @@ const Bill: NextPage = ({ users, settlement }: BillProps) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   // 認証確認
-  const authUser = await checkAuth(context)
+  const authUser = await getAuthUser()
   if (!authUser) {
     return {
       redirect: {

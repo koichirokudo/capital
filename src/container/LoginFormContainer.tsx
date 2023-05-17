@@ -1,6 +1,7 @@
 import LoginForm from 'components/LoginForm'
 import { useAuthContext } from 'contexts/AuthContext'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
+import { AxiosError } from 'axios'
 
 interface LoginFormContainerProps {
   /**
@@ -26,9 +27,9 @@ const LoginFormContainer = ({ onLogin }: LoginFormContainerProps) => {
       await login(name, password)
       onLogin && onLogin()
     } catch (err: unknown) {
-      if (err instanceof Error) {
+      if (err instanceof AxiosError) {
         // エラー内容を表示
-        window.alert(err.message)
+        window.alert(err.response?.data?.message ?? err.message)
         onLogin && onLogin(err)
       }
     } finally {

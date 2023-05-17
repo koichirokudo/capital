@@ -2,11 +2,8 @@ import CapitalForm, { CapitalFormData } from 'components/CapitalForm'
 import { useAuthContext } from 'contexts/AuthContext'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 import addCapital from 'services/capitals/add-capital'
-import { ApiContext, Capital } from 'types'
-
-const context: ApiContext = {
-  apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
-}
+import { Capital } from 'types'
+import { AxiosError } from 'axios'
 
 interface CapitalFormContainerProps {
   /**
@@ -14,13 +11,13 @@ interface CapitalFormContainerProps {
    * @param error
    * @returns
    */
-  onSave: (error?: Error, capital?: Capital) => void
+  mutate: () => Promise<Capital[] | undefined>
 }
 
 /**
  * 収入登録フォームコンテナ
  */
-const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
+const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
   const { authUser } = useAuthContext()
   const setSpinner = useSpinnerActionsContext()
   const handleSave = async (data: CapitalFormData) => {
@@ -30,23 +27,22 @@ const CapitalFormContainer = ({ onSave }: CapitalFormContainerProps) => {
       name: authUser.name,
       groupId: authUser.groupId,
       date: data.date,
-      share: data.share,
+      share: data.share ?? false,
       category: data.category,
       capitalType: data.capitalType,
       money: Number(data.money),
       note: data.note ?? '',
-      settlement: 'FALSE',
+      settlement: false,
       settlementAt: '',
     }
 
     try {
       setSpinner(true)
-      const ret = await addCapital(context, { capital })
-      onSave && onSave(undefined, ret)
+      await addCapital({ capital })
+      await mutate()
     } catch (err: unknown) {
-      if (err instanceof Error) {
+      if (err instanceof AxiosError) {
         window.alert(err.message)
-        onSave && onSave(err)
       }
     } finally {
       setSpinner(false)

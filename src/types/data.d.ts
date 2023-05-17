@@ -58,14 +58,14 @@ export type Group = {
 export type Capital = {
   id: number
   groupId: number
-  share: string
+  share: boolean
   name: string
   date: string
   category: string
   capitalType: string
   note: string
   money: number
-  settlement: string
+  settlement: boolean
   settlementAt: string
 }
 

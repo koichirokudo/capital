@@ -1,15 +1,11 @@
 import useSWR from 'swr'
-import type { ApiContext, Capital } from 'types'
+import type { Capital } from 'types'
 
 export type UseCapitalProps = {
   /**
    * 所属するグループID
    */
   groupId?: number
-  /**
-   * 初期状態
-   */
-  initial?: Capital[]
 }
 
 export type UseCapital = {
@@ -39,16 +35,13 @@ export type UseCapital = {
 /**
  * 収支API（個別取得）のカスタムフック
  */
-const useAllCapital = (
-  context: ApiContext,
-  { groupId, initial }: UseCapitalProps,
-): UseCapital => {
-  const { data, error, mutate } = useSWR<Capital[]>([
-    `${context.apiRootUrl.replace(/\/$/g, '')}/capitals?groupId=${groupId}`,
-  ])
+const useAllCapital = ({ groupId }: UseCapitalProps): UseCapital => {
+  const { data, error, mutate } = useSWR<Capital[]>(
+    `/api/capitals?groupId=${groupId}`,
+  )
 
   return {
-    capitals: data ?? initial,
+    capitals: data,
     isLoading: !error && !data,
     isError: error,
     mutate,

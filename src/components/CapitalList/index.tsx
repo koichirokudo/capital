@@ -32,7 +32,7 @@ import * as React from 'react'
 import deleteCapital from 'services/capitals/delete-capital'
 import updateCapital from 'services/capitals/update-capital'
 import { ApiContext } from 'types'
-import { useAuthContext } from 'contexts/AuthContext'
+import { AxiosError } from 'axios'
 
 /**
  * 収支一覧をDatagridで表示
@@ -192,14 +192,14 @@ const CapitalList = ({ capitals, mutate }: any) => {
   const handleDeleteClick = (id: GridRowId) => async () => {
     try {
       setSpinner(true)
-      await deleteCapital(context, id)
-      await mutate()
+      await deleteCapital(id)
+      mutate()
       setSnackbar({
         children: '収支情報の削除に成功しました。',
         severity: 'success',
       })
     } catch (err: unknown) {
-      if (err instanceof Error) {
+      if (err instanceof AxiosError) {
         setSnackbar({
           children:
             '収支情報の削除に失敗しました。もう一度やり直してください。',
@@ -227,6 +227,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
     async (newRow: GridRowModel) => {
       setSpinner(true)
       const res = await updateCapital(context, newRow)
+      mutate()
       setSpinner(false)
       setSnackbar({ children: '編集内容を保存しました。', severity: 'success' })
       return res

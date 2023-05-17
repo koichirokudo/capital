@@ -1,5 +1,5 @@
 import type { ApiContext, MonthlyIncomeAndExpenses } from 'types'
-import { fetcher } from 'utils'
+import { fetcher } from 'utils/axios'
 
 export type GetMonthlyIncomeAndExpensesParams = {
   /**

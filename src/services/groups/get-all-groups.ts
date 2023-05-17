@@ -1,5 +1,5 @@
 import type { ApiContext, Group } from 'types'
-import { fetcher } from 'utils'
+import { fetcher } from 'utils/axios'
 
 /**
  * グループAPI（一覧取得）

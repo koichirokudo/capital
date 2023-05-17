@@ -8,7 +8,7 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { SWRConfig } from 'swr'
 import { ApiContext } from 'types'
-import { fetcher } from 'utils'
+import { fetcher } from 'utils/axios'
 import createEmotionCache from '../createEmotionCache'
 import theme from '../theme'
 

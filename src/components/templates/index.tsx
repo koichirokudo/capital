@@ -89,9 +89,9 @@ const Template = (props: TemplateProps) => {
   const { authUser, isLoading } = useAuthContext()
   const { title, children } = props
   const [drawerOpen, setDrawerOpen] = React.useState<boolean>(false)
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true)

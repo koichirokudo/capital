@@ -10,7 +10,7 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from 'next'
-import checkAuth from 'services/auth/check-auth'
+import { getAuthUser } from 'services/auth/get-auth-user'
 import getMonthlyIncomeAndExpenses from 'services/month/get-monthly-income-and-expenses'
 import { ApiContext } from 'types'
 import { formatMoney } from 'utils/format'
@@ -171,7 +171,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   query,
 }: GetServerSidePropsContext) => {
   // 認証確認
-  const authUser = await checkAuth(context)
+  const authUser = await getAuthUser()
   if (!authUser) {
     return {
       redirect: {

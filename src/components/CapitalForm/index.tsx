@@ -28,7 +28,7 @@ export type CapitalFormData = {
   userId: number
   groupId: number
   date: string
-  share: string
+  share: boolean
   category: string
   capitalType: string
   note: string
@@ -174,7 +174,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
           <Controller
             name="note"
             control={control}
-            defaultValue={'undefined'}
+            defaultValue=""
             render={({ field }): JSX.Element => (
               <TextField
                 {...field}

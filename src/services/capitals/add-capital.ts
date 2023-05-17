@@ -1,5 +1,5 @@
-import type { ApiContext, Capital } from 'types'
-import { fetcher } from 'utils'
+import type { Capital } from 'types'
+import { axios } from 'utils/axios'
 
 export type AddCapitalPramas = {
   /**
@@ -15,20 +15,8 @@ export type AddCapitalPramas = {
  * @param params 新規追加する収支
  * @returns 新規追加した収支
  */
-const addCapital = async (
-  context: ApiContext,
-  { capital }: AddCapitalPramas,
-): Promise<Capital> => {
-  return await fetcher(`${context.apiRootUrl.replace(/\/$/g, '')}/capitals`, {
-    method: 'POST',
-    headers: {
-      Origin: '*',
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      credentials: 'include',
-    },
-    body: JSON.stringify(capital),
-  })
+const addCapital = async ({ capital }: AddCapitalPramas): Promise<Capital> => {
+  return await axios.post('/api/capitals', capital)
 }
 
 export default addCapital

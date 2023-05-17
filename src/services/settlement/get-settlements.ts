@@ -1,4 +1,4 @@
-import { fetcher } from 'utils'
+import { fetcher } from 'utils/axios'
 import { ApiContext, Settlement } from 'types'
 export type GetSettlementsParams = {
   /**

@@ -3,6 +3,7 @@ import { useAuthContext } from 'contexts/AuthContext'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 import updateUser from 'services/users/update-user'
 import { ApiContext, User } from 'types'
+import { AxiosError } from 'axios'
 
 const context: ApiContext = {
   apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
@@ -43,7 +44,7 @@ const UserEditFormContainer = ({ onSave }: UserEditFormContainerProps) => {
       const ret = await updateUser(context, user)
       onSave && onSave(undefined, ret)
     } catch (err: unknown) {
-      if (err instanceof Error) {
+      if (err instanceof AxiosError) {
         window.alert(err.message)
         onSave && onSave(err)
       }

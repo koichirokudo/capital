@@ -1,5 +1,5 @@
 import type { ApiContext, User } from 'types'
-import { fetcher } from 'utils'
+import { fetcher } from 'utils/axios'
 
 export type AddUserParams = {
   /**

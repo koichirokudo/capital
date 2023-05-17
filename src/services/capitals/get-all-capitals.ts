@@ -1,5 +1,5 @@
-import type { ApiContext, Capital } from 'types'
-import { fetcher } from 'utils'
+import type { Capital } from 'types'
+import { axios } from 'utils/axios'
 
 export type GetAllCapitalsParams = {
   /**
@@ -22,26 +22,15 @@ export type GetAllCapitalsParams = {
  * @param params パラメータ
  */
 const getAllCapitals = async (
-  context: ApiContext,
-  { userId, groupId, order }: GetAllCapitalsParams = {},
+  context: any,
+  params: GetAllCapitalsParams = {},
 ): Promise<Capital[]> => {
-  const path = `${context.apiRootUrl.replace(/\/$/g, '')}/capitals`
-  const params = new URLSearchParams()
-
-  userId && params.append('userId', `${userId}`)
-  groupId && params.append('groupId', `${groupId}`)
-  order && params.append('_order', order)
-
-  const query = params.toString()
-
-  return await fetcher(query.length > 0 ? `${path}?${query}` : path, {
-    method: 'GET',
+  return axios.get('http://api:8000/api/capitals', {
     headers: {
-      Origin: '*',
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      credentials: 'include',
+      Authorization: `Bearer ${process.env.API_TOKEN}`,
+      'X-Server-Side-Request': 'true',
     },
+    params,
   })
 }
 

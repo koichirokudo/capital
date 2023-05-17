@@ -1,6 +1,6 @@
 import { GridRowId } from '@mui/x-data-grid'
-import type { ApiContext, Capital } from 'types'
-import { fetcher } from 'utils'
+import type { Capital } from 'types'
+import { axios } from 'utils/axios'
 
 /**
  * 収支API（削除）
@@ -8,22 +8,8 @@ import { fetcher } from 'utils'
  * @param id 削除する収支ID
  * @returns
  */
-const deleteCapital = async (
-  context: ApiContext,
-  id: GridRowId,
-): Promise<Capital> => {
-  return await fetcher(
-    `${context.apiRootUrl.replace(/\/$/g, '')}/capitals/${id}`,
-    {
-      method: 'DELETE',
-      headers: {
-        Origin: '*',
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        credentials: 'include',
-      },
-    },
-  )
+const deleteCapital = async (id: GridRowId): Promise<Capital> => {
+  return await axios.delete(`/api/capitals/${id}`)
 }
 
 export default deleteCapital

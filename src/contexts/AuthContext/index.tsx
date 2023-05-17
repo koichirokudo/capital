@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
-import login from 'services/auth/login'
-import logout from 'services/auth/logout'
+import { getCsrf } from 'services/auth/get-csrf'
+import { loginWithNameAndPassword } from 'services/auth/login'
+import { logout } from 'services/auth/logout'
 import useSWR from 'swr'
 import type { ApiContext, User } from 'types'
 
@@ -36,24 +37,25 @@ export const useAuthContext = (): AuthContextType =>
  * @param params パラメータ
  */
 export const AuthContextProvider = ({
-  context,
   authUser,
   children,
 }: React.PropsWithChildren<AuthContextProviderProps>) => {
-  const { data, error, mutate } = useSWR<User>(
-    `${context.apiRootUrl.replace(/\/$/g, '')}/me`,
-  )
+  const { data, error, mutate } = useSWR<User>('/api/me')
+  console.log('Data:', data)
+  console.log('Error:', error)
   const isLoading = !data && !error
 
   // ログイン
   const loginInternal = async (name: string, password: string) => {
-    await login(context, { name, password })
+    await getCsrf()
+    await loginWithNameAndPassword({ name, password })
     await mutate()
   }
 
   // ログアウト
   const logoutInternal = async () => {
-    await logout(context)
+    // サーバサイドのセッションを破棄
+    await logout()
     await mutate()
   }
 

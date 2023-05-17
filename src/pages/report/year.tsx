@@ -17,9 +17,9 @@ import type {
 import { ApiContext } from 'types'
 import { formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
-import checkAuth from 'services/auth/check-auth'
 import YearControl from 'components/YearControl'
 import getYearlyIncomeAndExpenses from 'services/year/get-yearly-income-and-expenses'
+import { getAuthUser } from 'services/auth/get-auth-user'
 
 const context: ApiContext = {
   apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
@@ -348,7 +348,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   query,
 }: GetServerSidePropsContext) => {
   // 認証確認
-  const authUser = await checkAuth(context)
+  const authUser = await getAuthUser()
   if (!authUser) {
     return {
       redirect: {
