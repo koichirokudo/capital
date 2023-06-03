@@ -41,9 +41,6 @@ export const AuthContextProvider = ({
   children,
 }: React.PropsWithChildren<AuthContextProviderProps>) => {
   const { data, error, mutate } = useSWR<User>('/api/me')
-  console.log('Data:', data)
-  console.log('Error:', error)
-  const isLoading = !data && !error
 
   // ログイン
   const loginInternal = async (name: string, password: string) => {
@@ -63,7 +60,7 @@ export const AuthContextProvider = ({
     <AuthContext.Provider
       value={{
         authUser: data ?? authUser,
-        isLoading,
+        isLoading: !data && !error,
         login: loginInternal,
         logout: logoutInternal,
         mutate,

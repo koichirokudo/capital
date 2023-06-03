@@ -92,7 +92,6 @@ const Template = (props: TemplateProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
-
   const handleDrawerOpen = () => {
     setDrawerOpen(true)
   }
@@ -241,7 +240,7 @@ const Template = (props: TemplateProps) => {
             </Toolbar>
             <Divider />
             <List>
-              <Link href={`/capital`}>
+              <Link href={`/capital?groupId=${authUser.groupId}`}>
                 <ListItemButton>
                   <CurrencyYen />
                   <ListItem sx={{ ml: 1 }}>

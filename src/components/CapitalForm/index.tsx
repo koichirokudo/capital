@@ -18,18 +18,22 @@ import {
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { Categories } from 'components/CategoryList'
 import { ja } from 'date-fns/locale'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import getExpensesItems from 'services/capitals/get-exepenses-item'
+import { ExpensesItem } from 'types'
 import { getFullDate } from 'utils/format'
+
+const EXPENSES = 0
+const INCOME = 1
 
 export type CapitalFormData = {
   userId: number
   groupId: number
   date: string
   share: boolean
-  category: string
+  expensesItem: string
   capitalType: string
   note: string
   money: string
@@ -51,17 +55,39 @@ interface CapitalFormProps {
  */
 const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
   const today = getFullDate(new Date())
-  const categories = Categories
-
-  const onSubmit = (data: CapitalFormData) => {
-    onCapitalSave && onCapitalSave(data)
-  }
-
+  const [selectItems, setSelectItems] = React.useState<ExpensesItem[]>([])
   const {
     handleSubmit,
     control,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<CapitalFormData>()
+
+  // watch
+  const capitalType = watch('capitalType')
+
+  // FIXME:キャッシュ使いたい
+  React.useEffect(() => {
+    (async () => {
+      const newItems = await getExpensesItems({
+        type: capitalType === 'income' ? INCOME : EXPENSES,
+      })
+      setSelectItems(newItems)
+      setValue('expensesItem', newItems[0].value)
+    })()
+  }, [capitalType, setValue])
+
+  const onSubmit = (data: CapitalFormData) => {
+    // UTCでシリアライズされた日付(2023-05-31T15:00:00.000Z)を
+    // ISO8601の変換(2023-05-31)に変換する
+    const date = new Date(data.date)
+    // タイムゾーンを修正
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
+    const formattedDate = date.toISOString().split('T')[0]
+    data.date = formattedDate
+    onCapitalSave && onCapitalSave(data)
+  }
 
   return (
     <Paper sx={{ p: 1 }}>
@@ -110,6 +136,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                     <DatePicker
                       {...field}
                       label="日時"
+                      maxDate={new Date()} // 未来の日付を選択させない
                       inputFormat="yyyy/MM/dd"
                       renderInput={(params) => <TextField {...params} />}
                     />
@@ -125,29 +152,31 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
             error={errors?.hasOwnProperty('category')}
           >
             <Controller
-              name="category"
+              name="expensesItem"
               defaultValue="undefined"
               control={control}
-              rules={{ required: 'カテゴリを選択してください。' }}
+              rules={{ required: '収支項目を選択してください。' }}
               render={({ field }): JSX.Element => (
                 <>
-                  <InputLabel id="category">カテゴリ</InputLabel>
+                  <InputLabel id="expensesItem">収支項目</InputLabel>
                   <Select
                     {...field}
-                    data-testid="category-input"
-                    label="category"
-                    labelId="category"
+                    data-testid="expensesItem-input"
+                    label="expensesItem"
+                    labelId="expensesItem"
                     defaultValue="undefined"
                   >
-                    {categories.map((c, index) => {
+                    {selectItems.map((item) => {
                       return (
-                        <MenuItem key={index} value={c.value}>
-                          {c.label}
+                        <MenuItem key={item.id} value={item.value}>
+                          {item.label}
                         </MenuItem>
                       )
                     })}
                   </Select>
-                  <FormHelperText>{errors?.category?.message}</FormHelperText>
+                  <FormHelperText>
+                    {errors?.expensesItem?.message}
+                  </FormHelperText>
                 </>
               )}
             />

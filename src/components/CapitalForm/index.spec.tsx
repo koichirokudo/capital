@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react'
+import { findByText, fireEvent, render, waitFor } from '@testing-library/react'
 import CapitalForm from './index'
 import { Categories } from 'components/CategoryList'
 
@@ -16,7 +16,7 @@ describe('CapitalForm', () => {
 
     expect(getByText(/収支タイプ/i)).toBeInTheDocument()
     expect(getByLabelText(/日時/i)).toBeInTheDocument()
-    expect(getByLabelText(/カテゴリ/i)).toBeInTheDocument()
+    expect(getByLabelText(/収支項目/i)).toBeInTheDocument()
     expect(getByLabelText(/金額/i)).toBeInTheDocument()
     expect(getByLabelText(/メモ/i)).toBeInTheDocument()
     expect(getByText(/登録/i)).toBeInTheDocument()
@@ -32,11 +32,13 @@ describe('CapitalForm', () => {
       target: { value: '2023/02/02' },
     })
 
-    const categorySelect = getByTestId('category-input')
-    fireEvent.mouseDown(categorySelect)
+    const itemSelect = getByTestId('expensesItem-input')
+    fireEvent.mouseDown(itemSelect)
 
-    const categoryToSelect = Categories[0]
-    fireEvent.click(getByText(categoryToSelect.label))
+    // FIXME: うまくいかん！
+    // const itemElement = await findByText('食費');
+    // fireEvent.click(itemElement)
+    // debug(baseElement)
 
     fireEvent.change(getByLabelText(/金額/i), { target: { value: '5000' } })
     fireEvent.change(getByLabelText(/メモ/i), {

@@ -28,7 +28,7 @@ const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
       groupId: authUser.groupId,
       date: data.date,
       share: data.share ?? false,
-      category: data.category,
+      expensesItem: data.expensesItem,
       capitalType: data.capitalType,
       money: Number(data.money),
       note: data.note ?? '',

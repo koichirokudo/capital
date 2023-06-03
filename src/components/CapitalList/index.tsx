@@ -122,31 +122,25 @@ const CapitalList = ({ capitals, mutate }: any) => {
         native
         autoFocus
       >
-        <option>給料</option>
-        <option>賞与</option>
-        <option>副業</option>
-        <option>お小遣い</option>
-        <option>投資</option>
-        <option>臨時収入</option>
-        <option>日用品</option>
-        <option>教育費</option>
-        <option>美容</option>
-        <option>交通費</option>
-        <option>保険料</option>
-        <option>衣服</option>
         <option>食費</option>
-        <option>医療費</option>
-        <option>住居費</option>
-        <option>水道</option>
-        <option>ガス</option>
-        <option>電気</option>
-        <option>ローン返済</option>
-        <option>インターネット</option>
-        <option>スマートフォン</option>
-        <option>娯楽費</option>
+        <option>日用品</option>
+        <option>交通費</option>
         <option>交際費</option>
-        <option>贈答費</option>
-        <option>手数料</option>
+        <option>趣味・娯楽費</option>
+        <option>衣服・美容費</option>
+        <option>健康・医療費</option>
+        <option>通信費</option>
+        <option>教養・教育費</option>
+        <option>住宅費</option>
+        <option>水道・光熱費</option>
+        <option>保険料</option>
+        <option>税金</option>
+        <option>給与</option>
+        <option>一時所得</option>
+        <option>事業・副業</option>
+        <option>年金・配当金</option>
+        <option>不動産所得</option>
+        <option>その他</option>
       </Select>
     )
   }
@@ -226,7 +220,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
   const processRowUpdate = React.useCallback(
     async (newRow: GridRowModel) => {
       setSpinner(true)
-      const res = await updateCapital(context, newRow)
+      const res = await updateCapital(newRow)
       mutate()
       setSpinner(false)
       setSnackbar({ children: '編集内容を保存しました。', severity: 'success' })
@@ -261,8 +255,8 @@ const CapitalList = ({ capitals, mutate }: any) => {
       renderEditCell: renderSelectCapitalTypeEditInputCell,
     },
     {
-      field: 'category',
-      headerName: 'カテゴリ',
+      field: 'expensesItem',
+      headerName: '支出項目',
       width: 150,
       editable: true,
       renderEditCell: renderSelectCategoryEditInputCell,

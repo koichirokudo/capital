@@ -61,7 +61,7 @@ export type Capital = {
   share: boolean
   name: string
   date: string
-  category: string
+  expensesItem: string
   capitalType: string
   note: string
   money: number
@@ -91,6 +91,13 @@ export type Calculate = {
   expenses: number
   income: number
   total: number
+}
+
+export type ExpensesItem = {
+  id: number
+  type: number
+  value: string
+  label: string
 }
 
 export type YearlyIncomeAndExpenses = {
