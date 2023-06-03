@@ -1,6 +1,5 @@
 import { findByText, fireEvent, render, waitFor } from '@testing-library/react'
 import CapitalForm from './index'
-import { Categories } from 'components/CategoryList'
 
 describe('CapitalForm', () => {
   const onCapitalSave = jest.fn()
