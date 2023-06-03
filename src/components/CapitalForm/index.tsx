@@ -209,8 +209,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
               <TextField
                 {...field}
                 fullWidth
-                inputProps={{ min: '0' }}
-                autoComplete="off"
+                inputProps={{ min: '0', max: '10000000' }}
                 margin="normal"
                 type="number"
                 label="金額"
@@ -225,11 +224,11 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
             render={({ field }): JSX.Element => (
               <TextField
                 {...field}
-                autoComplete="off"
+                fullWidth
+                inputProps={{ maxLength: 10 }}
                 margin="normal"
                 type="text"
-                label="メモ"
-                fullWidth
+                label="メモ（10文字まで入力できます）"
               />
             )}
           />
