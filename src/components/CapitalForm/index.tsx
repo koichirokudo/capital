@@ -21,7 +21,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { ja } from 'date-fns/locale'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import getExpensesItems from 'services/capitals/get-exepenses-item'
+import useSWR from 'swr'
 import { ExpensesItem } from 'types'
 import { getFullDate } from 'utils/format'
 
@@ -54,29 +54,51 @@ interface CapitalFormProps {
  * 収支投稿フォーム
  */
 const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
-  const today = getFullDate(new Date())
-  const [selectItems, setSelectItems] = React.useState<ExpensesItem[]>([])
+  const { data: income } = useSWR<ExpensesItem[]>(
+    `/api/expenses-items?type=${INCOME}`,
+    (url) => fetch(url).then((res) => res.json()),
+  )
+  const { data: expenses } = useSWR<ExpensesItem[]>(
+    `/api/expenses-items?type=${EXPENSES}`,
+    (url) => fetch(url).then((res) => res.json()),
+  )
   const {
     handleSubmit,
     control,
     formState: { errors },
     watch,
     setValue,
-  } = useForm<CapitalFormData>()
+  } = useForm<CapitalFormData>({
+    defaultValues: {
+      capitalType: 'income',
+      date: getFullDate(new Date()),
+      expensesItem: '',
+      money: '0',
+      note: '',
+    },
+  })
+
+  const [selectItems, setSelectItems] = React.useState<ExpensesItem[]>([])
+
+  React.useEffect(() => {
+    if (income) {
+      setSelectItems(income)
+      setValue('expensesItem', income[0].value)
+    }
+  }, [income, setValue])
 
   // watch
-  const capitalType = watch('capitalType')
+  const capitalType = watch('capitalType', 'income')
 
-  // FIXME:キャッシュ使いたい
   React.useEffect(() => {
-    (async () => {
-      const newItems = await getExpensesItems({
-        type: capitalType === 'income' ? INCOME : EXPENSES,
-      })
-      setSelectItems(newItems)
-      setValue('expensesItem', newItems[0].value)
-    })()
-  }, [capitalType, setValue])
+    if (capitalType === 'income' && income) {
+      setSelectItems(income)
+      setValue('expensesItem', income[0].value)
+    } else if (expenses) {
+      setSelectItems(expenses)
+      setValue('expensesItem', expenses[0].value)
+    }
+  }, [capitalType, income, expenses, setValue])
 
   const onSubmit = (data: CapitalFormData) => {
     // UTCでシリアライズされた日付(2023-05-31T15:00:00.000Z)を
@@ -103,7 +125,6 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
               name="capitalType"
               control={control}
               rules={{ required: '収支タイプを選択してください。' }}
-              defaultValue="income"
               render={({ field }): JSX.Element => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
@@ -126,7 +147,6 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
               name="date"
               control={control}
               rules={{ required: '日時を選択してください。' }}
-              defaultValue={today}
               render={({ field }): JSX.Element => (
                 <>
                   <LocalizationProvider
@@ -153,7 +173,6 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
           >
             <Controller
               name="expensesItem"
-              defaultValue="undefined"
               control={control}
               rules={{ required: '収支項目を選択してください。' }}
               render={({ field }): JSX.Element => (
@@ -164,15 +183,18 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                     data-testid="expensesItem-input"
                     label="expensesItem"
                     labelId="expensesItem"
-                    defaultValue="undefined"
                   >
-                    {selectItems.map((item) => {
-                      return (
-                        <MenuItem key={item.id} value={item.value}>
-                          {item.label}
-                        </MenuItem>
-                      )
-                    })}
+                    {selectItems ? (
+                      selectItems.map((item) => {
+                        return (
+                          <MenuItem key={item.id} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        )
+                      })
+                    ) : (
+                      <div>Loading...</div>
+                    )}
                   </Select>
                   <FormHelperText>
                     {errors?.expensesItem?.message}
@@ -184,7 +206,6 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
           <Controller
             name="money"
             control={control}
-            defaultValue="0"
             rules={{ required: '金額を入力してください。' }}
             render={({ field }): JSX.Element => (
               <TextField
@@ -203,7 +224,6 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
           <Controller
             name="note"
             control={control}
-            defaultValue=""
             render={({ field }): JSX.Element => (
               <TextField
                 {...field}
