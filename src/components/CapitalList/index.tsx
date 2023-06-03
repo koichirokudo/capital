@@ -23,6 +23,7 @@ import {
   GridRowModesModel,
   GridRowParams,
   GridToolbar,
+  GridValueFormatterParams,
   jaJP,
   MuiEvent,
   useGridApiContext,
@@ -33,6 +34,7 @@ import deleteCapital from 'services/capitals/delete-capital'
 import updateCapital from 'services/capitals/update-capital'
 import { ApiContext } from 'types'
 import { AxiosError } from 'axios'
+import { adjustTimezone, formattedISO8601 } from 'utils/format'
 
 /**
  * 収支一覧をDatagridで表示
@@ -219,6 +221,9 @@ const CapitalList = ({ capitals, mutate }: any) => {
   // 更新前に呼び出される関数
   const processRowUpdate = React.useCallback(
     async (newRow: GridRowModel) => {
+      const date = new Date(newRow.date)
+      adjustTimezone(date)
+      newRow.date = formattedISO8601(date)
       setSpinner(true)
       const res = await updateCapital(newRow)
       mutate()
@@ -245,6 +250,16 @@ const CapitalList = ({ capitals, mutate }: any) => {
       width: 120,
       type: 'date',
       editable: true,
+      valueFormatter: (params: GridValueFormatterParams) => {
+        if (!params.value) {
+          return params.value
+        }
+        const date = new Date(params.value)
+        const year = date.getFullYear()
+        const month = ('0' + (date.getMonth() + 1)).slice(-2)
+        const day = ('0' + date.getDate()).slice(-2)
+        return `${year}/${month}/${day}`
+      },
     },
     { field: 'name', headerName: '更新者', width: 180, editable: true },
     {

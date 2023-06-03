@@ -23,7 +23,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { ExpensesItem } from 'types'
-import { getFullDate } from 'utils/format'
+import { adjustTimezone, formattedISO8601, getFullDate } from 'utils/format'
 
 const EXPENSES = 0
 const INCOME = 1
@@ -102,12 +102,11 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
 
   const onSubmit = (data: CapitalFormData) => {
     // UTCでシリアライズされた日付(2023-05-31T15:00:00.000Z)を
-    // ISO8601の変換(2023-05-31)に変換する
+    // ISO8601(2023-05-31)に変換する
     const date = new Date(data.date)
-    // タイムゾーンを修正
-    date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
-    const formattedDate = date.toISOString().split('T')[0]
-    data.date = formattedDate
+    // タイムゾーンを調整
+    adjustTimezone(date)
+    data.date = formattedISO8601(date)
     onCapitalSave && onCapitalSave(data)
   }
 
@@ -156,7 +155,6 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                     <DatePicker
                       {...field}
                       label="日時"
-                      maxDate={new Date()} // 未来の日付を選択させない
                       inputFormat="yyyy/MM/dd"
                       renderInput={(params) => <TextField {...params} />}
                     />

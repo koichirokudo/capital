@@ -82,6 +82,25 @@ export const getFullDate = (date: Date, delimiter = '/'): string => {
   const [year, month, day] = splitDate(date)
   return `${year}${delimiter}${month}${delimiter}${day}`
 }
+
+/**
+ * タイムゾーンの調整
+ * @param date
+ */
+export const adjustTimezone = (date: Date): void => {
+  date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
+}
+
+/**
+ * UTCでシリアライズされた日付(2023-05-31T15:00:00.000Z)を
+ * ISO8601(2023-05-31)に変換する
+ * @param date
+ * @returns {string}
+ */
+export const formattedISO8601 = (date: Date): string => {
+  return date.toISOString().split('T')[0]
+}
+
 /**
  * capital-history.statusの状態を画面表示用に変換する
  * @param status
