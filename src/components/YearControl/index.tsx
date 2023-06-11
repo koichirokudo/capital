@@ -7,19 +7,18 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material'
-import { YEAR_LIMIT } from 'const'
+import {YEAR_LIMIT} from 'const'
 import React from 'react'
-import { eachYearOfInterval } from 'date-fns'
-import { useRouter } from 'next/router'
-import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
+import {eachYearOfInterval} from 'date-fns'
+import {useSpinnerActionsContext} from 'contexts/SpinnerContext'
 
 type YearControlProps = {
   year: number
+  setYear: React.Dispatch<React.SetStateAction<number>>
 }
 
-const YearControl = ({ year }: YearControlProps) => {
-  const router = useRouter()
-  const setSpinner = useSpinnerActionsContext()
+const YearControl = ({year, setYear}: YearControlProps) => {
+  const setSpinner: React.Dispatch<React.SetStateAction<boolean>> = useSpinnerActionsContext()
 
   const [selectedYear, setSelectedYear] = React.useState<string>(
     year.toString(),
@@ -35,18 +34,18 @@ const YearControl = ({ year }: YearControlProps) => {
     setSelectedYear(event.target.value)
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setSpinner(true)
+    setYear(parseInt(selectedYear))
     setTimeout(() => {
       setSpinner(false)
     }, 500)
-    router.push(`/report/year?year=${selectedYear}`)
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <Box sx={{ display: 'flex', mb: 2 }}>
+      <Box sx={{display: 'flex', mb: 2}}>
         <FormControl>
           <InputLabel id="select-year-label">年</InputLabel>
           <Select
@@ -55,7 +54,7 @@ const YearControl = ({ year }: YearControlProps) => {
             id="select-year"
             value={selectedYear}
             label="年"
-            sx={{ width: '150px', mr: 1 }}
+            sx={{width: '150px', mr: 1}}
             color="primary"
             onChange={handleYearChange}
           >

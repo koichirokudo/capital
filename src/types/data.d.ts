@@ -1,33 +1,3 @@
-// 収入カテゴリ
-export type IncomeCategory =
-  | 'salary'
-  | 'sidejob'
-  | 'pocketmoney'
-  | 'investment'
-  | 'bonus'
-  | 'extra'
-
-// 支出カテゴリ
-export type ExpensesCategory =
-  | 'daily'
-  | 'education'
-  | 'transport'
-  | 'insurance'
-  | 'beauty'
-  | 'clothes'
-  | 'food'
-  | 'medical'
-  | 'house'
-  | 'water'
-  | 'gas'
-  | 'electric'
-  | 'loan'
-  | 'internet'
-  | 'smartphone'
-  | 'entertain'
-  | 'gift'
-  | 'fee'
-
 // API Context
 export type ApiContext = {
   apiRootUrl: string

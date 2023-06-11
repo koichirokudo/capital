@@ -38,7 +38,7 @@ export const BarChart: React.FC<BarChartProps> = ({
   width,
   height,
 }) => {
-  return <Bar data={data} options={options} width={width} height={height} />
+  return <Bar data={data} options={options} width={width} height={height}/>
 }
 
 export default BarChart

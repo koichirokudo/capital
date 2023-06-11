@@ -1,53 +1,57 @@
-import {
-  AccountBalanceWalletSharp,
-  CallMadeSharp,
-  CallReceivedSharp,
-} from '@mui/icons-material'
+import { AccountBalanceWalletSharp, CallMadeSharp, CallReceivedSharp, } from '@mui/icons-material'
 import { Avatar, Box, Grid, Paper, Typography } from '@mui/material'
 import { BarChart } from 'components/BarChart'
 import LineChart from 'components/LineChart'
 import Template from 'components/Templates'
-import { monthlyLabels, YEAR_LIMIT } from 'const'
-import type {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-  NextPage,
-} from 'next'
-import { ApiContext } from 'types'
+import { monthlyLabels } from 'const'
+import type { GetStaticProps, NextPage } from 'next'
 import { formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
 import YearControl from 'components/YearControl'
-import getYearlyIncomeAndExpenses from 'services/year/get-yearly-income-and-expenses'
-import { getAuthUser } from 'services/auth/get-auth-user'
+import useSWR from 'swr'
+import { useAuthContext } from 'contexts/AuthContext'
+import React from "react";
 
-const context: ApiContext = {
-  apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
-}
-
-type ReportYearPageProps = InferGetServerSidePropsType<
-  typeof getServerSideProps
->
-
-const ReportYearPage: NextPage<ReportYearPageProps> = ({
-  year,
-  incomeAndExpenses,
-}: ReportYearPageProps) => {
+const ReportYearPage: NextPage = () => {
   // 認証ガード
   useAuthGaurd()
+
+  const {authUser} = useAuthContext()
+
+  // 今年をデフォルトにする
+  const date = new Date()
+  const [selectedYear, setSelectedYear] = React.useState(date.getFullYear())
+  const {data: incomeAndExpenses} = useSWR(
+    authUser?.id ? `/api/year?user_id=${authUser?.id}` : null,
+    (url) => fetch(url).then((res) => res.json())
+  )
+
+  if (!incomeAndExpenses) {
+    return <div>Loading...</div>
+  }
 
   // データが登録されていない
   if (incomeAndExpenses.length === 0) {
     return (
       <Template title="年間レポート">
-        <YearControl year={year} />
-        <Typography variant="body1">{year}年のデータはありません。</Typography>
+        <YearControl year={selectedYear} setYear={setSelectedYear}/>
+        <Typography variant="body1">{selectedYear}年のデータはありません。</Typography>
       </Template>
     )
   }
 
-  const { incomeDetails, incomeTotal, expensesDetails, expensesTotal } =
-    incomeAndExpenses
+  const result = incomeAndExpenses.data.filter((item: { year: string }) => item.year === selectedYear.toString())[0] ?? null
+  // 選択した年のデータがない
+  if (!result) {
+    return (
+      <Template title="年間レポート">
+        <YearControl year={selectedYear} setYear={setSelectedYear}/>
+        <Typography variant="body1">{selectedYear}年のデータはありません。</Typography>
+      </Template>
+    )
+  }
+
+  const {incomeDetails, incomeTotal, expensesDetails, expensesTotal} = result
   const incomeMonthly = Object.values<number>(incomeDetails ?? [])
   const expensesMonthly = Object.values<number>(expensesDetails ?? [])
   const balanceMonthly: number[] = []
@@ -58,14 +62,14 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
   const barChartOptions = {
     plugins: {
       legend: {
-        align: 'end',
+        align: 'end' as const,
         labels: {
           usePointStyle: true,
           pointStyle: 'circle',
           padding: 15,
           font: {
             size: 14,
-            weight: 'bold',
+            weight: 'bold' as const,
           },
         },
       },
@@ -76,10 +80,10 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
         display: true,
         font: {
           size: 10,
-          weight: 'bold',
+          weight: 'bold' as const,
         },
-        anchor: 'end',
-        align: 'end',
+        anchor: 'end' as const,
+        align: 'end' as const,
         formatter: function (value: { toString: () => string | number }) {
           return formatMoney(value.toString(), true)
         },
@@ -107,8 +111,29 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
   }
 
   const lineChartOptions = {
-    responsive: true,
+    elements: {
+      line: {
+        borderWidth: 3,
+        fill: 'start',
+      },
+      point: {
+        backgroundColor: 'rgba(0,171,85, 0.7)',
+        borderColor: '#fff',
+        borderWidth: 3,
+        hitRadius: 70,
+        hoverBorderWidth: 2,
+        hoverRadius: 4,
+        pointStyle: 'circle',
+        radius: 0,
+      },
+    },
     plugins: {
+      datalabels: {
+        display: false,
+      },
+      legend: {
+        display: false,
+      },
       tooltip: {
         enable: true,
         displayColors: false,
@@ -125,29 +150,8 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
           },
         },
       },
-      legend: {
-        display: false,
-      },
-      datalabels: {
-        display: false,
-      },
     },
-    elements: {
-      line: {
-        borderWidth: 3,
-        fill: 'start',
-      },
-      point: {
-        radius: 0,
-        pointStyle: 'circle',
-        borderWidth: 3,
-        borderColor: '#fff',
-        backgroundColor: 'rgba(0,171,85, 0.7)',
-        hitRadius: 70,
-        hoverRadius: 4,
-        hoverBorderWidth: 2,
-      },
-    },
+    responsive: true,
     scales: {
       x: {
         display: false,
@@ -157,74 +161,74 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
       },
       y: {
         display: false,
-        suggestedMin: 50,
-        suggestedMax: 100,
         grid: {
           display: false,
         },
+        suggestedMax: 100,
+        suggestedMin: 50,
       },
     },
   }
 
   const lineChartIncomeData = {
-    labels: monthlyLabels,
     datasets: [
       {
+        backgroundColor: 'rgba(0, 171, 85, 0.3)',
+        borderColor: 'rgba(0, 171, 85, 1)',
         data: incomeMonthly,
         tension: 0.3,
-        borderColor: 'rgba(0, 171, 85, 1)',
-        backgroundColor: 'rgba(0, 171, 85, 0.3)',
       },
     ],
+    labels: monthlyLabels,
   }
 
   const lineChartExpensesData = {
-    labels: monthlyLabels,
     datasets: [
       {
+        backgroundColor: 'rgba(255, 171, 0, 0.3)',
+        borderColor: 'rgba(255, 171, 0, 1)',
         data: expensesMonthly,
         tension: 0.3,
-        borderColor: 'rgba(255, 171, 0, 1)',
-        backgroundColor: 'rgba(255, 171, 0, 0.3)',
       },
     ],
+    labels: monthlyLabels,
   }
 
   const lineChartBalanceData = {
-    labels: monthlyLabels,
     datasets: [
       {
+        backgroundColor: 'rgba(56, 123, 145, 0.3)',
+        borderColor: 'rgba(56, 123, 145, 1)',
         data: balanceMonthly,
         tension: 0.3,
-        borderColor: 'rgba(56, 123, 145, 1)',
-        backgroundColor: 'rgba(56, 123, 145, 0.3)',
       },
     ],
+    labels: monthlyLabels,
   }
 
   const monthlyData = {
-    labels: monthlyLabels,
     datasets: [
       {
-        label: '収入',
-        data: incomeMonthly,
         backgroundColor: 'rgba(0, 171, 85, 0.9)',
         barPercentage: 0.5,
         borderRadius: 10,
+        data: incomeMonthly,
+        label: '収入',
       },
       {
-        label: '支出',
-        data: expensesMonthly,
         backgroundColor: 'rgba(255, 171, 0, 0.9)',
         barPercentage: 0.5,
         borderRadius: 10,
+        data: expensesMonthly,
+        label: '支出',
       },
     ],
+    labels: monthlyLabels,
   }
 
   return (
     <Template title="年間レポート">
-      <YearControl year={year} />
+      <YearControl year={selectedYear} setYear={setSelectedYear}/>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={12} lg={4}>
           <Paper
@@ -233,24 +237,24 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
               positions: 'relative',
             }}
           >
-            <Typography color="#015249" sx={{ p: 2, fontWeight: 'bold' }}>
+            <Typography color="#015249" sx={{p: 2, fontWeight: 'bold'}}>
               収入
             </Typography>
             <Box
               color="#015249"
-              sx={{ ml: 3, fontSize: '2rem', fontWeight: 'bold' }}
+              sx={{fontSize: '2rem', fontWeight: 'bold', ml: 3}}
             >
               {formatMoney(incomeTotal, true)}
             </Box>
             <Avatar
               sx={{
                 backgroundColor: '#007B55',
+                left: 'calc(100% - 60px)',
                 positions: 'absolute',
                 top: '-80px',
-                left: 'calc(100% - 60px)',
               }}
             >
-              <CallReceivedSharp />
+              <CallReceivedSharp/>
             </Avatar>
             <LineChart
               data={lineChartIncomeData}
@@ -267,24 +271,24 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
               positions: 'relative',
             }}
           >
-            <Typography color="#7A4100" sx={{ p: 2, fontWeight: 'bold' }}>
+            <Typography color="#7A4100" sx={{p: 2, fontWeight: 'bold'}}>
               支出
             </Typography>
             <Box
               color="#7a4100"
-              sx={{ ml: 3, fontSize: '2rem', fontWeight: 'bold' }}
+              sx={{fontSize: '2rem', fontWeight: 'bold', ml: 3}}
             >
               {formatMoney(expensesTotal, true)}
             </Box>
             <Avatar
               sx={{
                 backgroundColor: '#B76E00',
+                left: 'calc(100% - 60px)',
                 positions: 'absolute',
                 top: '-80px',
-                left: 'calc(100% - 60px)',
               }}
             >
-              <CallMadeSharp />
+              <CallMadeSharp/>
             </Avatar>
             <LineChart
               data={lineChartExpensesData}
@@ -301,24 +305,24 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
               positions: 'relative',
             }}
           >
-            <Typography color="#275f72" sx={{ p: 2, fontWeight: 'bold' }}>
+            <Typography color="#275f72" sx={{p: 2, fontWeight: 'bold'}}>
               残高
             </Typography>
             <Box
               color="#275f72"
-              sx={{ ml: 3, fontSize: '2rem', fontWeight: 'bold' }}
+              sx={{fontSize: '2rem', fontWeight: 'bold', ml: 3}}
             >
               {formatMoney(incomeTotal - expensesTotal, true)}
             </Box>
             <Avatar
               sx={{
                 backgroundColor: '#387b91',
+                left: 'calc(100% - 60px)',
                 positions: 'absolute',
                 top: '-80px',
-                left: 'calc(100% - 60px)',
               }}
             >
-              <AccountBalanceWalletSharp />
+              <AccountBalanceWalletSharp/>
             </Avatar>
             <LineChart
               data={lineChartBalanceData}
@@ -329,8 +333,8 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
           </Paper>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <Paper sx={{ p: 2 }}>
-            <Typography sx={{ fontWeight: 'bold' }}>収支グラフ</Typography>
+          <Paper sx={{p: 2}}>
+            <Typography sx={{fontWeight: 'bold'}}>収支グラフ</Typography>
             <BarChart
               data={monthlyData}
               options={barChartOptions}
@@ -344,45 +348,9 @@ const ReportYearPage: NextPage<ReportYearPageProps> = ({
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query,
-}: GetServerSidePropsContext) => {
-  // 認証確認
-  const authUser = await getAuthUser()
-  if (!authUser) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
-
-  if (!query || !query.year) {
-    return {
-      notFound: true,
-    }
-  }
-
-  // 指定された年度の収支情報を取得する
-  const userId = authUser.id
-  const year = parseInt(query.year as string, 10)
-  if (year < YEAR_LIMIT || year > new Date().getFullYear()) {
-    return {
-      notFound: true,
-    }
-  }
-
-  const incomeAndExpenses = await getYearlyIncomeAndExpenses(context, {
-    userId: userId,
-    year: year,
-  })
-
+export const getStaticProps: GetStaticProps = async () => {
   return {
-    props: {
-      year: year,
-      incomeAndExpenses: incomeAndExpenses[0] ?? [],
-    },
+    props: {},
   }
 }
 
