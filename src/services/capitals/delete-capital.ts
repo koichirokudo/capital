@@ -4,7 +4,6 @@ import { axios } from 'utils/axios'
 
 /**
  * 収支API（削除）
- * @param context APIコンテキスト
  * @param id 削除する収支ID
  * @returns
  */

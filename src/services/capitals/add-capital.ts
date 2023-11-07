@@ -12,7 +12,6 @@ export type AddCapitalPramas = {
 /**
  * 収支API（新規追加）
  * @param APIコンテキスト
- * @param params 新規追加する収支
  * @returns 新規追加した収支
  */
 const addCapital = async ({ capital }: AddCapitalPramas): Promise<Capital> => {

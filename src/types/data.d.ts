@@ -27,9 +27,9 @@ export type Group = {
 // 収支
 export type Capital = {
   id: number
+  userId: number
   groupId: number
   share: boolean
-  name: string
   date: string
   expensesItem: string
   capitalType: string

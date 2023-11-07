@@ -24,7 +24,7 @@ const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
     if (!authUser) return
 
     const capital = {
-      name: authUser.name,
+      userId: authUser.id,
       groupId: authUser.groupId,
       date: data.date,
       share: data.share ?? false,
