@@ -81,7 +81,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
   const [selectItems, setSelectItems] = React.useState<ExpensesItem[]>([])
 
   React.useEffect(() => {
-    if (income) {
+    if (income && income.length > 0) {
       setSelectItems(income)
       setValue('expensesItem', income[0].value)
     }
@@ -91,10 +91,10 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
   const capitalType = watch('capitalType', 'income')
 
   React.useEffect(() => {
-    if (capitalType === 'income' && income) {
+    if (capitalType === 'income' && income && income.length > 0) {
       setSelectItems(income)
       setValue('expensesItem', income[0].value)
-    } else if (expenses) {
+    } else if (expenses && expenses.length > 0) {
       setSelectItems(expenses)
       setValue('expensesItem', expenses[0].value)
     }
