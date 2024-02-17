@@ -1,4 +1,4 @@
-export const monthlyLabels = [
+export const monthlyLabels: string[] = [
   '1月',
   '2月',
   '3月',
@@ -12,5 +12,7 @@ export const monthlyLabels = [
   '11月',
   '12月',
 ]
-export const MONTH_LIST = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+export const MONTH_LIST: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 export const YEAR_LIMIT = 2020
+export const EXPENSES = 0
+export const INCOME = 1

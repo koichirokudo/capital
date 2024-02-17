@@ -1,7 +1,7 @@
-import type { ApiContext, Group } from 'types'
+import type { ApiContext, UserGroup } from 'types'
 import { fetcher } from 'utils/axios'
 
-export type GetGroupParams = {
+export type GetUserGroupParams = {
   /**
    * グループID
    */
@@ -14,10 +14,10 @@ export type GetGroupParams = {
  * @param params パラメータ
  * @returns グループ
  */
-const getGroup = async (
+const getUserGroup = async (
   context: ApiContext,
-  { id }: GetGroupParams,
-): Promise<Group> => {
+  { id }: GetUserGroupParams,
+): Promise<UserGroup> => {
   /**
    * サンプルレスポンス
    {
@@ -30,7 +30,7 @@ const getGroup = async (
    }
    */
   return await fetcher(
-    `${context.apiRootUrl.replace(/\/$/g, '')}/groups/${id}`,
+    `${context.apiRootUrl.replace(/\/$/g, '')}/user-groups/${id}`,
     {
       headers: {
         Accept: 'application/json',
@@ -40,4 +40,4 @@ const getGroup = async (
   )
 }
 
-export default getGroup
+export default getUserGroup

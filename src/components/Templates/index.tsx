@@ -240,7 +240,7 @@ const Template = (props: TemplateProps) => {
             </Toolbar>
             <Divider />
             <List>
-              <Link href={`/capital?groupId=${authUser.groupId}`}>
+              <Link href={`/capital?userGroupId=${authUser.userGroupId}`}>
                 <ListItemButton>
                   <CurrencyYen />
                   <ListItem sx={{ ml: 1 }}>

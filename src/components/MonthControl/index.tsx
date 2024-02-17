@@ -14,19 +14,15 @@ import { MONTH_LIST, YEAR_LIMIT } from 'const'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 
 type MonthControlProps = {
-  year: number
-  month: number
+  selectedYear: string
+  selectedMonth: string
+  setSelectedYear: React.Dispatch<React.SetStateAction<string>>
+  setSelectedMonth: React.Dispatch<React.SetStateAction<string>>
 }
 
-const MonthControl = ({ year, month }: MonthControlProps) => {
+const MonthControl = ({ selectedYear, selectedMonth, setSelectedYear, setSelectedMonth}: MonthControlProps) => {
   const router = useRouter()
   const setSpinner = useSpinnerActionsContext()
-  const [selectedYear, setSelectedYear] = React.useState<string>(
-    year.toString(),
-  )
-  const [selectedMonth, setSelectedMonth] = React.useState<string>(
-    month.toString(),
-  )
   const YearList = React.useMemo(() => {
     return eachYearOfInterval({
       start: new Date(YEAR_LIMIT, 1, 1),

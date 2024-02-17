@@ -29,7 +29,7 @@ const UserEditFormContainer = ({ onSave }: UserEditFormContainerProps) => {
 
     const user = {
       id: data.id,
-      groupId: data.groupId,
+      userGroupId: data.userGroupId,
       authType: data.authType,
       profileImage: data.profileImage,
       name: data.name,

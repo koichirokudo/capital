@@ -9,7 +9,7 @@ export type GetAllCapitalsParams = {
   /**
    * 所属するグループID
    */
-  groupId?: number
+  userGroupId?: number
   /**
    * 昇順、降順
    */

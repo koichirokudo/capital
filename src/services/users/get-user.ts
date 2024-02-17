@@ -22,7 +22,7 @@ const getUser = async (
    * サンプルレスポンス
    {
      "id": "1"
-     "groupId": "1"
+     "userGroupId": "1"
      "authType": "1"
      "profileImage": "https://example.com/profile.png"
      "name": "name"

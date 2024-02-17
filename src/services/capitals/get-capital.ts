@@ -27,16 +27,17 @@ const getCapital = async (
    {
      "id": 1
      "userId": 1
-     "groupId": 1
-     "date": "2022-12-01 12:00:00"
-     "categoryId": 1
+     "userGroupId": 1
+     "date": "2023-12-07 12:00:00"
      "capitalType": 0
-     "note": "メモです"
+     "financialTransaction_id": 1
      "money": 1000
+     "share": "false"
      "settlement": "false"
-     "settlement_at": "",
-     "create_at": "2022-12-01-11:00:01",
-     "update_at": "2022-12-01-11:00:01"
+     "settlement_at": "2023-12-01-11:00:01",
+     "note": "memo"
+     "create_at": "2023-12-01-11:00:01",
+     "update_at": "2023-12-01-11:00:01"
    }
    */
 

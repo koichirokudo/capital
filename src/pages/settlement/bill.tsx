@@ -186,10 +186,10 @@ export const getStaticProps: GetStaticProps = async () => {
     }
   }
 
-  const groupId = authUser.groupId
+  const userGroupId = authUser.userGroupId
   const [users, settlement] = await Promise.all([
-    await getAllUsers(context, { groupId }),
-    await getSettlements(context, { groupId }),
+    await getAllUsers(context, { userGroupId }),
+    await getSettlements(context, { userGroupId }),
   ])
 
   return {

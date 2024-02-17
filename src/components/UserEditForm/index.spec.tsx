@@ -10,7 +10,7 @@ describe('UserEditForm', () => {
 
   const testUser = {
     id: 1,
-    groupId: 1,
+    userGroupId: 1,
     authType: 1,
     name: 'test',
     password: 'password',

@@ -5,7 +5,7 @@ import { User } from 'types'
 
 export type UserEditFormData = {
   id: number
-  groupId: number
+  userGroupId: number
   authType: number
   name: string
   password: string
@@ -177,10 +177,10 @@ const UserEditForm = ({ user, onUserSave }: UserFormProps) => {
           />
           <input
             type="hidden"
-            {...register('groupId', {
+            {...register('userGroupId', {
               valueAsNumber: true,
             })}
-            defaultValue={user.groupId}
+            defaultValue={user.userGroupId}
           />
           <input
             type="hidden"

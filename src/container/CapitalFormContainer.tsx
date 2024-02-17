@@ -25,10 +25,10 @@ const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
 
     const capital = {
       userId: authUser.id,
-      groupId: authUser.groupId,
+      userGroupId: authUser.userGroupId,
       date: data.date,
       share: data.share ?? false,
-      expensesItem: data.expensesItem,
+      financialTransactionId: data.financialTransactionId,
       capitalType: data.capitalType,
       money: Number(data.money),
       note: data.note ?? '',
@@ -38,6 +38,7 @@ const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
 
     try {
       setSpinner(true)
+      console.log('capital:', capital)
       await addCapital({ capital })
       await mutate()
     } catch (err: unknown) {

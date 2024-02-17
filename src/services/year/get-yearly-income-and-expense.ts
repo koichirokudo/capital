@@ -9,7 +9,7 @@ export type GetYealryIncomeAndExpensesParams = {
   /**
    * グループID
    */
-  groupId?: number
+  userGroupId?: number
   /**
    * 取得する年
    */
@@ -28,13 +28,13 @@ export type GetYealryIncomeAndExpensesParams = {
  */
 const getYearlyIncomeAndExpenses = async (
   context: ApiContext,
-  { userId, groupId, year, order }: GetYealryIncomeAndExpensesParams,
+  { userId, userGroupId, year, order }: GetYealryIncomeAndExpensesParams,
 ): Promise<YearlyIncomeAndExpenses[]> => {
   const path = `${context.apiRootUrl.replace(/\/$/g, '')}/year`
   const params = new URLSearchParams()
 
   userId && params.append('userId', `${userId}`)
-  groupId && params.append('groupId', `${groupId}`)
+  userGroupId && params.append('userGroupId', `${userGroupId}`)
   year && params.append('year', `${year}`)
   order && params.append('order', `${order}`)
 

@@ -5,7 +5,7 @@ export type GetAllUsersParams = {
   /**
    * 所属するグループID
    */
-  groupId?: number
+  userGroupId?: number
   /**
    * 昇順、降順
    */
@@ -15,16 +15,18 @@ export type GetAllUsersParams = {
 /**
  * ユーザAPI（一覧取得）
  * @param context APIコンテキスト
+ * @param userGroupId
+ * @param order
  * @returns ユーザ一覧
  */
 const getAllUsers = async (
   context: ApiContext,
-  { groupId, order }: GetAllUsersParams = {},
+  { userGroupId, order }: GetAllUsersParams = {},
 ): Promise<User[]> => {
   const path = `${context.apiRootUrl.replace(/\/$/g, '')}/users`
   const params = new URLSearchParams()
 
-  groupId && params.append('groupId', `${groupId}`)
+  userGroupId && params.append('userGroupId', `${userGroupId}`)
   order && params.append('_order', order)
 
   const query = params.toString()

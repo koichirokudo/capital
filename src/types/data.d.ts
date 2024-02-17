@@ -6,7 +6,7 @@ export type ApiContext = {
 // ユーザ
 export type User = {
   id: number
-  groupId: number
+  userGroupId: number
   authType: number
   profileImage: string
   name: string
@@ -15,8 +15,8 @@ export type User = {
   delete: string
 }
 
-// グループ
-export type Group = {
+// user group
+export type UserGroup = {
   id: number
   groupName: string
   inviteCode: string
@@ -28,10 +28,10 @@ export type Group = {
 export type Capital = {
   id: number
   userId: number
-  groupId: number
+  userGroupId: number
   share: boolean
   date: string
-  expensesItem: string
+  financialTransactionId: number
   capitalType: string
   note: string
   money: number
@@ -43,7 +43,7 @@ export type CapitalHistory = {
   id: number
   status: number
   userId: number
-  groupId: number
+  userGroupId: number
   date: string
   category: string
   capitalType: number
@@ -63,7 +63,7 @@ export type Calculate = {
   total: number
 }
 
-export type ExpensesItem = {
+export type FinancialTransactions = {
   id: number
   type: number
   value: string
@@ -72,7 +72,7 @@ export type ExpensesItem = {
 
 export type YearlyIncomeAndExpenses = {
   userId: number
-  groupId: number
+  userGroupId: number
   year: number
   incomeTotal: number
   incomeDetails: {
@@ -108,7 +108,7 @@ export type YearlyIncomeAndExpenses = {
 
 export type MonthlyIncomeAndExpenses = {
   userId: number
-  groupId: number
+  userGroupId: number
   year: number
   month: number
   incomeDetails: {
@@ -143,7 +143,7 @@ export type MonthlyIncomeAndExpenses = {
 
 export type Settlement = {
   id: number
-  groupId?: number
+  userGroupId?: number
   year: number
   month: number
   totalAmount: number

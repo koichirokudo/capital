@@ -5,7 +5,7 @@ export type UseCapitalProps = {
   /**
    * 所属するグループID
    */
-  groupId?: number
+  userGroupId?: number
 }
 
 export type UseCapital = {
@@ -35,9 +35,9 @@ export type UseCapital = {
 /**
  * 収支API（個別取得）のカスタムフック
  */
-const useAllCapital = ({ groupId }: UseCapitalProps): UseCapital => {
+const useAllCapital = ({ userGroupId }: UseCapitalProps): UseCapital => {
   const { data, error, mutate } = useSWR<Capital[]>(
-    `/api/capitals?groupId=${groupId}`,
+    `/api/capitals?userGroupId=${userGroupId}`,
   )
 
   return {

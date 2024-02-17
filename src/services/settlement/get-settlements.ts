@@ -8,7 +8,7 @@ export type GetSettlementsParams = {
   /**
    * グループID
    */
-  groupId?: number
+  userGroupId?: number
   /**
    * 昇順、降順
    */
@@ -17,13 +17,13 @@ export type GetSettlementsParams = {
 
 const getSettlements = async (
   context: ApiContext,
-  { userId, groupId, order }: GetSettlementsParams,
+  { userId, userGroupId, order }: GetSettlementsParams,
 ): Promise<Settlement[]> => {
   const path = `${context.apiRootUrl.replace(/\/$/g, '')}/settlement`
   const params = new URLSearchParams()
 
   userId && params.append('userId', `${userId}`)
-  groupId && params.append('groupId', `${groupId}`)
+  userGroupId && params.append('userGroupId', `${userGroupId}`)
   order && params.append('_order', order)
 
   const query = params.toString()

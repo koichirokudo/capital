@@ -22,18 +22,16 @@ import { ja } from 'date-fns/locale'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import useSWR from 'swr'
-import { ExpensesItem } from 'types'
+import { FinancialTransactions } from 'types'
 import { adjustTimezone, formattedISO8601, getFullDate } from 'utils/format'
-
-const EXPENSES = 0
-const INCOME = 1
+import { EXPENSES, INCOME } from 'const'
 
 export type CapitalFormData = {
   userId: number
-  groupId: number
+  userGroupId: number
   date: string
   share: boolean
-  expensesItem: string
+  financialTransactionId: number
   capitalType: string
   note: string
   money: string
@@ -54,12 +52,12 @@ interface CapitalFormProps {
  * 収支投稿フォーム
  */
 const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
-  const { data: income } = useSWR<ExpensesItem[]>(
-    `/api/expenses-items?type=${INCOME}`,
+  const { data: incomeItem } = useSWR<FinancialTransactions[]>(
+    `/api/financial-transactions?type=${INCOME}`,
     (url) => fetch(url).then((res) => res.json()),
   )
-  const { data: expenses } = useSWR<ExpensesItem[]>(
-    `/api/expenses-items?type=${EXPENSES}`,
+  const { data: expensesItem } = useSWR<FinancialTransactions[]>(
+    `/api/financial-transactions?type=${EXPENSES}`,
     (url) => fetch(url).then((res) => res.json()),
   )
   const {
@@ -70,35 +68,36 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     setValue,
   } = useForm<CapitalFormData>({
     defaultValues: {
-      capitalType: 'income',
+      capitalType: INCOME.toString(),
       date: getFullDate(new Date()),
-      expensesItem: '',
+      financialTransactionId: 1,
       money: '0',
       note: '',
     },
   })
 
-  const [selectItems, setSelectItems] = React.useState<ExpensesItem[]>([])
+  const [selectItems, setSelectItems] = React.useState<FinancialTransactions[]>([])
 
   React.useEffect(() => {
-    if (income && income.length > 0) {
-      setSelectItems(income)
-      setValue('expensesItem', income[0].value)
+    if (incomeItem && incomeItem.length > 0) {
+      setSelectItems(incomeItem)
+      setValue('financialTransactionId', incomeItem[0].id)
     }
-  }, [income, setValue])
+  }, [incomeItem, setValue])
 
   // watch
-  const capitalType = watch('capitalType', 'income')
+  const capitalType = watch('capitalType', INCOME.toString())
 
   React.useEffect(() => {
-    if (capitalType === 'income' && income && income.length > 0) {
-      setSelectItems(income)
-      setValue('expensesItem', income[0].value)
-    } else if (expenses && expenses.length > 0) {
-      setSelectItems(expenses)
-      setValue('expensesItem', expenses[0].value)
+    // FIXME:stringでないと制御できないのはどうして?
+    if (capitalType === INCOME.toString() && incomeItem && incomeItem.length > 0) {
+      setSelectItems(incomeItem)
+      setValue('financialTransactionId', incomeItem[0].id)
+    } else if (expensesItem && expensesItem.length > 0) {
+      setSelectItems(expensesItem)
+      setValue('financialTransactionId', expensesItem[0].id)
     }
-  }, [capitalType, income, expenses, setValue])
+  }, [capitalType, incomeItem, expensesItem, setValue])
 
   const onSubmit = (data: CapitalFormData) => {
     // UTCでシリアライズされた日付(2023-05-31T15:00:00.000Z)を
@@ -127,12 +126,12 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
               render={({ field }): JSX.Element => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
-                    value="income"
+                    value={INCOME.toString()}
                     control={<Radio required />}
                     label="収入"
                   />
                   <FormControlLabel
-                    value="expenses"
+                    value={EXPENSES.toString()}
                     control={<Radio required />}
                     label="支出"
                   />
@@ -170,22 +169,22 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
             error={errors?.hasOwnProperty('category')}
           >
             <Controller
-              name="expensesItem"
+              name="financialTransactionId"
               control={control}
               rules={{ required: '収支項目を選択してください。' }}
               render={({ field }): JSX.Element => (
                 <>
-                  <InputLabel id="expensesItem">収支項目</InputLabel>
+                  <InputLabel id="financialTransactionId">収支項目</InputLabel>
                   <Select
                     {...field}
-                    data-testid="expensesItem-input"
-                    label="expensesItem"
-                    labelId="expensesItem"
+                    data-testid="financialTransactionId-input"
+                    label="financialTransactionId"
+                    labelId="financialTransactionId"
                   >
                     {selectItems ? (
                       selectItems.map((item) => {
                         return (
-                          <MenuItem key={item.id} value={item.value}>
+                          <MenuItem key={item.id} value={item.id}>
                             {item.label}
                           </MenuItem>
                         )
@@ -195,7 +194,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                     )}
                   </Select>
                   <FormHelperText>
-                    {errors?.expensesItem?.message}
+                    {errors?.financialTransactionId?.message}
                   </FormHelperText>
                 </>
               )}
