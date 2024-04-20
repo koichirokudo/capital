@@ -21,10 +21,10 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { ja } from 'date-fns/locale'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import useSWR from 'swr'
 import { FinancialTransactions } from 'types'
 import { adjustTimezone, formattedISO8601, getFullDate } from 'utils/format'
 import { EXPENSES, INCOME } from 'const'
+import { useFinancialTransactionsContext } from '../../contexts/FinancialTransactionsContext'
 
 export type CapitalFormData = {
   userId: number
@@ -32,7 +32,7 @@ export type CapitalFormData = {
   date: string
   share: boolean
   financialTransactionId: number
-  capitalType: string
+  capitalType: number
   note: string
   money: string
   settlement: boolean
@@ -52,14 +52,7 @@ interface CapitalFormProps {
  * 収支投稿フォーム
  */
 const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
-  const { data: incomeItem } = useSWR<FinancialTransactions[]>(
-    `/api/financial-transactions?type=${INCOME}`,
-    (url) => fetch(url).then((res) => res.json()),
-  )
-  const { data: expensesItem } = useSWR<FinancialTransactions[]>(
-    `/api/financial-transactions?type=${EXPENSES}`,
-    (url) => fetch(url).then((res) => res.json()),
-  )
+  const { incomeItem, expensesItem } = useFinancialTransactionsContext()
   const {
     handleSubmit,
     control,
@@ -68,7 +61,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     setValue,
   } = useForm<CapitalFormData>({
     defaultValues: {
-      capitalType: INCOME.toString(),
+      capitalType: INCOME,
       date: getFullDate(new Date()),
       financialTransactionId: 1,
       money: '0',
@@ -76,7 +69,9 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     },
   })
 
-  const [selectItems, setSelectItems] = React.useState<FinancialTransactions[]>([])
+  const [selectItems, setSelectItems] = React.useState<FinancialTransactions[]>(
+    [],
+  )
 
   React.useEffect(() => {
     if (incomeItem && incomeItem.length > 0) {
@@ -85,12 +80,13 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     }
   }, [incomeItem, setValue])
 
-  // watch
-  const capitalType = watch('capitalType', INCOME.toString())
+  // watch で監視することで、収支タイプが変更されたら収支項目を変更する
+  // watch の戻り値の型が string になるため、後続の評価は == で対応
+  const capitalType = watch('capitalType', INCOME)
 
   React.useEffect(() => {
-    // FIXME:stringでないと制御できないのはどうして?
-    if (capitalType === INCOME.toString() && incomeItem && incomeItem.length > 0) {
+    // 収支タイプが変更されたら収支項目を変更する
+    if (capitalType == INCOME && incomeItem && incomeItem.length > 0) {
       setSelectItems(incomeItem)
       setValue('financialTransactionId', incomeItem[0].id)
     } else if (expensesItem && expensesItem.length > 0) {
@@ -126,12 +122,12 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
               render={({ field }): JSX.Element => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
-                    value={INCOME.toString()}
+                    value={Number(INCOME)}
                     control={<Radio required />}
                     label="収入"
                   />
                   <FormControlLabel
-                    value={EXPENSES.toString()}
+                    value={Number(EXPENSES)}
                     control={<Radio required />}
                     label="支出"
                   />
@@ -208,7 +204,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
               <TextField
                 {...field}
                 fullWidth
-                inputProps={{ min: '0', max: '10000000' }}
+                inputProps={{ min: '0', max: '1000000000' }}
                 margin="normal"
                 type="number"
                 label="金額"

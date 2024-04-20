@@ -7,6 +7,12 @@ import type { GetStaticProps, NextPage } from 'next'
 import * as React from 'react'
 import useAllCapital from 'services/capitals/use-all-capitals'
 import { useAuthGaurd } from 'utils/hook'
+import { FinancialTransactionsContextProvider } from '../contexts/FinancialTransactionsContext'
+import { ApiContext } from '../types'
+
+const context: ApiContext = {
+  apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
+}
 
 const CapitalPage: NextPage = () => {
   // 認証ガード
@@ -22,16 +28,18 @@ const CapitalPage: NextPage = () => {
   }
 
   return (
-    <Template title="収支登録・編集">
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={12} lg={3}>
-          <CapitalFormContainer mutate={data.mutate} />
+    <FinancialTransactionsContextProvider context={context}>
+      <Template title="収支登録・編集">
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={12} lg={3}>
+            <CapitalFormContainer mutate={data.mutate} />
+          </Grid>
+          <Grid item xs={12} md={12} lg={9}>
+            <CapitalList capitals={capitals} mutate={data.mutate} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={12} lg={9}>
-          <CapitalList capitals={capitals} mutate={data.mutate} />
-        </Grid>
-      </Grid>
-    </Template>
+      </Template>
+    </FinancialTransactionsContextProvider>
   )
 }
 

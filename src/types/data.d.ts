@@ -32,7 +32,7 @@ export type Capital = {
   share: boolean
   date: string
   financialTransactionId: number
-  capitalType: string
+  capitalType: number
   note: string
   money: number
   settlement: boolean

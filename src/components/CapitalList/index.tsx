@@ -32,18 +32,22 @@ import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 import * as React from 'react'
 import deleteCapital from 'services/capitals/delete-capital'
 import updateCapital from 'services/capitals/update-capital'
-import { ApiContext } from 'types'
+import { ApiContext, Capital } from 'types'
 import { AxiosError } from 'axios'
 import { adjustTimezone, formattedISO8601 } from 'utils/format'
+import { EXPENSES, INCOME } from '../../const'
+import { useFinancialTransactionsContext } from '../../contexts/FinancialTransactionsContext'
+
+const context: ApiContext = {
+  apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
+}
 
 /**
  * 収支一覧をDatagridで表示
  */
 const CapitalList = ({ capitals, mutate }: any) => {
-  const context: ApiContext = {
-    apiRootUrl: process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/proxy',
-  }
   const setSpinner = useSpinnerActionsContext()
+  const { incomeItem, expensesItem } = useFinancialTransactionsContext()
 
   // 行のモードを制御する変数（表示モード/編集モード）
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
@@ -81,8 +85,8 @@ const CapitalList = ({ capitals, mutate }: any) => {
         native
         autoFocus
       >
-        <option>収入</option>
-        <option>支出</option>
+        <option value={INCOME}>収入</option>
+        <option value={EXPENSES}>支出</option>
       </Select>
     )
   }
@@ -104,17 +108,18 @@ const CapitalList = ({ capitals, mutate }: any) => {
    * @returns
    */
   const SelectCategoryEditInputCell = (props: GridRenderCellParams) => {
-    const { id, value, field } = props
+    const { id, value, field, row } = props
     const apiRef = useGridApiContext()
+    const isIncome = row.capitalType === INCOME
+    const availableItems = isIncome ? incomeItem : expensesItem
 
     const handleChange = async (event: SelectChangeEvent) => {
       await apiRef.current.setEditCellValue({
         id,
         field,
-        value: event.target.value,
+        value: parseInt(event.target.value, 10),
       })
     }
-
     return (
       <Select
         value={value}
@@ -124,25 +129,11 @@ const CapitalList = ({ capitals, mutate }: any) => {
         native
         autoFocus
       >
-        <option>食費</option>
-        <option>日用品</option>
-        <option>交通費</option>
-        <option>交際費</option>
-        <option>趣味・娯楽費</option>
-        <option>衣服・美容費</option>
-        <option>健康・医療費</option>
-        <option>通信費</option>
-        <option>教養・教育費</option>
-        <option>住宅費</option>
-        <option>水道・光熱費</option>
-        <option>保険料</option>
-        <option>税金</option>
-        <option>給与</option>
-        <option>一時所得</option>
-        <option>事業・副業</option>
-        <option>年金・配当金</option>
-        <option>不動産所得</option>
-        <option>その他</option>
+        {availableItems?.map((item) => (
+          <option key={item.id} value={item.id}>
+            {item.label}
+          </option>
+        ))}
       </Select>
     )
   }
@@ -261,20 +252,36 @@ const CapitalList = ({ capitals, mutate }: any) => {
         return `${year}/${month}/${day}`
       },
     },
-    { field: 'name', headerName: '更新者', width: 180, editable: true },
+    {
+      field: 'user',
+      headerName: '更新者',
+      width: 180,
+      editable: false,
+      valueFormatter: (params: GridValueFormatterParams) => {
+        return params.value.name
+      }
+    },
     {
       field: 'capitalType',
       headerName: '収支',
       width: 80,
       editable: true,
       renderEditCell: renderSelectCapitalTypeEditInputCell,
+      valueFormatter: (params: GridValueFormatterParams) => {
+        return params.value === INCOME ? '収入' : '支出'
+      },
     },
     {
-      field: 'expensesItem',
+      field: 'financialTransactionId',
       headerName: '支出項目',
       width: 150,
       editable: true,
       renderEditCell: renderSelectCategoryEditInputCell,
+      valueFormatter: (params: GridValueFormatterParams) => {
+        const combinedItems = [...(incomeItem ?? []), ...(expensesItem ?? [])]
+        const item = combinedItems.find((i) => i.id === params.value)
+        return item?.label
+      },
     },
     {
       field: 'money',
