@@ -1,7 +1,7 @@
 import type { Capital } from 'types'
 import { axios } from 'utils/axios'
 
-export type AddCapitalPramas = {
+export type AddCapitalParams = {
   /**
    * 追加する収支
    * capitalId を除く
@@ -14,7 +14,7 @@ export type AddCapitalPramas = {
  * @param APIコンテキスト
  * @returns 新規追加した収支
  */
-const addCapital = async ({ capital }: AddCapitalPramas): Promise<Capital> => {
+const addCapital = async ({ capital }: AddCapitalParams): Promise<Capital> => {
   return await axios.post('/api/capitals', capital)
 }
 
