@@ -110,9 +110,8 @@ const CapitalList = ({ capitals, mutate }: any) => {
   const SelectCategoryEditInputCell = (props: GridRenderCellParams) => {
     const { id, value, field, row } = props
     const apiRef = useGridApiContext()
-    const isIncome = row.capitalType === INCOME
+    const isIncome = row.capitalType == INCOME
     const availableItems = isIncome ? incomeItem : expensesItem
-
     const handleChange = async (event: SelectChangeEvent) => {
       await apiRef.current.setEditCellValue({
         id,
