@@ -63,7 +63,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     defaultValues: {
       capitalType: INCOME,
       date: getFullDate(new Date()),
-      financialTransactionId: 1,
+      financialTransactionId: incomeItem?.[0]?.id,
       money: '0',
       note: '',
     },
@@ -73,10 +73,13 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     [],
   )
 
+  const [isLoading, setIsLoading] = React.useState<boolean>(true)
+
   React.useEffect(() => {
     if (incomeItem && incomeItem.length > 0) {
       setSelectItems(incomeItem)
       setValue('financialTransactionId', incomeItem[0].id)
+      setIsLoading(false)
     }
   }, [incomeItem, setValue])
 
@@ -89,9 +92,11 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     if (capitalType == INCOME && incomeItem && incomeItem.length > 0) {
       setSelectItems(incomeItem)
       setValue('financialTransactionId', incomeItem[0].id)
+      setIsLoading(false)
     } else if (expensesItem && expensesItem.length > 0) {
       setSelectItems(expensesItem)
       setValue('financialTransactionId', expensesItem[0].id)
+      setIsLoading(false)
     }
   }, [capitalType, incomeItem, expensesItem, setValue])
 
@@ -171,24 +176,22 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
               render={({ field }): JSX.Element => (
                 <>
                   <InputLabel id="financialTransactionId">収支項目</InputLabel>
-                  <Select
-                    {...field}
-                    data-testid="financialTransactionId-input"
-                    label="financialTransactionId"
-                    labelId="financialTransactionId"
-                  >
-                    {selectItems ? (
-                      selectItems.map((item) => {
+                  {!isLoading && (
+                    <Select
+                      {...field}
+                      data-testid="financialTransactionId-input"
+                      label="financialTransactionId"
+                      labelId="financialTransactionId"
+                    >
+                      {selectItems.map((item) => {
                         return (
                           <MenuItem key={item.id} value={item.id}>
                             {item.label}
                           </MenuItem>
                         )
-                      })
-                    ) : (
-                      <div>Loading...</div>
-                    )}
-                  </Select>
+                      })}
+                    </Select>
+                  )}
                   <FormHelperText>
                     {errors?.financialTransactionId?.message}
                   </FormHelperText>
