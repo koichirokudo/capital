@@ -127,14 +127,14 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
               render={({ field }): JSX.Element => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
-                    value={Number(INCOME)}
-                    control={<Radio required />}
-                    label="収入"
-                  />
-                  <FormControlLabel
                     value={Number(EXPENSES)}
                     control={<Radio required />}
                     label="支出"
+                  />
+                  <FormControlLabel
+                    value={Number(INCOME)}
+                    control={<Radio required />}
+                    label="収入"
                   />
                 </RadioGroup>
               )}

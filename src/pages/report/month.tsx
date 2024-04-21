@@ -25,11 +25,11 @@ const ReportMonthPage: NextPage = () => {
   // カテゴリ情報を取得する
   const { data: incomeItem } = useSWR<FinancialTransactions[]>(
     `/api/financial-transactions?type=${INCOME}`,
-    (url) => fetch(url).then((res) => res.json()),
+    (url: RequestInfo | URL) => fetch(url).then((res) => res.json()),
   )
   const { data: expensesItem } = useSWR<FinancialTransactions[]>(
     `/api/financial-transactions?type=${EXPENSES}`,
-    (url) => fetch(url).then((res) => res.json()),
+    (url: RequestInfo | URL) => fetch(url).then((res) => res.json()),
   )
   // 今月をデフォルトにする
   const date: Date = new Date()
@@ -39,14 +39,12 @@ const ReportMonthPage: NextPage = () => {
   const [selectedMonth, setSelectedMonth] = React.useState(
     (date.getMonth() + 1).toString(),
   )
-
   const { data: incomeAndExpenses } = useSWR(
     authUser?.id
       ? `/api/month?user_id=${authUser?.id}&year=${selectedYear}&month=${selectedMonth}`
       : null,
     (url) => fetch(url).then((res) => res.json()),
   )
-
   const specificIncomeAndExpenses = incomeAndExpenses?.data.filter(
     (item: { year: string; month: string }) =>
       item.year === selectedYear &&
@@ -70,9 +68,6 @@ const ReportMonthPage: NextPage = () => {
       </Template>
     )
   }
-
-  console.log(incomeItem)
-  console.log(expensesItem)
 
   const options = {
     indexAxis: 'y' as const,
@@ -122,15 +117,13 @@ const ReportMonthPage: NextPage = () => {
   }
 
   const { incomeDetails, expensesDetails } = specificIncomeAndExpenses[0]
-  const categoryIncomeData = Object.values<number>(incomeDetails ?? [])
-  const categoryExpensesData = Object.values<number>(expensesDetails ?? [])
 
   const incomeCategoriesData = {
-    labels: incomeItem?.map((item) => item.label),
+    labels: Object.keys(incomeDetails ?? {}),
     datasets: [
       {
         label: 'カテゴリ',
-        data: categoryIncomeData,
+        data: Object.values<number>(incomeDetails ?? {}),
         backgroundColor: 'rgba(0, 171, 85, 0.9)',
         barPercentage: 0.9,
         borderRadius: 10,
@@ -140,11 +133,11 @@ const ReportMonthPage: NextPage = () => {
   }
 
   const expensesCategoriesData = {
-    labels: expensesItem?.map((item) => item.label),
+    labels: Object.keys(expensesDetails ?? {}),
     datasets: [
       {
         label: 'カテゴリ',
-        data: categoryExpensesData,
+        data: Object.values<number>(expensesDetails ?? {}),
         backgroundColor: 'rgba(255, 171, 0, 0.9)',
         barPercentage: 0.9,
         borderRadius: 10,
