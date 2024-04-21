@@ -36,12 +36,13 @@ export type UseCapital = {
  * 収支API（個別取得）のカスタムフック
  */
 const useAllCapital = ({ userGroupId }: UseCapitalProps): UseCapital => {
+  const shouldFetch = Boolean(userGroupId)
   const { data, error, mutate } = useSWR<Capital[]>(
-    `/api/capitals?userGroupId=${userGroupId}`,
+    shouldFetch ? `/api/capitals?userGroupId=${userGroupId}` : null,
   )
 
   return {
-    capitals: data,
+    capitals: data || [],
     isLoading: !error && !data,
     isError: error,
     mutate,
