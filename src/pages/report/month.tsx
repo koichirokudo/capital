@@ -22,15 +22,6 @@ const ReportMonthPage: NextPage = () => {
 
   const { authUser } = useAuthContext()
 
-  // カテゴリ情報を取得する
-  const { data: incomeItem } = useSWR<FinancialTransactions[]>(
-    `/api/financial-transactions?type=${INCOME}`,
-    (url: RequestInfo | URL) => fetch(url).then((res) => res.json()),
-  )
-  const { data: expensesItem } = useSWR<FinancialTransactions[]>(
-    `/api/financial-transactions?type=${EXPENSES}`,
-    (url: RequestInfo | URL) => fetch(url).then((res) => res.json()),
-  )
   // 今月をデフォルトにする
   const date: Date = new Date()
   const [selectedYear, setSelectedYear] = React.useState(
