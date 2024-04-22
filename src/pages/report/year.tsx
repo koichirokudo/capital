@@ -1,4 +1,8 @@
-import { AccountBalanceWalletSharp, CallMadeSharp, CallReceivedSharp, } from '@mui/icons-material'
+import {
+  AccountBalanceWalletSharp,
+  CallMadeSharp,
+  CallReceivedSharp,
+} from '@mui/icons-material'
 import { Avatar, Box, Grid, Paper, Typography } from '@mui/material'
 import { BarChart } from 'components/BarChart'
 import LineChart from 'components/LineChart'
@@ -10,20 +14,20 @@ import { useAuthGaurd } from 'utils/hook'
 import YearControl from 'components/YearControl'
 import useSWR from 'swr'
 import { useAuthContext } from 'contexts/AuthContext'
-import React from "react";
+import React from 'react'
 
 const ReportYearPage: NextPage = () => {
   // 認証ガード
   useAuthGaurd()
 
-  const {authUser} = useAuthContext()
+  const { authUser } = useAuthContext()
 
   // 今年をデフォルトにする
   const date = new Date()
   const [selectedYear, setSelectedYear] = React.useState(date.getFullYear())
-  const {data: incomeAndExpenses} = useSWR(
+  const { data: incomeAndExpenses } = useSWR(
     authUser?.id ? `/api/year?user_id=${authUser?.id}` : null,
-    (url) => fetch(url).then((res) => res.json())
+    (url) => fetch(url).then((res) => res.json()),
   )
 
   if (!incomeAndExpenses) {
@@ -34,31 +38,38 @@ const ReportYearPage: NextPage = () => {
   if (incomeAndExpenses.length === 0) {
     return (
       <Template title="年間レポート">
-        <YearControl year={selectedYear} setYear={setSelectedYear}/>
-        <Typography variant="body1">{selectedYear}年のデータはありません。</Typography>
+        <YearControl year={selectedYear} setYear={setSelectedYear} />
+        <Typography variant="body1">
+          {selectedYear}年のデータはありません。
+        </Typography>
       </Template>
     )
   }
 
-  const result = incomeAndExpenses.data.filter((item: { year: string }) => item.year === selectedYear.toString())[0] ?? null
+  const result =
+    incomeAndExpenses.data.filter(
+      (item: { year: string }) => item.year === selectedYear.toString(),
+    )[0] ?? null
   // 選択した年のデータがない
   if (!result) {
     return (
       <Template title="年間レポート">
-        <YearControl year={selectedYear} setYear={setSelectedYear}/>
-        <Typography variant="body1">{selectedYear}年のデータはありません。</Typography>
+        <YearControl year={selectedYear} setYear={setSelectedYear} />
+        <Typography variant="body1">
+          {selectedYear}年のデータはありません。
+        </Typography>
       </Template>
     )
   }
 
-  const {incomeDetails, incomeTotal, expensesDetails, expensesTotal} = result
+  const { incomeDetails, incomeTotal, expensesDetails, expensesTotal } = result
   const incomeMonthly = Object.values<number>(incomeDetails ?? [])
   const expensesMonthly = Object.values<number>(expensesDetails ?? [])
   const balanceMonthly: number[] = []
   for (let i = 0; i < incomeMonthly.length; i++) {
     balanceMonthly.push(incomeMonthly[i] - expensesMonthly[i])
   }
-
+  console.log(result)
   const barChartOptions = {
     plugins: {
       legend: {
@@ -228,7 +239,7 @@ const ReportYearPage: NextPage = () => {
 
   return (
     <Template title="年間レポート">
-      <YearControl year={selectedYear} setYear={setSelectedYear}/>
+      <YearControl year={selectedYear} setYear={setSelectedYear} />
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={12} lg={4}>
           <Paper
@@ -237,12 +248,12 @@ const ReportYearPage: NextPage = () => {
               positions: 'relative',
             }}
           >
-            <Typography color="#015249" sx={{p: 2, fontWeight: 'bold'}}>
+            <Typography color="#015249" sx={{ p: 2, fontWeight: 'bold' }}>
               収入
             </Typography>
             <Box
               color="#015249"
-              sx={{fontSize: '2rem', fontWeight: 'bold', ml: 3}}
+              sx={{ fontSize: '2rem', fontWeight: 'bold', ml: 3 }}
             >
               {formatMoney(incomeTotal, true)}
             </Box>
@@ -254,7 +265,7 @@ const ReportYearPage: NextPage = () => {
                 top: '-80px',
               }}
             >
-              <CallReceivedSharp/>
+              <CallReceivedSharp />
             </Avatar>
             <LineChart
               data={lineChartIncomeData}
@@ -271,12 +282,12 @@ const ReportYearPage: NextPage = () => {
               positions: 'relative',
             }}
           >
-            <Typography color="#7A4100" sx={{p: 2, fontWeight: 'bold'}}>
+            <Typography color="#7A4100" sx={{ p: 2, fontWeight: 'bold' }}>
               支出
             </Typography>
             <Box
               color="#7a4100"
-              sx={{fontSize: '2rem', fontWeight: 'bold', ml: 3}}
+              sx={{ fontSize: '2rem', fontWeight: 'bold', ml: 3 }}
             >
               {formatMoney(expensesTotal, true)}
             </Box>
@@ -288,7 +299,7 @@ const ReportYearPage: NextPage = () => {
                 top: '-80px',
               }}
             >
-              <CallMadeSharp/>
+              <CallMadeSharp />
             </Avatar>
             <LineChart
               data={lineChartExpensesData}
@@ -305,12 +316,12 @@ const ReportYearPage: NextPage = () => {
               positions: 'relative',
             }}
           >
-            <Typography color="#275f72" sx={{p: 2, fontWeight: 'bold'}}>
+            <Typography color="#275f72" sx={{ p: 2, fontWeight: 'bold' }}>
               残高
             </Typography>
             <Box
               color="#275f72"
-              sx={{fontSize: '2rem', fontWeight: 'bold', ml: 3}}
+              sx={{ fontSize: '2rem', fontWeight: 'bold', ml: 3 }}
             >
               {formatMoney(incomeTotal - expensesTotal, true)}
             </Box>
@@ -322,7 +333,7 @@ const ReportYearPage: NextPage = () => {
                 top: '-80px',
               }}
             >
-              <AccountBalanceWalletSharp/>
+              <AccountBalanceWalletSharp />
             </Avatar>
             <LineChart
               data={lineChartBalanceData}
@@ -333,8 +344,8 @@ const ReportYearPage: NextPage = () => {
           </Paper>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <Paper sx={{p: 2}}>
-            <Typography sx={{fontWeight: 'bold'}}>収支グラフ</Typography>
+          <Paper sx={{ p: 2 }}>
+            <Typography sx={{ fontWeight: 'bold' }}>収支グラフ</Typography>
             <BarChart
               data={monthlyData}
               options={barChartOptions}
