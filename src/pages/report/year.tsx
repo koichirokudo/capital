@@ -1,10 +1,15 @@
 import {
-  AccountBalanceWalletSharp,
-  CallMadeSharp,
-  CallReceivedSharp,
-} from '@mui/icons-material'
-import { Avatar, Box, Grid, Paper, Typography } from '@mui/material'
-import { BarChart } from 'components/BarChart'
+  Box,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material'
+import TableRowComponent from 'components/TableRowComponent'
 import LineChart from 'components/LineChart'
 import Template from 'components/Templates'
 import { monthlyLabels } from 'const'
@@ -69,57 +74,6 @@ const ReportYearPage: NextPage = () => {
   for (let i = 0; i < incomeMonthly.length; i++) {
     balanceMonthly.push(incomeMonthly[i] - expensesMonthly[i])
   }
-  console.log(result)
-  const barChartOptions = {
-    plugins: {
-      legend: {
-        align: 'end' as const,
-        labels: {
-          usePointStyle: true,
-          pointStyle: 'circle',
-          padding: 15,
-          font: {
-            size: 14,
-            weight: 'bold' as const,
-          },
-        },
-      },
-      tooltip: {
-        enabled: false,
-      },
-      datalabels: {
-        display: true,
-        font: {
-          size: 10,
-          weight: 'bold' as const,
-        },
-        anchor: 'end' as const,
-        align: 'end' as const,
-        formatter: function (value: { toString: () => string | number }) {
-          return formatMoney(value.toString(), true)
-        },
-      },
-    },
-    scales: {
-      x: {
-        display: true,
-        grid: {
-          display: false,
-        },
-        ticks: {
-          font: {
-            size: 14,
-          },
-        },
-      },
-      y: {
-        display: true,
-        grid: {
-          display: false,
-        },
-      },
-    },
-  }
 
   const lineChartOptions = {
     elements: {
@@ -128,26 +82,26 @@ const ReportYearPage: NextPage = () => {
         fill: 'start',
       },
       point: {
-        backgroundColor: 'rgba(0,171,85, 0.7)',
-        borderColor: '#fff',
         borderWidth: 3,
         hitRadius: 70,
-        hoverBorderWidth: 2,
-        hoverRadius: 4,
-        pointStyle: 'circle',
-        radius: 0,
       },
     },
     plugins: {
       datalabels: {
-        display: false,
+        color: '#000',
+        display: true,
+        anchor: 'end' as const,
+        align: 'end' as const,
+        formatter: function (value: { toString: () => string | number }) {
+          return formatMoney(value.toString(), true)
+        },
       },
       legend: {
-        display: false,
+        display: true,
       },
       tooltip: {
         enable: true,
-        displayColors: false,
+        displayColors: true,
         callbacks: {
           label: function (context: { parsed: { y: number | bigint | null } }) {
             let label = ''
@@ -165,13 +119,13 @@ const ReportYearPage: NextPage = () => {
     responsive: true,
     scales: {
       x: {
-        display: false,
+        display: true,
         grid: {
           display: false,
         },
       },
       y: {
-        display: false,
+        display: true,
         grid: {
           display: false,
         },
@@ -184,54 +138,18 @@ const ReportYearPage: NextPage = () => {
   const lineChartIncomeData = {
     datasets: [
       {
+        label: '収入',
         backgroundColor: 'rgba(0, 171, 85, 0.3)',
         borderColor: 'rgba(0, 171, 85, 1)',
         data: incomeMonthly,
-        tension: 0.3,
+        tension: 0.2,
       },
-    ],
-    labels: monthlyLabels,
-  }
-
-  const lineChartExpensesData = {
-    datasets: [
       {
+        label: '支出',
         backgroundColor: 'rgba(255, 171, 0, 0.3)',
         borderColor: 'rgba(255, 171, 0, 1)',
         data: expensesMonthly,
-        tension: 0.3,
-      },
-    ],
-    labels: monthlyLabels,
-  }
-
-  const lineChartBalanceData = {
-    datasets: [
-      {
-        backgroundColor: 'rgba(56, 123, 145, 0.3)',
-        borderColor: 'rgba(56, 123, 145, 1)',
-        data: balanceMonthly,
-        tension: 0.3,
-      },
-    ],
-    labels: monthlyLabels,
-  }
-
-  const monthlyData = {
-    datasets: [
-      {
-        backgroundColor: 'rgba(0, 171, 85, 0.9)',
-        barPercentage: 0.5,
-        borderRadius: 10,
-        data: incomeMonthly,
-        label: '収入',
-      },
-      {
-        backgroundColor: 'rgba(255, 171, 0, 0.9)',
-        barPercentage: 0.5,
-        borderRadius: 10,
-        data: expensesMonthly,
-        label: '支出',
+        tension: 0.2,
       },
     ],
     labels: monthlyLabels,
@@ -241,117 +159,69 @@ const ReportYearPage: NextPage = () => {
     <Template title="年間レポート">
       <YearControl year={selectedYear} setYear={setSelectedYear} />
       <Grid container spacing={2} justifyContent="center">
-        <Grid item xs={12} md={12} lg={4}>
+        <Grid item xs={12} md={12} lg={12}>
           <Paper
             sx={{
-              backgroundColor: '#C8FACD',
+              backgroundColor: '#FFFFFF',
+              p: 2,
               positions: 'relative',
             }}
           >
-            <Typography color="#015249" sx={{ p: 2, fontWeight: 'bold' }}>
-              収入
-            </Typography>
-            <Box
-              color="#015249"
-              sx={{ fontSize: '2rem', fontWeight: 'bold', ml: 3 }}
-            >
-              {formatMoney(incomeTotal, true)}
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              <Box
+                color="#015249"
+                sx={{ fontSize: '1.25rem', fontWeight: 'bold', mr: 2 }}
+              >
+                収入：
+                {formatMoney(incomeTotal, true)}
+              </Box>
+              <Box
+                color="#7a4100"
+                sx={{ fontSize: '1.25rem', fontWeight: 'bold', mr: 2 }}
+              >
+                支出：
+                {formatMoney(expensesTotal, true)}
+              </Box>
+              <Box
+                color="#275f72"
+                sx={{ fontSize: '1.25rem', fontWeight: 'bold' }}
+              >
+                残高：
+                {formatMoney(incomeTotal - expensesTotal, true)}
+              </Box>
             </Box>
-            <Avatar
-              sx={{
-                backgroundColor: '#007B55',
-                left: 'calc(100% - 60px)',
-                positions: 'absolute',
-                top: '-80px',
-              }}
-            >
-              <CallReceivedSharp />
-            </Avatar>
             <LineChart
               data={lineChartIncomeData}
               options={lineChartOptions}
-              width={50}
-              height={25}
-            />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={12} lg={4}>
-          <Paper
-            sx={{
-              backgroundColor: '#FFF5CC',
-              positions: 'relative',
-            }}
-          >
-            <Typography color="#7A4100" sx={{ p: 2, fontWeight: 'bold' }}>
-              支出
-            </Typography>
-            <Box
-              color="#7a4100"
-              sx={{ fontSize: '2rem', fontWeight: 'bold', ml: 3 }}
-            >
-              {formatMoney(expensesTotal, true)}
-            </Box>
-            <Avatar
-              sx={{
-                backgroundColor: '#B76E00',
-                left: 'calc(100% - 60px)',
-                positions: 'absolute',
-                top: '-80px',
-              }}
-            >
-              <CallMadeSharp />
-            </Avatar>
-            <LineChart
-              data={lineChartExpensesData}
-              options={lineChartOptions}
-              width={50}
-              height={25}
-            />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={12} lg={4}>
-          <Paper
-            sx={{
-              backgroundColor: '#D2F3FE',
-              positions: 'relative',
-            }}
-          >
-            <Typography color="#275f72" sx={{ p: 2, fontWeight: 'bold' }}>
-              残高
-            </Typography>
-            <Box
-              color="#275f72"
-              sx={{ fontSize: '2rem', fontWeight: 'bold', ml: 3 }}
-            >
-              {formatMoney(incomeTotal - expensesTotal, true)}
-            </Box>
-            <Avatar
-              sx={{
-                backgroundColor: '#387b91',
-                left: 'calc(100% - 60px)',
-                positions: 'absolute',
-                top: '-80px',
-              }}
-            >
-              <AccountBalanceWalletSharp />
-            </Avatar>
-            <LineChart
-              data={lineChartBalanceData}
-              options={lineChartOptions}
-              width={50}
-              height={25}
+              width={40}
+              height={15}
             />
           </Paper>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <Paper sx={{ p: 2 }}>
-            <Typography sx={{ fontWeight: 'bold' }}>収支グラフ</Typography>
-            <BarChart
-              data={monthlyData}
-              options={barChartOptions}
-              height={500}
-              width={1200}
-            />
+          <Paper>
+            <Box sx={{ p: 2 }}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                月別収支
+              </Typography>
+            </Box>
+            <Table sx={{ minWidth: 800 }} size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell></TableCell>
+                  {monthlyLabels.map((label) => (
+                    <TableCell align="left" key={label}>
+                      {label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRowComponent label="収入" values={incomeMonthly} />
+                <TableRowComponent label="支出" values={expensesMonthly} />
+                <TableRowComponent label="残高" values={balanceMonthly} />
+              </TableBody>
+            </Table>
           </Paper>
         </Grid>
       </Grid>
