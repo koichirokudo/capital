@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { useRouter } from 'next/router'
 import { getCsrf } from 'services/auth/get-csrf'
 import { loginWithNameAndPassword } from 'services/auth/login'
 import { logout } from 'services/auth/logout'
@@ -41,6 +42,7 @@ export const AuthContextProvider = ({
   children,
 }: React.PropsWithChildren<AuthContextProviderProps>) => {
   const { data, error, mutate } = useSWR<User>('/api/me')
+  const router = useRouter()
 
   // ログイン
   const loginInternal = async (name: string, password: string) => {
@@ -53,7 +55,11 @@ export const AuthContextProvider = ({
   const logoutInternal = async () => {
     // サーバサイドのセッションを破棄
     await logout()
-    await mutate()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await mutate(null, false)
+    // ログイン画面に遷移
+    router.push('/login')
   }
 
   return (
@@ -63,6 +69,8 @@ export const AuthContextProvider = ({
         isLoading: !data && !error,
         login: loginInternal,
         logout: logoutInternal,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         mutate,
       }}
     >
