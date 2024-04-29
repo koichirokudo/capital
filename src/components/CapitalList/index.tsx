@@ -45,7 +45,7 @@ const context: ApiContext = {
 /**
  * 収支一覧をDatagridで表示
  */
-const CapitalList = ({ capitals, mutate }: any) => {
+const CapitalList = ({ capitals, mutate }: never) => {
   const setSpinner = useSpinnerActionsContext()
   const { incomeItem, expensesItem } = useFinancialTransactionsContext()
 
@@ -78,8 +78,8 @@ const CapitalList = ({ capitals, mutate }: any) => {
         native
         autoFocus
       >
-        <option value="true">する</option>
-        <option value="false">しない</option>
+        <option value="true">はい</option>
+        <option value="false">いいえ</option>
       </Select>
     )
   }
@@ -289,12 +289,11 @@ const CapitalList = ({ capitals, mutate }: any) => {
     {
       field: 'share',
       headerName: '共有',
-      width: 80,
+      width: 100,
       editable: true,
       renderEditCell: renderSelectShareEditInputCell,
       valueFormatter: (params: GridValueFormatterParams) => {
-        console.log(params)
-        return params.value === SHARE ? 'する' : 'しない'
+        return params.value === SHARE ? 'はい' : 'いいえ'
       },
     },
     {
