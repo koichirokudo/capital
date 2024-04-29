@@ -86,7 +86,7 @@ const Drawer = styled(MuiDrawer, {
 }))
 
 const Template = (props: TemplateProps) => {
-  const { authUser, isLoading } = useAuthContext()
+  const { authUser, isLoading, logout } = useAuthContext()
   const { title, children } = props
   const [drawerOpen, setDrawerOpen] = React.useState<boolean>(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -104,6 +104,11 @@ const Template = (props: TemplateProps) => {
   }
   const handleMenuClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleLogout = async () => {
+    handleMenuClose()
+    await logout()
   }
 
   return (
@@ -201,9 +206,7 @@ const Template = (props: TemplateProps) => {
                         プロフィール編集
                       </MenuItem>
                     </Link>
-                    <Link href={`/logout`}>
-                      <MenuItem onClick={handleMenuClose}>ログアウト</MenuItem>
-                    </Link>
+                    <MenuItem onClick={handleLogout}>ログアウト</MenuItem>
                   </Menu>
                 </Box>
               )
@@ -240,7 +243,7 @@ const Template = (props: TemplateProps) => {
             </Toolbar>
             <Divider />
             <List>
-              <Link href={`/capital?userGroupId=${authUser.userGroupId}`}>
+              <Link href={`/capital`}>
                 <ListItemButton>
                   <CurrencyYen />
                   <ListItem sx={{ ml: 1 }}>
