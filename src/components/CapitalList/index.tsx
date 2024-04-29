@@ -35,7 +35,7 @@ import updateCapital from 'services/capitals/update-capital'
 import { ApiContext } from 'types'
 import { AxiosError } from 'axios'
 import { adjustTimezone, formattedISO8601 } from 'utils/format'
-import { EXPENSES, INCOME } from '../../const'
+import { EXPENSES, INCOME, SHARE } from '../../const'
 import { useFinancialTransactionsContext } from '../../contexts/FinancialTransactionsContext'
 
 const context: ApiContext = {
@@ -58,6 +58,41 @@ const CapitalList = ({ capitals, mutate }: any) => {
     AlertProps,
     'children' | 'severity'
   > | null>(null)
+
+  const SelectShareEditInputCell = (props: GridRenderCellParams) => {
+    const { id, value, field } = props
+    const apiRef = useGridApiContext()
+    const handleChange = async (event: SelectChangeEvent) => {
+      await apiRef.current.setEditCellValue({
+        id,
+        field,
+        value: event.target.value,
+      })
+    }
+    return (
+      <Select
+        value={value}
+        onChange={handleChange}
+        size="small"
+        sx={{ height: 1 }}
+        native
+        autoFocus
+      >
+        <option value="true">する</option>
+        <option value="false">しない</option>
+      </Select>
+    )
+  }
+
+  /**
+   * SelectShareEditInputCellのラッパー関数
+   * @param params
+   */
+  const renderSelectShareEditInputCell: GridColDef['renderCell'] = (
+    params,
+  ) => {
+    return <SelectShareEditInputCell {...params} />
+  }
 
   /**
    * 収支タイプをDataGridのセル内で表示する
@@ -252,13 +287,24 @@ const CapitalList = ({ capitals, mutate }: any) => {
       },
     },
     {
+      field: 'share',
+      headerName: '共有',
+      width: 80,
+      editable: true,
+      renderEditCell: renderSelectShareEditInputCell,
+      valueFormatter: (params: GridValueFormatterParams) => {
+        console.log(params)
+        return params.value === SHARE ? 'する' : 'しない'
+      },
+    },
+    {
       field: 'user',
       headerName: '更新者',
       width: 180,
       editable: false,
       valueFormatter: (params: GridValueFormatterParams) => {
         return params.value.name
-      }
+      },
     },
     {
       field: 'capitalType',
