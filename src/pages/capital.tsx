@@ -19,8 +19,7 @@ const CapitalPage: NextPage = () => {
   useAuthGaurd()
 
   const { authUser } = useAuthContext()
-  const userGroupId = authUser?.userGroupId
-  const data = useAllCapital({ userGroupId })
+  const data = useAllCapital()
   const capitals = data.capitals ?? []
 
   if (!authUser || data.isLoading) {
