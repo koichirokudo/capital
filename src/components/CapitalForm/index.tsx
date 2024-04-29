@@ -30,7 +30,7 @@ export type CapitalFormData = {
   userId: number
   userGroupId: number
   date: string
-  share: boolean
+  share: string
   financialTransactionId: number
   capitalType: number
   note: string
@@ -61,7 +61,8 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     setValue,
   } = useForm<CapitalFormData>({
     defaultValues: {
-      capitalType: INCOME,
+      capitalType: EXPENSES,
+      share: "true",
       date: getFullDate(new Date()),
       financialTransactionId: incomeItem?.[0]?.id,
       money: '0',
@@ -114,33 +115,64 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     <Paper sx={{ p: 1 }}>
       <Box>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl
-            component="fieldset"
-            error={errors?.hasOwnProperty('capitalType')}
-          >
-            <FormLabel component="legend">収支タイプ</FormLabel>
-            <Controller
-              aria-labelledby="capital-type-radio"
-              name="capitalType"
-              control={control}
-              rules={{ required: '収支タイプを選択してください。' }}
-              render={({ field }): JSX.Element => (
-                <RadioGroup row {...field}>
-                  <FormControlLabel
-                    value={Number(EXPENSES)}
-                    control={<Radio required />}
-                    label="支出"
-                  />
-                  <FormControlLabel
-                    value={Number(INCOME)}
-                    control={<Radio required />}
-                    label="収入"
-                  />
-                </RadioGroup>
-              )}
-            />
-            <FormHelperText>{errors?.capitalType?.message}</FormHelperText>
-          </FormControl>
+          <Box>
+            <FormControl
+              component="fieldset"
+              error={errors?.hasOwnProperty('capitalType')}
+            >
+              <FormLabel component="legend">収支タイプ</FormLabel>
+              <Controller
+                aria-labelledby="capital-type-radio"
+                name="capitalType"
+                control={control}
+                rules={{ required: '収支タイプを選択してください。' }}
+                render={({ field }): JSX.Element => (
+                  <RadioGroup row {...field}>
+                    <FormControlLabel
+                      value={Number(INCOME)}
+                      control={<Radio required />}
+                      label="収入"
+                    />
+                    <FormControlLabel
+                      value={Number(EXPENSES)}
+                      control={<Radio required />}
+                      label="支出"
+                    />
+                  </RadioGroup>
+                )}
+              />
+              <FormHelperText>{errors?.capitalType?.message}</FormHelperText>
+            </FormControl>
+          </Box>
+          <Box>
+            <FormControl
+              component="fieldset"
+              error={errors?.hasOwnProperty('share')}
+            >
+              <FormLabel component="legend">共有</FormLabel>
+              <Controller
+                aria-labelledby="share-radio"
+                name="share"
+                control={control}
+                rules={{ required: '共有を選択してください。' }}
+                render={({ field }): JSX.Element => (
+                  <RadioGroup row {...field}>
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio required />}
+                      label="はい"
+                    />
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio required />}
+                      label="いいえ"
+                    />
+                  </RadioGroup>
+                )}
+              />
+              <FormHelperText>{errors?.capitalType?.message}</FormHelperText>
+            </FormControl>
+          </Box>
           <FormControl fullWidth error={errors?.hasOwnProperty('date')}>
             <Controller
               name="date"

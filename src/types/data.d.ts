@@ -29,7 +29,7 @@ export type Capital = {
   id: number
   userId: number
   userGroupId: number
-  share: boolean
+  share: string
   date: string
   financialTransactionId: number
   capitalType: number
