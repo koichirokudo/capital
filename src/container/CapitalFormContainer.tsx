@@ -27,7 +27,7 @@ const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
       userId: authUser.id,
       userGroupId: authUser.userGroupId,
       date: data.date,
-      share: data.share,
+      share: Boolean(data.share),
       financialTransactionId: Number(data.financialTransactionId),
       capitalType: Number(data.capitalType),
       money: Number(data.money),

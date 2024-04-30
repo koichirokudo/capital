@@ -30,10 +30,10 @@ const CapitalPage: NextPage = () => {
     <FinancialTransactionsContextProvider context={context}>
       <Template title="収支登録・編集">
         <Grid container spacing={2}>
-          <Grid item xs={12} md={12} lg={3}>
+          <Grid item xs={12} md={12} lg={4}>
             <CapitalFormContainer mutate={data.mutate} />
           </Grid>
-          <Grid item xs={12} md={12} lg={9}>
+          <Grid item xs={12} md={12} lg={8}>
             <CapitalList capitals={capitals} mutate={data.mutate} />
           </Grid>
         </Grid>

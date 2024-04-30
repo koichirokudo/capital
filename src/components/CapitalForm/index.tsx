@@ -30,7 +30,7 @@ export type CapitalFormData = {
   userId: number
   userGroupId: number
   date: string
-  share: string
+  share: boolean
   financialTransactionId: number
   capitalType: number
   note: string
@@ -62,7 +62,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
   } = useForm<CapitalFormData>({
     defaultValues: {
       capitalType: EXPENSES,
-      share: "true",
+      share: true,
       date: getFullDate(new Date()),
       financialTransactionId: incomeItem?.[0]?.id,
       money: '0',
@@ -112,7 +112,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
   }
 
   return (
-    <Paper sx={{ p: 1 }}>
+    <Paper sx={{ p: 2 }}>
       <Box>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box>
@@ -151,26 +151,35 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
             >
               <FormLabel component="legend">共有</FormLabel>
               <Controller
-                aria-labelledby="share-radio"
                 name="share"
                 control={control}
-                rules={{ required: '共有を選択してください。' }}
+                rules={{
+                  validate: (value) =>
+                    (value !== null && value !== undefined) ||
+                    '共有を選択してください。',
+                }}
                 render={({ field }): JSX.Element => (
-                  <RadioGroup row {...field}>
+                  <RadioGroup
+                    row
+                    {...field}
+                    onChange={(event) =>
+                      field.onChange(event.target.value === 'true')
+                    }
+                  >
                     <FormControlLabel
-                      value={true}
+                      value="true"
                       control={<Radio required />}
                       label="はい"
                     />
                     <FormControlLabel
-                      value={false}
+                      value="false"
                       control={<Radio required />}
                       label="いいえ"
                     />
                   </RadioGroup>
                 )}
               />
-              <FormHelperText>{errors?.capitalType?.message}</FormHelperText>
+              <FormHelperText>{errors?.share?.message}</FormHelperText>
             </FormControl>
           </Box>
           <FormControl fullWidth error={errors?.hasOwnProperty('date')}>

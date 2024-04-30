@@ -29,7 +29,7 @@ export type Capital = {
   id: number
   userId: number
   userGroupId: number
-  share: string
+  share: boolean
   date: string
   financialTransactionId: number
   capitalType: number
@@ -44,6 +44,7 @@ export type CapitalHistory = {
   status: number
   userId: number
   userGroupId: number
+  share: boolean
   date: string
   category: string
   capitalType: number

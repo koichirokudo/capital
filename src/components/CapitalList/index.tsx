@@ -45,7 +45,7 @@ const context: ApiContext = {
 /**
  * 収支一覧をDatagridで表示
  */
-const CapitalList = ({ capitals, mutate }: never) => {
+const CapitalList = ({ capitals, mutate }: any) => {
   const setSpinner = useSpinnerActionsContext()
   const { incomeItem, expensesItem } = useFinancialTransactionsContext()
 
@@ -60,18 +60,19 @@ const CapitalList = ({ capitals, mutate }: never) => {
   > | null>(null)
 
   const SelectShareEditInputCell = (props: GridRenderCellParams) => {
-    const { id, value, field } = props
+    const { id, field } = props
     const apiRef = useGridApiContext()
     const handleChange = async (event: SelectChangeEvent) => {
+      const isShare = event.target.value === 'true'
       await apiRef.current.setEditCellValue({
         id,
         field,
-        value: event.target.value,
+        value: isShare,
       })
     }
     return (
       <Select
-        value={value}
+        value={props.value ? 'true' : 'false'}
         onChange={handleChange}
         size="small"
         sx={{ height: 1 }}
@@ -88,9 +89,7 @@ const CapitalList = ({ capitals, mutate }: never) => {
    * SelectShareEditInputCellのラッパー関数
    * @param params
    */
-  const renderSelectShareEditInputCell: GridColDef['renderCell'] = (
-    params,
-  ) => {
+  const renderSelectShareEditInputCell: GridColDef['renderCell'] = (params) => {
     return <SelectShareEditInputCell {...params} />
   }
 
@@ -386,15 +385,15 @@ const CapitalList = ({ capitals, mutate }: never) => {
 
   return (
     <Paper>
-      <Box sx={{ height: '700px', width: '100%' }}>
+      <Box sx={{ height: '800px', width: '100%' }}>
         <DataGrid
           rows={capitals}
           getRowId={(row) => row.id}
           columns={columns}
           editMode="row"
-          rowHeight={30}
-          pageSize={20}
-          rowsPerPageOptions={[20, 40, 100]}
+          rowHeight={40}
+          pageSize={50}
+          // rowsPerPageOptions={[20, 40, 100]}
           pagination
           localeText={jaJP.components.MuiDataGrid.defaultProps.localeText}
           rowModesModel={rowModesModel}
