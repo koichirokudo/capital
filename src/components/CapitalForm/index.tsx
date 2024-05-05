@@ -21,31 +21,16 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { ja } from 'date-fns/locale'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { FinancialTransactions } from 'types'
+import { Capital, FinancialTransactions } from 'types'
 import { adjustTimezone, formattedISO8601, getFullDate } from 'utils/format'
 import { EXPENSES, INCOME } from 'const'
 import { useFinancialTransactionsContext } from '../../contexts/FinancialTransactionsContext'
-
-export type CapitalFormData = {
-  userId: number
-  userGroupId: number
-  date: string
-  share: boolean
-  financialTransactionId: number
-  capitalType: number
-  note: string
-  money: string
-  settlement: boolean
-  settlementAt: string
-  createAt: string
-  updateAt: string
-}
 
 interface CapitalFormProps {
   /**
    * 登録ボタンを押した時のイベントハンドラ
    */
-  onCapitalSave?: (data: CapitalFormData) => void
+  onCapitalSave?: (data: Capital) => void
 }
 
 /**
@@ -59,13 +44,13 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     formState: { errors },
     watch,
     setValue,
-  } = useForm<CapitalFormData>({
+  } = useForm<Capital>({
     defaultValues: {
       capitalType: EXPENSES,
       share: true,
       date: getFullDate(new Date()),
       financialTransactionId: incomeItem?.[0]?.id,
-      money: '0',
+      money: 0,
       note: '',
     },
   })
@@ -101,7 +86,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     }
   }, [capitalType, incomeItem, expensesItem, setValue])
 
-  const onSubmit = (data: CapitalFormData) => {
+  const onSubmit = (data: Capital) => {
     // UTCでシリアライズされた日付(2023-05-31T15:00:00.000Z)を
     // ISO8601(2023-05-31)に変換する
     const date = new Date(data.date)

@@ -11,7 +11,7 @@ const RegisterPage: NextPage = () => {
   const router = useRouter()
 
   // 登録後のイベントハンドラ
-  const onSave = async (err?: Error) => {
+  const onUserRegister = async (err?: Error) => {
     if (!err) {
       // 登録後はトップページに遷移する
       await router.push('/')
@@ -22,7 +22,7 @@ const RegisterPage: NextPage = () => {
     <>
       <Template>
         <Box sx={{ textAlign: 'center', mt: 1 }}>
-          <UserRegisterFormContainer onSave={onSave} />
+          <UserRegisterFormContainer onUserRegister={onUserRegister} />
         </Box>
       </Template>
     </>

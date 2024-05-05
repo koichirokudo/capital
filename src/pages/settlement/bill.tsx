@@ -11,20 +11,12 @@ import {
   Typography,
 } from '@mui/material'
 import Template from 'components/Templates'
-import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
+import { NextPage } from 'next'
 import React from 'react'
-import { getAuthUser } from 'services/auth/get-auth-user'
-import getSettlements from 'services/settlement/get-settlements'
-import getAllUsers from 'services/users/get-all-users'
 import theme from 'theme'
-import { ApiContext, Settlement, User } from 'types'
+import { Settlement, User } from 'types'
 import { formatMoney } from 'utils/format'
-
-const context: ApiContext = {
-  apiRootUrl: process.env.API_BASE_URL || 'http://localhost:8000',
-}
-
-type BillProps = InferGetStaticPropsType<typeof getStaticProps>
+import useSettlements from '../../services/settlement/use-settlements'
 
 const formatPaidStatus = (status: string) => {
   switch (status) {
@@ -49,13 +41,12 @@ const formatPaidStatus = (status: string) => {
   }
 }
 
-const Bill: NextPage = ({ users, settlement }: BillProps) => {
+const Bill: NextPage = () => {
+  const settlement: Settlement[] = useSettlements().settlements
   const [selected, setSelected] = React.useState([])
   const [rowCount, setRowCount] = React.useState(0)
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(12)
-
-  console.log(users)
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -172,33 +163,6 @@ const Bill: NextPage = ({ users, settlement }: BillProps) => {
       </Paper>
     </Template>
   )
-}
-
-export const getStaticProps: GetStaticProps = async () => {
-  // 認証確認
-  const authUser = await getAuthUser()
-  if (!authUser) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
-
-  const userGroupId = authUser.userGroupId
-  const [users, settlement] = await Promise.all([
-    await getAllUsers(context, { userGroupId }),
-    await getSettlements(context, { userGroupId }),
-  ])
-
-  return {
-    props: {
-      users: users ?? [],
-      settlement: settlement ?? [],
-    },
-    revalidate: 10,
-  }
 }
 
 export default Bill

@@ -1,4 +1,4 @@
-import CapitalForm, { CapitalFormData } from 'components/CapitalForm'
+import CapitalForm from 'components/CapitalForm'
 import { useAuthContext } from 'contexts/AuthContext'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 import addCapital from 'services/capitals/add-capital'
@@ -16,11 +16,13 @@ interface CapitalFormContainerProps {
 
 /**
  * 収入登録フォームコンテナ
+ * @param mutate
+ * @constructor
  */
 const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
   const { authUser } = useAuthContext()
   const setSpinner = useSpinnerActionsContext()
-  const handleSave = async (data: CapitalFormData) => {
+  const handleSave = async (data: Capital) => {
     if (!authUser) return
 
     const capital = {
