@@ -196,12 +196,12 @@ const Template = (props: TemplateProps) => {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                   >
-                    <Link href={`/users/profile/${authUser.id}`}>
+                    <Link href={`/users/profile`}>
                       <MenuItem onClick={handleMenuClose}>
                         プロフィール
                       </MenuItem>
                     </Link>
-                    <Link href={`/users/edit/${authUser.id}`}>
+                    <Link href={`/users/edit`}>
                       <MenuItem onClick={handleMenuClose}>
                         プロフィール編集
                       </MenuItem>
