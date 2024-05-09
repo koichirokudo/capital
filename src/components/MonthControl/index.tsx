@@ -7,22 +7,33 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { eachYearOfInterval } from 'date-fns'
 import { MONTH_LIST, YEAR_LIMIT } from 'const'
 import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 
 type MonthControlProps = {
-  selectedYear: string
-  selectedMonth: string
-  setSelectedYear: React.Dispatch<React.SetStateAction<string>>
-  setSelectedMonth: React.Dispatch<React.SetStateAction<string>>
+  year: number
+  month: number
+  setYear: React.Dispatch<React.SetStateAction<number>>
+  setMonth: React.Dispatch<React.SetStateAction<number>>
 }
 
-const MonthControl = ({ selectedYear, selectedMonth, setSelectedYear, setSelectedMonth}: MonthControlProps) => {
-  const router = useRouter()
-  const setSpinner = useSpinnerActionsContext()
+const MonthControl = ({
+  year,
+  month,
+  setYear,
+  setMonth,
+}: MonthControlProps) => {
+  const setSpinner: React.Dispatch<React.SetStateAction<boolean>> =
+    useSpinnerActionsContext()
+  const [selectedYear, setSelectedYear] = React.useState<string>(
+    year.toString(),
+  )
+  const [selectedMonth, setSelectedMonth] = React.useState<string>(
+    month.toString(),
+  )
+
   const YearList = React.useMemo(() => {
     return eachYearOfInterval({
       start: new Date(YEAR_LIMIT, 1, 1),
@@ -41,10 +52,11 @@ const MonthControl = ({ selectedYear, selectedMonth, setSelectedYear, setSelecte
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setSpinner(true)
+    setYear(parseInt(selectedYear))
+    setMonth(parseInt(selectedMonth))
     setTimeout(() => {
       setSpinner(false)
     }, 500)
-    router.push(`/report/month?year=${selectedYear}&month=${selectedMonth}`)
   }
 
   return (

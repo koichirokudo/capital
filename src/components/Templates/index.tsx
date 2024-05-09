@@ -243,7 +243,7 @@ const Template = (props: TemplateProps) => {
             </Toolbar>
             <Divider />
             <List>
-              <Link href={`/capital`}>
+              <Link href={'/capital'}>
                 <ListItemButton>
                   <CurrencyYen />
                   <ListItem sx={{ ml: 1 }}>
@@ -251,7 +251,7 @@ const Template = (props: TemplateProps) => {
                   </ListItem>
                 </ListItemButton>
               </Link>
-              <Link href={`/report/year?year=${getSpecificDate(date, 'year')}`}>
+              <Link href={'/report/year'}>
                 <ListItemButton>
                   <BarChart />
                   <ListItem sx={{ ml: 1 }}>
@@ -259,12 +259,7 @@ const Template = (props: TemplateProps) => {
                   </ListItem>
                 </ListItemButton>
               </Link>
-              <Link
-                href={`/report/month?year=${getSpecificDate(
-                  date,
-                  'year',
-                )}&month=${getSpecificDate(date, 'month', -1)}`}
-              >
+              <Link href={'/report/month'}>
                 <ListItemButton>
                   <Category />
                   <ListItem sx={{ ml: 1 }}>
@@ -272,7 +267,7 @@ const Template = (props: TemplateProps) => {
                   </ListItem>
                 </ListItemButton>
               </Link>
-              <Link href={`/settlement/bill`}>
+              <Link href={'/calculate'}>
                 <ListItemButton>
                   <Logout />
                   <ListItem sx={{ ml: 1 }}>

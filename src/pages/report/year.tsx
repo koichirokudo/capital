@@ -18,21 +18,17 @@ import { formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
 import YearControl from 'components/YearControl'
 import useSWR from 'swr'
-import { useAuthContext } from 'contexts/AuthContext'
 import React from 'react'
 
 const ReportYearPage: NextPage = () => {
   // 認証ガード
   useAuthGaurd()
 
-  const { authUser } = useAuthContext()
-
   // 今年をデフォルトにする
   const date = new Date()
   const [selectedYear, setSelectedYear] = React.useState(date.getFullYear())
-  const { data: incomeAndExpenses } = useSWR(
-    authUser?.id ? `/api/year?user_id=${authUser?.id}` : null,
-    (url) => fetch(url).then((res) => res.json()),
+  const { data: incomeAndExpenses } = useSWR('/api/year', (url) =>
+    fetch(url).then((res) => res.json()),
   )
 
   if (!incomeAndExpenses) {

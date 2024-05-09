@@ -2,13 +2,9 @@ import { Grid, Paper, Typography } from '@mui/material'
 import { BarChart } from 'components/BarChart'
 import MonthControl from 'components/MonthControl'
 import Template from 'components/Templates'
-import type {
-  GetStaticProps,
-  NextPage,
-} from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 import { formatMoney } from 'utils/format'
 import { useAuthGaurd } from 'utils/hook'
-import { useAuthContext } from '../../contexts/AuthContext'
 import React from 'react'
 import useSWR from 'swr'
 
@@ -16,27 +12,19 @@ const ReportMonthPage: NextPage = () => {
   // 認証ガード
   useAuthGaurd()
 
-  const { authUser } = useAuthContext()
-
   // 今月をデフォルトにする
   const date: Date = new Date()
-  const [selectedYear, setSelectedYear] = React.useState(
-    date.getFullYear().toString(),
+  const [selectedYear, setSelectedYear] = React.useState(date.getFullYear())
+  const [selectedMonth, setSelectedMonth] = React.useState(date.getMonth() + 1)
+  const { data: incomeAndExpenses } = useSWR('/api/month', (url) =>
+    fetch(url).then((res) => res.json()),
   )
-  const [selectedMonth, setSelectedMonth] = React.useState(
-    (date.getMonth() + 1).toString(),
-  )
-  const { data: incomeAndExpenses } = useSWR(
-    authUser?.id
-      ? `/api/month?user_id=${authUser?.id}&year=${selectedYear}&month=${selectedMonth}`
-      : null,
-    (url) => fetch(url).then((res) => res.json()),
-  )
+
+  console.log(incomeAndExpenses)
   const specificIncomeAndExpenses = incomeAndExpenses?.data.filter(
     (item: { year: string; month: string }) =>
-      item.year === selectedYear &&
       item.month ===
-        `${selectedYear}-${selectedMonth.toString().padStart(2, '0')}`,
+      `${selectedYear.toString()}-${selectedMonth.toString().padStart(2, '0')}`,
   )
 
   // データが登録されていない
@@ -44,10 +32,10 @@ const ReportMonthPage: NextPage = () => {
     return (
       <Template title="月間レポート">
         <MonthControl
-          selectedYear={selectedYear}
-          selectedMonth={selectedMonth}
-          setSelectedYear={setSelectedYear}
-          setSelectedMonth={setSelectedMonth}
+          year={selectedYear}
+          month={selectedMonth}
+          setYear={setSelectedYear}
+          setMonth={setSelectedMonth}
         />
         <Typography variant="body1">
           {selectedYear}年{selectedMonth}月のデータはありません。
@@ -136,10 +124,10 @@ const ReportMonthPage: NextPage = () => {
   return (
     <Template title="月間レポート">
       <MonthControl
-        selectedYear={selectedYear}
-        selectedMonth={selectedMonth}
-        setSelectedYear={setSelectedYear}
-        setSelectedMonth={setSelectedMonth}
+        year={selectedYear}
+        month={selectedMonth}
+        setYear={setSelectedYear}
+        setMonth={setSelectedMonth}
       />
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={12} lg={12}>
