@@ -20,7 +20,6 @@ const ReportMonthPage: NextPage = () => {
     fetch(url).then((res) => res.json()),
   )
 
-  console.log(incomeAndExpenses)
   const specificIncomeAndExpenses = incomeAndExpenses?.data.filter(
     (item: { year: string; month: string }) =>
       item.month ===
