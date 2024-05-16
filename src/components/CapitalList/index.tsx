@@ -227,7 +227,9 @@ const CapitalList = ({ capitals, mutate }: any) => {
         })
       }
     } finally {
-      setSpinner(false)
+      setTimeout(() => {
+        setSpinner(false)
+      }, 500)
     }
   }
 
