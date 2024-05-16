@@ -40,8 +40,11 @@ const ReportYearPage: NextPage = () => {
     return (
       <Template title="年間レポート">
         <YearControl year={selectedYear} setYear={setSelectedYear} />
+        <Typography variant="h4" sx={{ m: 1 }}>
+          {selectedYear}年
+        </Typography>
         <Typography variant="body1">
-          {selectedYear}年のデータはありません。
+          データがありません。
         </Typography>
       </Template>
     )
@@ -56,8 +59,11 @@ const ReportYearPage: NextPage = () => {
     return (
       <Template title="年間レポート">
         <YearControl year={selectedYear} setYear={setSelectedYear} />
+        <Typography variant="h4" sx={{ m: 1 }}>
+          {selectedYear}年
+        </Typography>
         <Typography variant="body1">
-          {selectedYear}年のデータはありません。
+          データがありません。
         </Typography>
       </Template>
     )
@@ -154,6 +160,9 @@ const ReportYearPage: NextPage = () => {
   return (
     <Template title="年間レポート">
       <YearControl year={selectedYear} setYear={setSelectedYear} />
+      <Typography variant="h4" sx={{ m: 1 }}>
+        {selectedYear}年
+      </Typography>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={12} lg={12}>
           <Paper
