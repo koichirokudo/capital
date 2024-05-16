@@ -5,9 +5,9 @@ import {
   Person,
   CurrencyYen,
   BarChart,
-  Logout,
-  Category,
+  MultilineChart,
   ChevronLeft,
+  ModeEdit,
 } from '@mui/icons-material'
 import {
   AppBar as MuiAppBar,
@@ -30,10 +30,9 @@ import {
 import Link from 'components/Link'
 import { useAuthContext } from 'contexts/AuthContext'
 import * as React from 'react'
-import { getSpecificDate } from 'utils/format'
+import { useEffect } from 'react'
 
 const drawerWidth = 220
-const date = new Date()
 
 interface TemplateProps {
   window?: () => Window
@@ -92,11 +91,18 @@ const Template = (props: TemplateProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
+  useEffect(() => {
+    const drawerOpen = localStorage.getItem('drawerOpen')
+    setDrawerOpen(drawerOpen === 'true')
+  }, [])
+
   const handleDrawerOpen = () => {
     setDrawerOpen(true)
+    localStorage.setItem('drawerOpen', 'true')
   }
   const handleDrawerClose = () => {
     setDrawerOpen(false)
+    localStorage.setItem('drawerOpen', 'false')
   }
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -245,7 +251,7 @@ const Template = (props: TemplateProps) => {
             <List>
               <Link href={'/capital'}>
                 <ListItemButton>
-                  <CurrencyYen />
+                  <ModeEdit />
                   <ListItem sx={{ ml: 1 }}>
                     <ListItemText primary="収支登録・編集" />
                   </ListItem>
@@ -253,7 +259,7 @@ const Template = (props: TemplateProps) => {
               </Link>
               <Link href={'/report/year'}>
                 <ListItemButton>
-                  <BarChart />
+                  <MultilineChart />
                   <ListItem sx={{ ml: 1 }}>
                     <ListItemText primary="年間レポート" />
                   </ListItem>
@@ -261,7 +267,7 @@ const Template = (props: TemplateProps) => {
               </Link>
               <Link href={'/report/month'}>
                 <ListItemButton>
-                  <Category />
+                  <BarChart />
                   <ListItem sx={{ ml: 1 }}>
                     <ListItemText primary="月間レポート" />
                   </ListItem>
@@ -269,7 +275,7 @@ const Template = (props: TemplateProps) => {
               </Link>
               <Link href={'/calculate'}>
                 <ListItemButton>
-                  <Logout />
+                  <CurrencyYen />
                   <ListItem sx={{ ml: 1 }}>
                     <ListItemText primary="精算" />
                   </ListItem>
