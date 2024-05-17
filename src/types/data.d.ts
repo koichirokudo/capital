@@ -29,14 +29,13 @@ export type Capital = {
   id: number
   userId: number
   userGroupId: number
+  settlement_id: number
   share: boolean
   date: string
   financialTransactionId: number
   capitalType: number
   note: string
   money: number
-  settlement: boolean
-  settlementAt: string
 }
 
 export type CapitalHistory = {
@@ -164,10 +163,5 @@ export type Settlement = {
   userGroupId?: number
   year: number
   month: number
-  totalAmount: number
-  status: string
-  users: Array<{
-    name: string
-    amount: number
-  }>
+  settled: string
 }
