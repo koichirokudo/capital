@@ -29,28 +29,13 @@ export type Capital = {
   id: number
   userId: number
   userGroupId: number
-  settlement_id: number
+  settlementId: number | null
   share: boolean
   date: string
   financialTransactionId: number
   capitalType: number
   note: string
   money: number
-}
-
-export type CapitalHistory = {
-  id: number
-  status: number
-  userId: number
-  userGroupId: number
-  share: boolean
-  date: string
-  category: string
-  capitalType: number
-  note: string
-  money: number
-  settlement: boolean
-  settlementAt: string
 }
 
 type Payment = {

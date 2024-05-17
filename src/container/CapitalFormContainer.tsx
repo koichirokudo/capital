@@ -28,14 +28,13 @@ const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
     const capital = {
       userId: authUser.id,
       userGroupId: authUser.userGroupId,
+      settlementId: null,
       date: data.date,
       share: Boolean(data.share),
       financialTransactionId: Number(data.financialTransactionId),
       capitalType: Number(data.capitalType),
       money: Number(data.money),
       note: data.note ?? '',
-      settlement: false,
-      settlementAt: '',
     }
 
     try {
