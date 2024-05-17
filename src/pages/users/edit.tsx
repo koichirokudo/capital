@@ -3,7 +3,7 @@ import Template from '../../components/Templates'
 
 const userEditPage: NextPage = () => {
   return (
-    <Template>
+    <Template title="プロフィール編集">
       <div>
         <h2>プロフィール編集</h2>
         <p>そのうちつくる</p>

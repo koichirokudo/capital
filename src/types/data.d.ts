@@ -54,14 +54,24 @@ export type CapitalHistory = {
   settlementAt: string
 }
 
+type Payment = {
+  label: string
+  paid: {
+    [name: string]: number
+    total: number
+    perPerson: number
+  }
+  paymentPlan: {
+    [name: string]: number
+  }
+}
+
 export type Calculate = {
-  id: number
-  userId: number
-  name: string
-  memberName: string
-  expenses: number
-  income: number
-  total: number
+  paymentByCategory: Record<string, Payment>
+  paymentPlanTotal: {
+    [name: string]: number
+  }
+  users: string[]
 }
 
 export type FinancialTransactions = {
@@ -69,6 +79,13 @@ export type FinancialTransactions = {
   type: number
   value: string
   label: string
+}
+
+export type FinancialTransactionRatios = {
+  id: number
+  userGroupId: number
+  financialTransactionId: number
+  ratio: number
 }
 
 export type YearlyIncomeAndExpenses = {

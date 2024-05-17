@@ -20,7 +20,7 @@ const RegisterPage: NextPage = () => {
 
   return (
     <>
-      <Template>
+      <Template title="ユーザー登録">
         <Box sx={{ textAlign: 'center', mt: 1 }}>
           <UserRegisterFormContainer onUserRegister={onUserRegister} />
         </Box>

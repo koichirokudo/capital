@@ -19,29 +19,14 @@ const ReportMonthPage: NextPage = () => {
   const { data: incomeAndExpenses } = useSWR('/api/month', (url) =>
     fetch(url).then((res) => res.json()),
   )
+  console.log(incomeAndExpenses)
 
   const specificIncomeAndExpenses = incomeAndExpenses?.data.filter(
     (item: { year: string; month: string }) =>
       item.month ===
       `${selectedYear.toString()}-${selectedMonth.toString().padStart(2, '0')}`,
   )
-
-  // データが登録されていない
-  if (!specificIncomeAndExpenses || specificIncomeAndExpenses.length === 0) {
-    return (
-      <Template title="月間レポート">
-        <MonthControl
-          year={selectedYear}
-          month={selectedMonth}
-          setYear={setSelectedYear}
-          setMonth={setSelectedMonth}
-        />
-        <Typography variant="body1">
-          {selectedYear}年{selectedMonth}月のデータはありません。
-        </Typography>
-      </Template>
-    )
-  }
+  console.log(specificIncomeAndExpenses)
 
   const options = {
     indexAxis: 'y' as const,
@@ -90,7 +75,40 @@ const ReportMonthPage: NextPage = () => {
     },
   }
 
+  // データが登録されていない
+  if (!specificIncomeAndExpenses || specificIncomeAndExpenses.length === 0) {
+    return (
+      <Template title="月間レポート">
+        <MonthControl
+          year={selectedYear}
+          month={selectedMonth}
+          setYear={setSelectedYear}
+          setMonth={setSelectedMonth}
+        />
+        <Typography variant="body1">
+          {selectedYear}年{selectedMonth}月のデータはありません。
+        </Typography>
+      </Template>
+    )
+  }
   const { incomeDetails, expensesDetails } = specificIncomeAndExpenses[0]
+
+  if (incomeDetails.length === 0 && expensesDetails.length === 0) {
+    return (
+      <Template title="月間レポート">
+        <MonthControl
+          year={selectedYear}
+          month={selectedMonth}
+          setYear={setSelectedYear}
+          setMonth={setSelectedMonth}
+        />
+        <Typography variant="h4" sx={{ m: 1 }}>
+          {selectedYear}年{selectedMonth}月
+        </Typography>
+        <Typography variant="body1">データがありません。</Typography>
+      </Template>
+    )
+  }
 
   const incomeCategoriesData = {
     labels: Object.keys(incomeDetails ?? {}),
@@ -128,9 +146,15 @@ const ReportMonthPage: NextPage = () => {
         setYear={setSelectedYear}
         setMonth={setSelectedMonth}
       />
+      <Typography variant="h4" sx={{ m: 1 }}>
+        {selectedYear}年{selectedMonth}月
+      </Typography>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={12} lg={12}>
           <Paper>
+            <Typography variant="h5" sx={{ p: 2 }}>
+              収入
+            </Typography>
             <BarChart
               data={incomeCategoriesData}
               options={options}
@@ -141,6 +165,9 @@ const ReportMonthPage: NextPage = () => {
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <Paper>
+            <Typography variant="h5" sx={{ p: 2 }}>
+              支出
+            </Typography>
             <BarChart
               data={expensesCategoriesData}
               options={options}

@@ -23,7 +23,11 @@ const CapitalPage: NextPage = () => {
   const capitals = data.capitals ?? []
 
   if (!authUser || data.isLoading) {
-    return <div>loading...</div>
+    return (
+      <Template title="収支登録・編集">
+        <p>loading...</p>
+      </Template>
+    )
   }
 
   return (

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import {
   Menu as MenuIcon,
   Notifications,
@@ -69,6 +70,7 @@ const Drawer = styled(MuiDrawer, {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    height: '100vh',
     boxSizing: 'border-box',
     ...(!open && {
       overflowX: 'hidden',
@@ -76,7 +78,6 @@ const Drawer = styled(MuiDrawer, {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-      width: theme.spacing(3),
       [theme.breakpoints.up('sm')]: {
         width: theme.spacing(7.5),
       },
@@ -114,6 +115,7 @@ const Template = (props: TemplateProps) => {
 
   const handleLogout = async () => {
     handleMenuClose()
+    handleDrawerClose()
     await logout()
   }
 
@@ -138,7 +140,19 @@ const Template = (props: TemplateProps) => {
               )
             }
           })()}
-          <Typography variant="h5" color="white" sx={{ ml: 3 }}>
+          <Box sx={{ ml: 3 }} />
+          <Image
+            src="/logo.png"
+            width={120}
+            height={40}
+            style={{ cursor: 'pointer' }}
+            alt="MyCapi"
+            priority={true}
+            onClick={() => {
+              location.href = '/'
+            }}
+          />
+          <Typography variant="h6" color="white" sx={{ ml: 3 }}>
             {title}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
@@ -173,32 +187,6 @@ const Template = (props: TemplateProps) => {
                     open={open}
                     onClose={handleMenuClose}
                     onClick={handleMenuClose}
-                    PaperProps={{
-                      elevation: 0,
-                      sx: {
-                        overflow: 'visible',
-                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                        mt: 1.5,
-                        '& .MuiAvatar-root': {
-                          width: 32,
-                          height: 32,
-                          ml: -0.5,
-                          mr: 1,
-                        },
-                        '&:before': {
-                          content: '""',
-                          display: 'block',
-                          position: 'absolute',
-                          top: 0,
-                          right: 14,
-                          width: 10,
-                          height: 10,
-                          bgcolor: 'background.paper',
-                          transform: 'translateY(-50%) rotate(45deg)',
-                          zIndex: 0,
-                        },
-                      },
-                    }}
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                   >

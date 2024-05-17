@@ -19,7 +19,7 @@ const UserProfilePage: NextPage = () => {
   }
 
   return (
-    <Template>
+    <Template title="プロフィール">
       <Grid
         container
         justifyContent="center"

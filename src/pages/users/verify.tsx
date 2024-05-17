@@ -27,7 +27,7 @@ const VerifyPage: NextPage = () => {
 
   return (
     <>
-      <Template>
+      <Template title="ユーザー本登録">
         <div>
           <h2>ユーザー本登録</h2>
           <p>本登録が完了しました。</p>
