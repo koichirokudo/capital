@@ -8,7 +8,7 @@ const useSettlement = (year: number, month: number) => {
   const { data, error, mutate } = useSWR<Settlement[]>(
     `/api/settlement/${year}/${month}`,
   )
-  console.log(data)
+
   return {
     settlement: data || [],
     isLoading: !error && !data,

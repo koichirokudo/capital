@@ -138,7 +138,13 @@ const CalculatePage: NextPage = () => {
   const handleCloseSnackbar = () => setSnackbar(null)
 
   // 各ユーザーが支払うべき金額を計算
-  let finalPayments: FinalPayments = {}
+  let finalPayments: FinalPayments = {
+    fromId: 0,
+    fromName: '',
+    toId: 0,
+    toName: '',
+    amount: 0,
+  }
   Object(users).map((user1: User) => {
     Object(users).map((user2: User) => {
       if (user1.id !== user2.id) {
