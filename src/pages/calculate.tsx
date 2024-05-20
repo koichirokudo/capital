@@ -15,13 +15,20 @@ import {
   Typography,
   Button,
   Box,
+  AlertProps,
+  Snackbar,
+  Alert,
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { Decision, FinalPayments } from '../types'
+import { useSpinnerActionsContext } from '../contexts/SpinnerContext'
+import decision from '../services/settlement/decision'
+import { AxiosError } from 'axios'
+import useSettlement from '../services/settlement/use-settlement'
 
-type FinalPayments = {
-  from: string
-  to: string
-  amount: number
+type User = {
+  id: number
+  name: string
 }
 
 const CalculatePage: NextPage = () => {
@@ -34,10 +41,25 @@ const CalculatePage: NextPage = () => {
   const [selectedMonth, setSelectedMonth] = React.useState(date.getMonth() + 1)
   const { paymentByCategory, paymentPlanTotal, users, isLoading, mutate } =
     useCalculateCapital(selectedYear, selectedMonth)
+  const { settlement } = useSettlement(selectedYear, selectedMonth)
+  const [settled, setSettled] = React.useState(settlement.length > 0)
+  const setSpinner = useSpinnerActionsContext()
+  const [snackbar, setSnackbar] = React.useState<Pick<
+    AlertProps,
+    'children' | 'severity'
+  > | null>(null)
+
+  React.useEffect(() => {
+    setSettled(settlement.length > 0)
+  }, [settlement])
+
   const { handleSubmit } = useForm({
     defaultValues: {
       year: selectedYear,
       month: selectedMonth,
+      payerId: 0,
+      payeeId: 0,
+      amount: 0,
     },
   })
 
@@ -66,38 +88,84 @@ const CalculatePage: NextPage = () => {
     )
   }
 
+  const handleSave = async (data: Decision) => {
+    const decisionData = {
+      year: data.year,
+      month: data.month,
+      payerId: data.payerId,
+      payeeId: data.payeeId,
+      amount: data.amount,
+    }
+
+    try {
+      setSpinner(true)
+      await decision(decisionData)
+      await mutate()
+      setSnackbar({
+        children: '精算が完了しました',
+        severity: 'success',
+      })
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        setSnackbar({
+          children: '精算に失敗しました。もう一度やり直してください。',
+          severity: 'error',
+        })
+      }
+    } finally {
+      setTimeout(() => {
+        setSpinner(false)
+      }, 500)
+    }
+  }
+
   const onSubmit = async (data: {
     year: number
     month: number
-    finalPayments: FinalPayments
+    payerId: number
+    payeeId: number
+    amount: number
   }) => {
     data.year = selectedYear
     data.month = selectedMonth
-    data.finalPayments = finalPayments
-    await mutate()
+    data.payerId = finalPayments.fromId
+    data.payeeId = finalPayments.toId
+    data.amount = finalPayments.amount
+    handleSave && handleSave(data)
+    setSettled(true)
   }
+
+  const handleCloseSnackbar = () => setSnackbar(null)
 
   // 各ユーザーが支払うべき金額を計算
   let finalPayments: FinalPayments = {}
-  Object.keys(users).map((user1) => {
-    Object.keys(users).map((user2) => {
-      if (user1 !== user2) {
-        if (paymentPlanTotal[user1] > paymentPlanTotal[user2]) {
+  Object(users).map((user1: User) => {
+    Object(users).map((user2: User) => {
+      if (user1.id !== user2.id) {
+        if (paymentPlanTotal[user1.name] > paymentPlanTotal[user2.name]) {
           finalPayments = {
-            from: user1,
-            to: user2,
-            amount: paymentPlanTotal[user1] - paymentPlanTotal[user2],
+            fromId: user1.id,
+            fromName: user1.name,
+            toId: user2.id,
+            toName: user2.name,
+            amount: paymentPlanTotal[user1.name] - paymentPlanTotal[user2.name],
           }
-        } else if (paymentPlanTotal[user1] < paymentPlanTotal[user2]) {
+        } else if (
+          paymentPlanTotal[user1.name] < paymentPlanTotal[user2.name]
+        ) {
           finalPayments = {
-            from: user2,
-            to: user1,
-            amount: paymentPlanTotal[user2] - paymentPlanTotal[user1],
+            fromId: user2.id,
+            fromName: user2.name,
+            toId: user1.id,
+            toName: user1.name,
+            amount: paymentPlanTotal[user2.name] - paymentPlanTotal[user1.name],
           }
         } else {
           finalPayments = {
-            from: user1,
-            to: user2,
+            fromId: user1.id,
+            fromName: user1.name,
+            toId: user2.id,
+            toName: user2.name,
             amount: 0,
           }
         }
@@ -126,8 +194,8 @@ const CalculatePage: NextPage = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>カテゴリ</TableCell>
-                  {Object.keys(users).map((user) => (
-                    <TableCell key={user}>{user}</TableCell>
+                  {Object(users).map((user: User) => (
+                    <TableCell key={user.id}>{user.name}</TableCell>
                   ))}
                   <TableCell>支払い合計</TableCell>
                   <TableCell>1人あたりの支払金額</TableCell>
@@ -139,9 +207,9 @@ const CalculatePage: NextPage = () => {
                   return (
                     <TableRow key={key}>
                       <TableCell>{payment.label}</TableCell>
-                      {Object.keys(users).map((user) => (
-                        <TableCell key={user}>
-                          {formatMoney(payment.paid[user], true)}
+                      {Object(users).map((user: User) => (
+                        <TableCell key={user.id}>
+                          {formatMoney(payment.paid[user.name], true)}
                         </TableCell>
                       ))}
                       <TableCell>
@@ -164,8 +232,8 @@ const CalculatePage: NextPage = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>カテゴリ</TableCell>
-                  {Object.keys(users).map((user) => (
-                    <TableCell key={user}>{user}</TableCell>
+                  {Object(users).map((user: User) => (
+                    <TableCell key={user.id}>{user.name}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>
@@ -175,9 +243,9 @@ const CalculatePage: NextPage = () => {
                   return (
                     <TableRow key={key}>
                       <TableCell>{payment.label}</TableCell>
-                      {Object.keys(users).map((user) => (
-                        <TableCell key={user}>
-                          {formatMoney(payment.paymentPlan[user], true)}
+                      {Object(users).map((user: User) => (
+                        <TableCell key={user.id}>
+                          {formatMoney(payment.paymentPlan[user.name], true)}
                         </TableCell>
                       ))}
                     </TableRow>
@@ -185,9 +253,9 @@ const CalculatePage: NextPage = () => {
                 })}
                 <TableRow>
                   <TableCell>合計</TableCell>
-                  {Object.keys(users).map((user) => (
-                    <TableCell key={user}>
-                      {formatMoney(paymentPlanTotal[user], true)}
+                  {Object(users).map((user: User) => (
+                    <TableCell key={user.id}>
+                      {formatMoney(paymentPlanTotal[user.name], true)}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -195,12 +263,12 @@ const CalculatePage: NextPage = () => {
             </Table>
           </Grid>
         </Grid>
-        <Box component="div" sx={{ p: 2 }}>
+        <Box component="div" sx={{ p: 2, color: settled ? 'grey' : 'black' }}>
           <Typography variant="h6">
             {selectedYear}年{selectedMonth}月の精算結果
           </Typography>
           <Typography variant="body1" sx={{ mt: 1, mb: 1 }}>
-            {finalPayments.from} から {finalPayments.to} に{' '}
+            {finalPayments.fromName} から {finalPayments.toName} に{' '}
             <Box component="span" sx={{ fontSize: 20, fontWeight: 600 }}>
               {formatMoney(finalPayments.amount)}
             </Box>{' '}
@@ -219,11 +287,22 @@ const CalculatePage: NextPage = () => {
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
+            disabled={settled}
           >
-            精算
+            精算{settled ? '済み' : ''}
           </Button>
         </Box>
       </form>
+      {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={6000}
+        >
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+      )}
     </Template>
   )
 }

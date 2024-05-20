@@ -72,6 +72,22 @@ export type FinancialTransactionRatios = {
   ratio: number
 }
 
+export type FinalPayments = {
+  fromId: number
+  fromName: string
+  toId: number
+  toName: string
+  amount: number
+}
+
+export type Decision = {
+  year: number
+  month: number
+  payerId: number
+  payeeId: number
+  amount: number
+}
+
 export type YearlyIncomeAndExpenses = {
   userId: number
   userGroupId: number
