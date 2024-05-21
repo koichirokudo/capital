@@ -95,7 +95,9 @@ const LoginForm = ({ handleLogin }: LoginFormProps) => {
             ログイン
           </Button>
         </form>
-        <Link href={'/users/register'}>ユーザー登録はこちら</Link>
+        <Box sx={{ mt: 3 }}>
+          <Link href={'/users/register'}>ユーザー登録はこちら</Link>
+        </Box>
       </Box>
     </Container>
   )
