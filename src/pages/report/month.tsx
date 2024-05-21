@@ -19,14 +19,12 @@ const ReportMonthPage: NextPage = () => {
   const { data: incomeAndExpenses } = useSWR('/api/month', (url) =>
     fetch(url).then((res) => res.json()),
   )
-  console.log(incomeAndExpenses)
 
   const specificIncomeAndExpenses = incomeAndExpenses?.data.filter(
     (item: { year: string; month: string }) =>
       item.month ===
       `${selectedYear.toString()}-${selectedMonth.toString().padStart(2, '0')}`,
   )
-  console.log(specificIncomeAndExpenses)
 
   const options = {
     indexAxis: 'y' as const,
@@ -118,6 +116,7 @@ const ReportMonthPage: NextPage = () => {
         data: Object.values<number>(incomeDetails ?? {}),
         backgroundColor: 'rgba(0, 171, 85, 0.9)',
         barPercentage: 0.9,
+        categoryPercentage: 0.9,
         borderRadius: 10,
         skipNull: true,
       },
@@ -132,6 +131,7 @@ const ReportMonthPage: NextPage = () => {
         data: Object.values<number>(expensesDetails ?? {}),
         backgroundColor: 'rgba(255, 171, 0, 0.9)',
         barPercentage: 0.9,
+        categoryPercentage: 0.9,
         borderRadius: 10,
         skipNull: true,
       },
@@ -151,30 +151,38 @@ const ReportMonthPage: NextPage = () => {
       </Typography>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={12} lg={12}>
-          <Paper>
-            <Typography variant="h5" sx={{ p: 2 }}>
-              収入
-            </Typography>
+          <Typography variant="h5" sx={{ p: 2 }}>
+            収入
+          </Typography>
+          {Object.keys(incomeDetails).length > 0 ? (
             <BarChart
               data={incomeCategoriesData}
               options={options}
               height={200}
               width={1200}
             />
-          </Paper>
+          ) : (
+            <Typography variant="body1" sx={{ p: 2 }}>
+              データがありません。
+            </Typography>
+          )}
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <Paper>
-            <Typography variant="h5" sx={{ p: 2 }}>
-              支出
-            </Typography>
+          <Typography variant="h5" sx={{ p: 2 }}>
+            支出
+          </Typography>
+          {Object.keys(expensesDetails).length > 0 ? (
             <BarChart
               data={expensesCategoriesData}
               options={options}
-              height={500}
+              height={200}
               width={1200}
             />
-          </Paper>
+          ) : (
+            <Typography variant="body1" sx={{ p: 2 }}>
+              データがありません。
+            </Typography>
+          )}
         </Grid>
       </Grid>
     </Template>

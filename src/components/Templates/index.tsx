@@ -97,6 +97,12 @@ const Template = (props: TemplateProps) => {
     setDrawerOpen(drawerOpen === 'true')
   }, [])
 
+  useEffect(() => {
+    if (!authUser) {
+      localStorage.setItem('drawerOpen', 'false');
+    }
+  }, [authUser]);
+
   const handleDrawerOpen = () => {
     setDrawerOpen(true)
     localStorage.setItem('drawerOpen', 'true')

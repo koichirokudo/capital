@@ -43,18 +43,13 @@ interface CapitalFormProps {
  * @param year
  * @param month
  */
-const CapitalForm = ({ onCapitalSave, settled, year, month }: CapitalFormProps) => {
+const CapitalForm = ({
+  onCapitalSave,
+  settled,
+  year,
+  month,
+}: CapitalFormProps) => {
   // 日付の初期値を設定
-  const currentDate = new Date()
-  const prevDate = new Date(year, month - 1, 1)
-
-  let date
-  if (currentDate <= prevDate) {
-    date = getFullDate(currentDate)
-  } else {
-    date = getFullDate(prevDate)
-  }
-
   const { incomeItem, expensesItem } = useFinancialTransactionsContext()
   const {
     handleSubmit,
@@ -66,7 +61,7 @@ const CapitalForm = ({ onCapitalSave, settled, year, month }: CapitalFormProps) 
     defaultValues: {
       capitalType: EXPENSES,
       share: true,
-      date: date,
+      date: getFullDate(new Date(year, month - 1, 1)),
       financialTransactionId: incomeItem?.[0]?.id,
       money: 0,
       note: '',
@@ -78,6 +73,10 @@ const CapitalForm = ({ onCapitalSave, settled, year, month }: CapitalFormProps) 
   )
 
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
+
+  React.useEffect(() => {
+    setValue('date', getFullDate(new Date(year, month - 1, 1)));
+  }, [year, month, setValue]);
 
   React.useEffect(() => {
     if (incomeItem && incomeItem.length > 0) {
@@ -206,6 +205,9 @@ const CapitalForm = ({ onCapitalSave, settled, year, month }: CapitalFormProps) 
                       inputFormat="yyyy/MM/dd"
                       renderInput={(params) => <TextField {...params} />}
                       disabled={settled}
+                      shouldDisableDate={(date) => {
+                        return date.getMonth() + 1 !== month
+                      }}
                     />
                   </LocalizationProvider>
                   <FormHelperText>{errors?.date?.message}</FormHelperText>
