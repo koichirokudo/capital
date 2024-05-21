@@ -31,12 +31,30 @@ interface CapitalFormProps {
    * 登録ボタンを押した時のイベントハンドラ
    */
   onCapitalSave?: (data: Capital) => void
+  settled: boolean
+  year: number
+  month: number
 }
 
 /**
  * 収支投稿フォーム
+ * @param onCapitalSave
+ * @param settled
+ * @param year
+ * @param month
  */
-const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
+const CapitalForm = ({ onCapitalSave, settled, year, month }: CapitalFormProps) => {
+  // 日付の初期値を設定
+  const currentDate = new Date()
+  const prevDate = new Date(year, month - 1, 1)
+
+  let date
+  if (currentDate <= prevDate) {
+    date = getFullDate(currentDate)
+  } else {
+    date = getFullDate(prevDate)
+  }
+
   const { incomeItem, expensesItem } = useFinancialTransactionsContext()
   const {
     handleSubmit,
@@ -48,7 +66,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
     defaultValues: {
       capitalType: EXPENSES,
       share: true,
-      date: getFullDate(new Date()),
+      date: date,
       financialTransactionId: incomeItem?.[0]?.id,
       money: 0,
       note: '',
@@ -117,11 +135,13 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                       value={Number(INCOME)}
                       control={<Radio required />}
                       label="収入"
+                      disabled={settled}
                     />
                     <FormControlLabel
                       value={Number(EXPENSES)}
                       control={<Radio required />}
                       label="支出"
+                      disabled={settled}
                     />
                   </RadioGroup>
                 )}
@@ -155,11 +175,13 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                       value="true"
                       control={<Radio required />}
                       label="はい"
+                      disabled={settled}
                     />
                     <FormControlLabel
                       value="false"
                       control={<Radio required />}
                       label="いいえ"
+                      disabled={settled}
                     />
                   </RadioGroup>
                 )}
@@ -183,6 +205,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                       label="日時"
                       inputFormat="yyyy/MM/dd"
                       renderInput={(params) => <TextField {...params} />}
+                      disabled={settled}
                     />
                   </LocalizationProvider>
                   <FormHelperText>{errors?.date?.message}</FormHelperText>
@@ -208,6 +231,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                       data-testid="financialTransactionId-input"
                       label="financialTransactionId"
                       labelId="financialTransactionId"
+                      disabled={settled}
                     >
                       {selectItems.map((item) => {
                         return (
@@ -239,6 +263,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                 label="金額"
                 error={errors?.hasOwnProperty('money')}
                 helperText={errors?.money?.message}
+                disabled={settled}
               />
             )}
           />
@@ -253,6 +278,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
                 margin="normal"
                 type="text"
                 label="メモ（10文字まで入力できます）"
+                disabled={settled}
               />
             )}
           />
@@ -261,6 +287,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
             color="primary"
             variant="contained"
             fullWidth
+            disabled={settled}
             sx={{
               mt: 1,
               color: '#fff',
@@ -269,7 +296,7 @@ const CapitalForm = ({ onCapitalSave }: CapitalFormProps) => {
               height: 56,
             }}
           >
-            登録
+            {settled ? '精算済み' : '登録'}
           </Button>
         </form>
       </Box>

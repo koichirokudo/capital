@@ -4,9 +4,9 @@ import type { Capital } from 'types'
 /**
  * 収支API（個別取得）のカスタムフック
  */
-const useAllCapital = () => {
+const useAllCapital = (year: number, month: number) => {
   const { data, error, mutate } = useSWR<Capital[]>(
-    `/api/capitals`
+    `/api/capitals/${year}/${month}`,
   )
 
   return {

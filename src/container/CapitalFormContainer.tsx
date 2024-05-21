@@ -12,14 +12,20 @@ interface CapitalFormContainerProps {
    * @returns
    */
   mutate: () => Promise<Capital[] | undefined>
+  settled: boolean
+  year: number
+  month: number
 }
 
 /**
  * 収入登録フォームコンテナ
  * @param mutate
+ * @param settled
+ * @param year
+ * @param month
  * @constructor
  */
-const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
+const CapitalFormContainer = ({ mutate, settled, year, month }: CapitalFormContainerProps) => {
   const { authUser } = useAuthContext()
   const setSpinner = useSpinnerActionsContext()
   const handleSave = async (data: Capital) => {
@@ -49,7 +55,7 @@ const CapitalFormContainer = ({ mutate }: CapitalFormContainerProps) => {
       setSpinner(false)
     }
   }
-  return <CapitalForm onCapitalSave={handleSave} />
+  return <CapitalForm onCapitalSave={handleSave} settled={settled} year={year} month={month} />
 }
 
 export default CapitalFormContainer

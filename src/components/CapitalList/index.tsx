@@ -32,7 +32,7 @@ import { useSpinnerActionsContext } from 'contexts/SpinnerContext'
 import * as React from 'react'
 import deleteCapital from 'services/capitals/delete-capital'
 import updateCapital from 'services/capitals/update-capital'
-import { ApiContext } from 'types'
+import { ApiContext, Capital } from 'types'
 import { AxiosError } from 'axios'
 import { adjustTimezone, formattedISO8601 } from 'utils/format'
 import { EXPENSES, INCOME, SHARE } from '../../const'
@@ -43,9 +43,21 @@ const context: ApiContext = {
 }
 
 /**
- * 収支一覧をDatagridで表示
+ * DataGridの収支行を表示するコンポーネント
  */
-const CapitalList = ({ capitals, mutate }: any) => {
+type CapitalListProps = {
+  capitals: Capital[]
+  settled: boolean
+  mutate: () => Promise<Capital[] | undefined>
+}
+
+/**
+ * 収支一覧をDatagridで表示
+ * @param capitals
+ * @param settled
+ * @param mutate
+ */
+const CapitalList = ({ capitals, settled, mutate }: CapitalListProps) => {
   const setSpinner = useSpinnerActionsContext()
   const { incomeItem, expensesItem } = useFinancialTransactionsContext()
 
@@ -367,6 +379,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
         return [
           // eslint-disable-next-line react/jsx-key
           <GridActionsCellItem
+            disabled={settled}
             icon={<Edit />}
             label="Edit"
             className="textPrimary"
@@ -375,6 +388,7 @@ const CapitalList = ({ capitals, mutate }: any) => {
           />,
           // eslint-disable-next-line react/jsx-key
           <GridActionsCellItem
+            disabled={settled}
             icon={<Delete />}
             label="Delete"
             onClick={handleDeleteClick(id)}
