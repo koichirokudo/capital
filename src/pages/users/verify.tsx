@@ -1,4 +1,5 @@
 import { NextPage } from 'next'
+import { Box } from '@mui/material'
 import Template from '../../components/Templates'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -28,14 +29,12 @@ const VerifyPage: NextPage = () => {
   return (
     <>
       <Template title="ユーザー本登録">
-        <div>
+        <Box>
           <h2>ユーザー本登録</h2>
           <p>本登録が完了しました。</p>
           <p>ログインしてご利用ください。</p>
-          <Link href="/login">
-            <a>ログイン画面へ</a>
-          </Link>
-        </div>
+          <Link href="/login">ログイン画面へ</Link>
+        </Box>
       </Template>
     </>
   )

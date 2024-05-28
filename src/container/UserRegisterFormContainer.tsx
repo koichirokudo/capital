@@ -28,6 +28,7 @@ const UserRegisterFormContainer = ({
       email: data.email,
       password: data.password,
       name: data.name,
+      inviteCode: data.inviteCode ?? '',
     }
 
     try {

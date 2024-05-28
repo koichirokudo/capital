@@ -27,6 +27,7 @@ const UserRegisterForm = ({ handleUserRegister }: UserRegisterFormProps) => {
     handleSubmit,
     control,
     formState: { errors },
+    watch
   } = useForm<UserRegisterFormData>({
     defaultValues: {
       email: '',
@@ -36,6 +37,8 @@ const UserRegisterForm = ({ handleUserRegister }: UserRegisterFormProps) => {
       inviteCode: '',
     },
   })
+
+  const password = watch('password')
 
   return (
     <>
@@ -99,6 +102,10 @@ const UserRegisterForm = ({ handleUserRegister }: UserRegisterFormProps) => {
                   value: 8,
                   message: 'パスワードは8文字以上で入力してください。',
                 },
+                maxLength: {
+                  value: 16,
+                  message: 'パスワードは16文字以下で入力してください。',
+                },
               }}
               render={({ field }) => (
                 <TextField
@@ -122,6 +129,12 @@ const UserRegisterForm = ({ handleUserRegister }: UserRegisterFormProps) => {
                   value: 8,
                   message: 'パスワードは8文字以上で入力してください。',
                 },
+                maxLength: {
+                  value: 16,
+                  message: 'パスワードは16文字以下で入力してください。',
+                },
+                validate: (value) =>
+                  value === password || 'パスワードが一致しません。',
               }}
               render={({ field }) => (
                 <TextField
@@ -138,10 +151,14 @@ const UserRegisterForm = ({ handleUserRegister }: UserRegisterFormProps) => {
             <Controller
               name="inviteCode"
               control={control}
+              defaultValue=""
               render={({ field }) => (
                 <TextField
                   {...field}
-                  type="hidden"
+                  label="グループ招待コード"
+                  fullWidth
+                  error={!!errors.inviteCode}
+                  helperText={errors.inviteCode?.message}
                   margin="normal"
                 />
               )}

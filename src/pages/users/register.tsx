@@ -14,18 +14,16 @@ const RegisterPage: NextPage = () => {
   const onUserRegister = async (err?: Error) => {
     if (!err) {
       // 登録後はトップページに遷移する
-      await router.push('/')
+      await router.push('/users/register-complete')
     }
   }
 
   return (
-    <>
-      <Template title="ユーザー登録">
-        <Box sx={{ textAlign: 'center', mt: 1 }}>
-          <UserRegisterFormContainer onUserRegister={onUserRegister} />
-        </Box>
-      </Template>
-    </>
+    <Template title="ユーザー登録">
+      <Box sx={{ textAlign: 'center', mt: 1 }}>
+        <UserRegisterFormContainer onUserRegister={onUserRegister} />
+      </Box>
+    </Template>
   )
 }
 

@@ -201,11 +201,6 @@ const Template = (props: TemplateProps) => {
                         プロフィール
                       </MenuItem>
                     </Link>
-                    <Link href={`/users/edit`}>
-                      <MenuItem onClick={handleMenuClose}>
-                        プロフィール編集
-                      </MenuItem>
-                    </Link>
                     <MenuItem onClick={handleLogout}>ログアウト</MenuItem>
                   </Menu>
                 </Box>

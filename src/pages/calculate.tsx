@@ -71,6 +71,23 @@ const CalculatePage: NextPage = () => {
     )
   }
 
+  if (Object.keys(users).length == 1) {
+    return (
+      <Template title="精算">
+        <MonthControl
+          year={selectedYear}
+          month={selectedMonth}
+          setYear={setSelectedYear}
+          setMonth={setSelectedMonth}
+        />
+        <Typography variant="h4" sx={{ p: 1 }}>
+          {selectedYear}年{selectedMonth}月
+        </Typography>
+        <p>ユーザーが1人しかいないため精算できません</p>
+      </Template>
+    )
+  }
+
   if (Object.keys(paymentByCategory).length == 0) {
     return (
       <Template title="精算">
@@ -126,6 +143,11 @@ const CalculatePage: NextPage = () => {
     payeeId: number
     amount: number
   }) => {
+
+    if (!window.confirm('精算を実行しますか？')) {
+      return
+    }
+
     data.year = selectedYear
     data.month = selectedMonth
     data.payerId = finalPayments.fromId

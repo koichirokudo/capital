@@ -13,6 +13,7 @@ export type User = {
   password: string
   email: string
   delete: string
+  inviteCode: string
 }
 
 // user group
