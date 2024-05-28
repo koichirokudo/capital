@@ -28,7 +28,5 @@ axios.interceptors.response.use(
 
 export const fetcher = async (url: string) => {
   const response = await axios.get(url)
-  console.log('fetcher response:', response)
-  console.log('fetcher:', url, response.data)
   return response.data
 }
