@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import { BarChart } from 'components/BarChart'
 import MonthControl from 'components/MonthControl'
 import Template from 'components/Templates'

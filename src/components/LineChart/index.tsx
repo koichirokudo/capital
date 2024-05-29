@@ -3,6 +3,8 @@ import {
   BarElement,
   CategoryScale,
   Chart as ChartJS,
+  ChartData,
+  ChartOptions,
   LinearScale,
   LineController,
   PointElement,
@@ -30,8 +32,8 @@ ChartJS.register(
 )
 
 interface LineChartProps {
-  data: any
-  options?: any
+  data: ChartData<'line', number[], string>
+  options?: ChartOptions
   height: number
   width: number
 }

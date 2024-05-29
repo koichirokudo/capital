@@ -51,6 +51,10 @@ type CapitalListProps = {
   mutate: () => Promise<Capital[] | undefined>
 }
 
+type Row = {
+  id: GridRowId
+}
+
 /**
  * 収支一覧をDatagridで表示
  * @param capitals
@@ -404,12 +408,11 @@ const CapitalList = ({ capitals, settled, mutate }: CapitalListProps) => {
       <Box sx={{ height: '800px', width: '100%' }}>
         <DataGrid
           rows={capitals}
-          getRowId={(row) => row.id}
+          getRowId={(row: Row) => row.id}
           columns={columns}
           editMode="row"
           rowHeight={40}
           pageSize={50}
-          // rowsPerPageOptions={[20, 40, 100]}
           pagination
           localeText={jaJP.components.MuiDataGrid.defaultProps.localeText}
           rowModesModel={rowModesModel}

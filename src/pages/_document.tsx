@@ -1,10 +1,29 @@
 import createEmotionServer from '@emotion/server/create-instance'
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, {
+  Html,
+  Head,
+  Main,
+  NextScript,
+  DocumentInitialProps as NextDocumentInitialProps,
+} from 'next/document'
+import { AppProps as NextAppProps, AppType } from 'next/app'
 import createEmotionCache from '../createEmotionCache'
 import theme from '../theme'
+import { EmotionCache } from '@emotion/react'
+import React from 'react'
+
+interface AppProps extends NextAppProps {
+  emotionCache?: EmotionCache
+}
+
+interface DocumentInitialProps extends NextDocumentInitialProps {
+  emotionStyleTags?: React.ReactElement[]
+}
 
 export default class MyDocument extends Document {
   render() {
+    const { emotionStyleTags } = this.props as DocumentInitialProps
+
     return (
       <Html lang="ja">
         <Head>
@@ -21,7 +40,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap%22%20rel=%22stylesheet"
           />
-          {(this.props as any).emotionStyleTags}
+          {emotionStyleTags}
         </Head>
         <body>
           <Main />
@@ -39,8 +58,8 @@ MyDocument.getInitialProps = async (ctx) => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App: any) =>
-        function EnhanceApp(props) {
+      enhanceApp: (App: AppType) =>
+        function EnhanceApp(props: AppProps) {
           return <App emotionCache={cache} {...props} />
         },
     })
