@@ -1,4 +1,4 @@
-import { findByText, fireEvent, render, waitFor } from '@testing-library/react'
+import { fireEvent, render, waitFor } from '@testing-library/react'
 import CapitalForm from './index'
 
 describe('CapitalForm', () => {
@@ -10,7 +10,7 @@ describe('CapitalForm', () => {
 
   it('CapitalFormのレンダリング', () => {
     const { getByLabelText, getByText } = render(
-      <CapitalForm onCapitalSave={onCapitalSave} />,
+      <CapitalForm onCapitalSave={onCapitalSave} settled={false} year={2024} month={1} />,
     )
 
     expect(getByText(/収支タイプ/i)).toBeInTheDocument()
@@ -23,7 +23,7 @@ describe('CapitalForm', () => {
 
   it('テストデータを使用してフォームの送信すると onCapitalSaveが呼ばれる', async () => {
     const { getByLabelText, getByText, getByTestId } = render(
-      <CapitalForm onCapitalSave={onCapitalSave} />,
+      <CapitalForm onCapitalSave={onCapitalSave} settled={false} year={2024} month={1} />,
     )
 
     fireEvent.click(getByText(/収支タイプ/i))
@@ -33,11 +33,6 @@ describe('CapitalForm', () => {
 
     const itemSelect = getByTestId('expensesItem-input')
     fireEvent.mouseDown(itemSelect)
-
-    // FIXME: うまくいかん！
-    // const itemElement = await findByText('食費');
-    // fireEvent.click(itemElement)
-    // debug(baseElement)
 
     fireEvent.change(getByLabelText(/金額/i), { target: { value: '5000' } })
     fireEvent.change(getByLabelText(/メモ/i), {
@@ -54,7 +49,7 @@ describe('CapitalForm', () => {
 
   it('空の必須フィールドエラーメッセージを表示する', async () => {
     const { getByText, getByLabelText } = render(
-      <CapitalForm onCapitalSave={onCapitalSave} />,
+      <CapitalForm onCapitalSave={onCapitalSave} settled={false} year={2024} month={1} />,
     )
 
     fireEvent.change(getByLabelText('日時'), { target: { value: '' } })
