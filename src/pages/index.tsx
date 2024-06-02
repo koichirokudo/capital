@@ -41,9 +41,6 @@ const Home: NextPage = () => {
             <br />
             ぜひ、MyCapiをお試しください！
           </Typography>
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            お問い合わせ:{' '} koichirokudo746@gmail.com
-          </Typography>
         </Box>
       </Template>
     </>
